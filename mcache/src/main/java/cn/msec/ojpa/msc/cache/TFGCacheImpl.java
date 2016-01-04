@@ -18,7 +18,7 @@ import org.osgi.framework.BundleContext;
 @Instantiate(name = "tfgcache")
 @Provides(specifications = StoreServiceProvider.class, strategy = "SINGLETON")
 @Slf4j
-public class TFGCacheImpl extends StoreServiceProvider {
+public class TFGCacheImpl implements StoreServiceProvider {
 
 	@Override
 	public String getProviderid() {
@@ -52,6 +52,11 @@ public class TFGCacheImpl extends StoreServiceProvider {
 	@Override
 	public DomainDaoSupport getDaoByBeanName(OJpaDAO dao) {
 		return new CacheDao(cacheLoader);
+	}
+
+	@Override
+	public String[] getContextConfigs() {
+		return null;
 	}
 
 }

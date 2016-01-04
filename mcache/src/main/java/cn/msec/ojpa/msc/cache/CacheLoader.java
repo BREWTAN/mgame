@@ -34,7 +34,7 @@ import org.apache.felix.ipojo.annotations.Provides;
 @Provides(specifications = { IJPAClient.class, StoreServiceProvider.class, IActor.class })
 @Slf4j
 @Data
-public class CacheLoader extends StoreServiceProvider implements IJPAClient, IActor {
+public class CacheLoader implements StoreServiceProvider, IJPAClient, IActor {
 	@Override
 	public String getProviderid() {
 		return ServiceSpec.CACHE_STORE.getTarget();
@@ -110,19 +110,19 @@ public class CacheLoader extends StoreServiceProvider implements IJPAClient, IAc
 		}
 		return defaulto;
 	}
-	
-	public static String toCamelKey(String key){
-		StringBuffer sb=new StringBuffer();
-		for(String str:key.split("_")){
-			if(sb.length()>0)
-			{
+
+	public static String toCamelKey(String key) {
+		StringBuffer sb = new StringBuffer();
+		for (String str : key.split("_")) {
+			if (sb.length() > 0) {
 				sb.append(StringUtils.capitalize(StringUtils.lowerCase(str)));
-			}else{
+			} else {
 				sb.append(StringUtils.lowerCase(str));
 			}
 		}
 		return sb.toString();
 	}
+
 	private HashMap<String, Object> toCaseIgnore(Map<String, Object> omap) {
 		val ret = new HashMap<String, Object>();
 		for (val entry : omap.entrySet()) {
@@ -168,7 +168,16 @@ public class CacheLoader extends StoreServiceProvider implements IJPAClient, IAc
 				log.warn("cannot Found key for keyfields, drop mapping to cache:" + beanclazz);
 				return;
 			}
-			Object obj = mysqlDao.doBySQL("SELECT * FROM " + tab.name());
+			Class exampleclass = null;
+			Object obj = null;
+			try {
+				exampleclass = Class.forName(beanclazz.getName() + "Example");
+				obj = mysqlDao.selectByExample(exampleclass.newInstance());
+			} catch (Exception e) {
+				log.warn("no example class found for cache:" + beanclazz.getName() + "Example", e);
+				return;
+			}
+
 			val tablename = tab.name().replaceAll("_", "").toLowerCase();
 			// List arr = SerializerUtil.deserializeArray(obj, beanclazz);
 			val tablecolmap = new HashMap<String, HashMap<String, Object>>();
@@ -238,8 +247,19 @@ public class CacheLoader extends StoreServiceProvider implements IJPAClient, IAc
 	}
 
 	@Override
-	public String getWebPath() {
-		return "/cache/man.do";
+	public String[] getWebPaths() {
+		// TODO Auto-generated method stub
+		return new String[] { "/cache/man.do" };
+	}
+
+	@Override
+	public void onDaoServiceAllReady() {
+
+	}
+
+	@Override
+	public String[] getContextConfigs() {
+		return null;
 	}
 
 }
