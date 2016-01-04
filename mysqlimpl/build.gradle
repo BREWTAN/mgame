@@ -1,0 +1,32 @@
+
+version = '1.0.0'
+
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src/main/java'
+			srcDir 'src/main/resources'
+			srcDir 'src/gens/java'
+		}
+		resources {
+			srcDir 'src/resources'
+			srcDir 'src/gens/resources'
+		}
+	}
+}
+
+dependencies {
+	//ibatis3
+	compile "onight.tfw:onight.tfw.ordbutils:2.0.0"
+	//	 testCompile 'junit:junit:4.12'
+}
+
+jar {
+	manifest{
+		//		attributes( 'Spring-Context': 'applicationContext-common.xml, applicationContext-beans.xml')
+		attributes( 'Import-Ignore':'org.springframework,org.mybatis.spring,com.mchange.v2.c3p0')
+		attributes( 'DynamicImport-Package': '*')
+		attributes( 'Import-Lib': 'lib')
+	}
+}

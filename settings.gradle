@@ -1,0 +1,12 @@
+
+include 'mysqlimpl'
+include 'mcache'
+include 'mauthlogin'
+include 'mcoinsys'
+include 'mfront'
+
+include 'act:actcore'
+include 'act:actmysql'
+include 'act:actcass'
+
+rootProject.name = 'mgame'

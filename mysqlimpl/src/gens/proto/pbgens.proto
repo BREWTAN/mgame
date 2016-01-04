@@ -1,0 +1,384 @@
+
+syntax = "proto3";
+
+package onight.tfg.ordbgens.sys.pbo;
+
+message PBTSysAction
+{
+	int action_id = 1;
+	string action_flag = 2;
+	string action_name = 3;
+	string action_desc = 4;
+	int action_menu = 5;
+	string field1 = 6;
+}
+
+message PBTSysBranch
+{
+	string id = 1;
+	string branch_id = 2;
+	string branch_desc = 3;
+	string branch_name = 4;
+	string branch_manager = 5;
+	string mobile = 6;
+	string begin_time = 7;
+	string end_time = 8;
+	string parent_id = 9;
+	int32 leaf_flag = 10;
+	int32 branch_seq = 11;
+	int32 level = 12;
+}
+
+message PBTSysBusiness
+{
+	string business_id = 1;
+	string business_name = 2;
+	string business_desc = 3;
+	string business_manager = 4;
+	string business_mobile = 5;
+	int32 business_seq = 6;
+	string begin_time = 7;
+	string end_time = 8;
+	int32 status = 9;
+	int32 business_data_permission = 10;
+}
+
+message PBTSysMenu
+{
+	int32 menu_id = 1;
+	string menu_name = 2;
+	string menu_desc = 3;
+	int32 menu_seq = 4;
+	string menu_url = 5;
+	int32 parent_id = 6;
+	int32 leaf_flag = 7;
+	int32 level = 8;
+	string icon = 9;
+}
+
+message PBTSysOpLogs
+{
+	string id = 1;
+	string skeys = 2;
+	string contents = 3;
+	string level = 4;
+	string crt_time = 5;
+}
+
+message PBTSysParam
+{
+	string param_id = 1;
+	string param_type = 2;
+	string param_value = 3;
+	string dsc = 4;
+	string crt_time = 5;
+	string field1 = 6;
+	string field2 = 7;
+	string field3 = 8;
+}
+
+message PBTSysRole
+{
+	string role_id = 1;
+	string role_name = 2;
+	string role_desc = 3;
+	int32 status = 4;
+}
+
+message PBTSysRoleAction
+{
+	string id = 1;
+	int action_id = 2;
+	string role_id = 3;
+	int status = 4;
+}
+
+message PBTSysRoleMenu
+{
+	string id = 1;
+	int32 menu_id = 2;
+	string role_id = 3;
+	int32 status = 4;
+}
+
+message PBTSysRoleMutex
+{
+	string role_mutex_id = 1;
+	string role_id_a = 2;
+	string role_id_b = 3;
+	int32 status = 4;
+}
+
+message PBTSysRspCode
+{
+	string id = 1;
+	string prod_id = 2;
+	string out_rsp_code = 3;
+	string in_rsp_code2 = 4;
+	string rsp_desc = 5;
+}
+
+message PBTSysUser
+{
+	string user_id = 1;
+	string branch_id = 2;
+	string login_name = 3;
+	string user_name = 4;
+	string mobile = 5;
+	string user_workaddress = 6;
+	string status = 7;
+	string password = 8;
+	string update_time = 9;
+	string create_time = 10;
+	string created_by = 11;
+	string modified_by = 12;
+	string email = 13;
+	int32 data_environ = 14;
+	string icon = 15;
+}
+
+message PBTSysUserRole
+{
+	string user_role_id = 1;
+	string role_id = 2;
+	string user_id = 3;
+	int32 status = 4;
+}
+
+message PBTFGLoginUser
+{
+	int user_id = 1;
+	string login_id = 2;
+	string nickname = 3;
+	string email = 4;
+	string mobile = 5;
+	string third_loginid1 = 6;
+	string third_loginid2 = 7;
+	string reg_type = 8;
+	int32 status = 9;
+	string password = 10;
+	string trade_password = 11;
+	string update_time = 12;
+	string create_time = 13;
+}
+
+message PBTFGUserIdList
+{
+	int user_id = 1;
+	int32 status = 2;
+}
+
+message PBTFGUserInfo
+{
+	int user_id = 1;
+	string nickname = 2;
+	string security_email = 3;
+	string user_name = 4;
+	string address = 5;
+	int32 status = 6;
+	string id_no = 7;
+	string update_time = 8;
+	string create_time = 9;
+	string qq_id = 10;
+	string wechat_id = 11;
+	string mobile = 12;
+	string email = 13;
+	string renren = 14;
+	string weibo = 15;
+	int32 face = 16;
+	string face_url = 17;
+	int32 gender = 18;
+	string birthday = 19;
+	string country = 20;
+	string city = 21;
+	string reg_time = 22;
+	string reg_ip = 23;
+	string last_login_time = 24;
+	string last_login_ip = 25;
+}
+
+message PBTFGUserRole
+{
+	int user_role_id = 1;
+	int user_id = 2;
+	int role_id = 3;
+	string status = 4;
+}
+
+message PBTFCChannelProduct
+{
+	string row_id = 1;
+	string game_id = 2;
+	string channel_id = 3;
+	string product_id = 4;
+	string note = 5;
+	string author = 6;
+	string rectime = 7;
+}
+
+message PBTFCCoinType
+{
+	string coin_type_id = 1;
+	string coin_name = 2;
+	string coin_script = 3;
+	int32 have_child = 4;
+	int32 can_split = 5;
+	int32 use_level = 6;
+}
+
+message PBTFCConfigUpdateLog
+{
+	string config_type = 1;
+	string update_time = 2;
+	string note = 3;
+}
+
+message PBTFCGameSupportCoin
+{
+	string row_id = 1;
+	string coin_type_id = 2;
+	string game_id = 3;
+}
+
+message PBTFCOrder
+{
+	string order_id = 1;
+	int user_id = 2;
+	int32 order_status = 3;
+	string item_id = 4;
+	int coin_num = 5;
+	string storage_time = 6;
+	string handle_time = 7;
+}
+
+message PBTFCOrderDetail
+{
+	string row_id = 1;
+	int user_id = 2;
+	string handle_time = 3;
+	int32 hanlde_status = 4;
+	int num_before = 5;
+	int change_num = 6;
+	int num_after = 7;
+	string note = 8;
+}
+
+message PBTFCSequence
+{
+	string name = 1;
+	int current_value = 2;
+	int32 _increment = 3;
+}
+
+message PBTFCUserCoin
+{
+	string coin_rowid = 1;
+	string coin_type_id = 2;
+	int user_id = 3;
+	string start_time = 4;
+	string expire_time = 5;
+	int coin_num = 6;
+	int lock_count = 7;
+	int32 show_child = 8;
+}
+
+message PBTFCUserCoinChangeDetail
+{
+	string coin_row_id = 1;
+	string coin_type_id = 2;
+	string rec_time = 3;
+	int user_id = 4;
+	int change_num = 5;
+	int remain_num = 6;
+	string lock_id = 7;
+	string channel_id = 8;
+	string product_id = 9;
+	string flow_number = 10;
+	string user_ip = 11;
+	string server_ip = 12;
+	int32 game_id = 13;
+}
+
+message PBTFCUserCoinChangeLimit
+{
+	string coin_row_id = 1;
+	int in_num = 2;
+	int out_num = 3;
+	int change_num = 4;
+	string lastupdatetime = 5;
+	string resettime = 6;
+}
+
+message PBTFCUserCoinReclaimDetail
+{
+	string row_id = 1;
+	string coin_type_id = 2;
+	string rec_time = 3;
+	int user_id = 4;
+	int reclaim_num = 5;
+	int req_num = 6;
+	int changed_num = 7;
+	string lock_id = 8;
+	string channel_id = 9;
+	string product_id = 10;
+	string flow_number = 11;
+	string user_ip = 12;
+	string server_ip = 13;
+	string game_id = 14;
+}
+
+message PBTFCUserLock
+{
+	string row_id = 1;
+	string lock_id = 2;
+	string user_id = 3;
+	string coin_row_id = 4;
+	string game_id = 5;
+	string server_ip = 6;
+	string server_name = 7;
+	string coin_type_id = 8;
+	int lock_num = 9;
+	string rec_date = 10;
+}
+
+message PBTFCUserLockcs
+{
+	string user_id = 1;
+	int read_count = 2;
+	int write_count = 3;
+}
+
+message PBTFCUserLockChangeDetail
+{
+	string row_id = 1;
+	string coin_type_id = 2;
+	string rec_time = 3;
+	string lock_id = 4;
+	string user_id = 5;
+	int change_num = 6;
+	int locked_num = 7;
+	string channel_id = 8;
+	string product_id = 9;
+	string flow_number = 10;
+	string user_ip = 11;
+	string server_ip = 12;
+	string game_id = 13;
+}
+
+message PBTFCUseLockDetail
+{
+	string row_id = 1;
+	string coin_type_id = 2;
+	string rec_time = 3;
+	int32 actiontype = 4;
+	string lock_id = 5;
+	string user_id = 6;
+	string server_ip = 7;
+	string game_id = 8;
+	string server_name = 9;
+	int lock_num = 10;
+	int change_num = 11;
+	int remain_num = 12;
+	int other_lock_num = 13;
+}
+

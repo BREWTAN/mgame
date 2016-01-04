@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+		<bean id="tSysActionMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.sys.mapper.TSysActionMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tsysactionDao" class="onight.tfg.ordbgens.sys.dao.TSysActionDao" >
+ 		<property name="mapper" ref="tSysActionMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tSysBranchMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.sys.mapper.TSysBranchMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tsysbranchDao" class="onight.tfg.ordbgens.sys.dao.TSysBranchDao" >
+ 		<property name="mapper" ref="tSysBranchMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tSysBusinessMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.sys.mapper.TSysBusinessMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tsysbusinessDao" class="onight.tfg.ordbgens.sys.dao.TSysBusinessDao" >
+ 		<property name="mapper" ref="tSysBusinessMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tSysMenuMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.sys.mapper.TSysMenuMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tsysmenuDao" class="onight.tfg.ordbgens.sys.dao.TSysMenuDao" >
+ 		<property name="mapper" ref="tSysMenuMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tSysOpLogsMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.sys.mapper.TSysOpLogsMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tsysoplogsDao" class="onight.tfg.ordbgens.sys.dao.TSysOpLogsDao" >
+ 		<property name="mapper" ref="tSysOpLogsMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tSysParamMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.sys.mapper.TSysParamMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tsysparamDao" class="onight.tfg.ordbgens.sys.dao.TSysParamDao" >
+ 		<property name="mapper" ref="tSysParamMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tSysRoleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.sys.mapper.TSysRoleMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tsysroleDao" class="onight.tfg.ordbgens.sys.dao.TSysRoleDao" >
+ 		<property name="mapper" ref="tSysRoleMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tSysRoleActionMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.sys.mapper.TSysRoleActionMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tsysroleactionDao" class="onight.tfg.ordbgens.sys.dao.TSysRoleActionDao" >
+ 		<property name="mapper" ref="tSysRoleActionMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tSysRoleMenuMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.sys.mapper.TSysRoleMenuMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tsysrolemenuDao" class="onight.tfg.ordbgens.sys.dao.TSysRoleMenuDao" >
+ 		<property name="mapper" ref="tSysRoleMenuMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tSysRoleMutexMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.sys.mapper.TSysRoleMutexMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tsysrolemutexDao" class="onight.tfg.ordbgens.sys.dao.TSysRoleMutexDao" >
+ 		<property name="mapper" ref="tSysRoleMutexMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tSysRspCodeMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.sys.mapper.TSysRspCodeMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tsysrspcodeDao" class="onight.tfg.ordbgens.sys.dao.TSysRspCodeDao" >
+ 		<property name="mapper" ref="tSysRspCodeMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tSysUserMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.sys.mapper.TSysUserMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tsysuserDao" class="onight.tfg.ordbgens.sys.dao.TSysUserDao" >
+ 		<property name="mapper" ref="tSysUserMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tSysUserRoleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.sys.mapper.TSysUserRoleMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tsysuserroleDao" class="onight.tfg.ordbgens.sys.dao.TSysUserRoleDao" >
+ 		<property name="mapper" ref="tSysUserRoleMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFGLoginUserMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfg.mapper.TFGLoginUserMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfgloginuserDao" class="onight.tfg.ordbgens.tfg.dao.TFGLoginUserDao" >
+ 		<property name="mapper" ref="tFGLoginUserMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFGUserIdListMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfg.mapper.TFGUserIdListMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfguseridlistDao" class="onight.tfg.ordbgens.tfg.dao.TFGUserIdListDao" >
+ 		<property name="mapper" ref="tFGUserIdListMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFGUserInfoMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfg.mapper.TFGUserInfoMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfguserinfoDao" class="onight.tfg.ordbgens.tfg.dao.TFGUserInfoDao" >
+ 		<property name="mapper" ref="tFGUserInfoMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFGUserRoleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfg.mapper.TFGUserRoleMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfguserroleDao" class="onight.tfg.ordbgens.tfg.dao.TFGUserRoleDao" >
+ 		<property name="mapper" ref="tFGUserRoleMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCChannelProductMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCChannelProductMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfcchannelproductDao" class="onight.tfg.ordbgens.tfc.dao.TFCChannelProductDao" >
+ 		<property name="mapper" ref="tFCChannelProductMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCCoinTypeMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCCoinTypeMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfccointypeDao" class="onight.tfg.ordbgens.tfc.dao.TFCCoinTypeDao" >
+ 		<property name="mapper" ref="tFCCoinTypeMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCConfigUpdateLogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCConfigUpdateLogMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfcconfigupdatelogDao" class="onight.tfg.ordbgens.tfc.dao.TFCConfigUpdateLogDao" >
+ 		<property name="mapper" ref="tFCConfigUpdateLogMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCGameSupportCoinMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCGameSupportCoinMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfcgamesupportcoinDao" class="onight.tfg.ordbgens.tfc.dao.TFCGameSupportCoinDao" >
+ 		<property name="mapper" ref="tFCGameSupportCoinMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCOrderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCOrderMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfcorderDao" class="onight.tfg.ordbgens.tfc.dao.TFCOrderDao" >
+ 		<property name="mapper" ref="tFCOrderMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCOrderDetailMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCOrderDetailMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfcorderdetailDao" class="onight.tfg.ordbgens.tfc.dao.TFCOrderDetailDao" >
+ 		<property name="mapper" ref="tFCOrderDetailMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCSequenceMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCSequenceMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfcsequenceDao" class="onight.tfg.ordbgens.tfc.dao.TFCSequenceDao" >
+ 		<property name="mapper" ref="tFCSequenceMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCUserCoinMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCUserCoinMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfcusercoinDao" class="onight.tfg.ordbgens.tfc.dao.TFCUserCoinDao" >
+ 		<property name="mapper" ref="tFCUserCoinMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCUserCoinChangeDetailMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCUserCoinChangeDetailMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfcusercoinchangedetailDao" class="onight.tfg.ordbgens.tfc.dao.TFCUserCoinChangeDetailDao" >
+ 		<property name="mapper" ref="tFCUserCoinChangeDetailMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCUserCoinChangeLimitMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCUserCoinChangeLimitMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfcusercoinchangelimitDao" class="onight.tfg.ordbgens.tfc.dao.TFCUserCoinChangeLimitDao" >
+ 		<property name="mapper" ref="tFCUserCoinChangeLimitMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCUserCoinReclaimDetailMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCUserCoinReclaimDetailMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfcusercoinreclaimdetailDao" class="onight.tfg.ordbgens.tfc.dao.TFCUserCoinReclaimDetailDao" >
+ 		<property name="mapper" ref="tFCUserCoinReclaimDetailMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCUserLockMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCUserLockMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfcuserlockDao" class="onight.tfg.ordbgens.tfc.dao.TFCUserLockDao" >
+ 		<property name="mapper" ref="tFCUserLockMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCUserLockcsMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCUserLockcsMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfcuserlockcsDao" class="onight.tfg.ordbgens.tfc.dao.TFCUserLockcsDao" >
+ 		<property name="mapper" ref="tFCUserLockcsMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCUserLockChangeDetailMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCUserLockChangeDetailMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfcuserlockchangedetailDao" class="onight.tfg.ordbgens.tfc.dao.TFCUserLockChangeDetailDao" >
+ 		<property name="mapper" ref="tFCUserLockChangeDetailMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	<bean id="tFCUseLockDetailMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.tfg.ordbgens.tfc.mapper.TFCUseLockDetailMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tfcuselockdetailDao" class="onight.tfg.ordbgens.tfc.dao.TFCUseLockDetailDao" >
+ 		<property name="mapper" ref="tFCUseLockDetailMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
+	
+</beans>

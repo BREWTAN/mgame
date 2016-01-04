@@ -1,0 +1,39 @@
+
+
+syntax = "proto3";
+
+package onight.mgame.mauthlogin;
+
+
+message PBRegister
+{
+	int32	userid = 1;
+	string	pwd	=	2;
+	string  nickname = 3;
+	string  username= 4;
+	string	qqid	= 5;
+	string	wechatid = 6;
+	string	mobile = 7;
+	string	email=8;
+	string	renren = 9;
+	string	weibo=10;
+	int32	face = 11;
+	string	faceurl=12;
+	int32	gender = 13;
+	string	country = 14;
+	string 	city = 15;
+	string  address = 16;
+	string	birthday = 17;
+	string	idno = 18;
+	string	method = 30;//0.注册，1. 获取userid，3.检查nickname,4.检查username，5.检查qqid,6.检查wechatid，7.检查手机号，8.检查email，9.检查renren，18.检查idno
+};
+
+
+message PBRetRegister 
+{
+	 string userid = 1;
+	 int32 retcode = 2;
+	 string status = 3;
+	 string desc = 4;	 
+};
+

@@ -1,0 +1,26 @@
+
+
+syntax = "proto3";
+
+package onight.mgame.mauthlogin;
+
+
+message PBLogin
+{
+	int32	userid = 1;
+	string	nickname = 2;
+	string	email = 3;
+	string 	modile = 4;
+	string	thirdloginid1 = 5;
+	string	thirdloginid2 = 6;
+	string	pwd = 10;
+	int32	logintype=20;//登录类型，
+};
+
+message PBRetLogin 
+{
+	 int32 userid = 1;
+	 int32 retcode = 2;
+	 string status = 3;
+	 string desc = 4;
+}

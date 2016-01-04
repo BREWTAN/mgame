@@ -1,0 +1,53 @@
+
+version = '1.0.0'
+
+buildscript {
+	repositories { maven { url "https://plugins.gradle.org/m2/" } }
+	dependencies {  classpath 'com.google.protobuf:protobuf-gradle-plugin:0.7.0' }
+}
+
+apply plugin: "com.google.protobuf"
+
+protobuf {
+	protoc{
+		//path = '/usr/local/Cellar/protobuf/2.6.1/bin/protoc'
+		artifact = 'com.google.protobuf:protoc:3.0.0-alpha-3'
+	}
+}
+
+
+sourceSets {
+	main {
+		proto {
+			// In addition to the default 'src/main/proto'
+			srcDir 'src/gens/proto'
+		}
+		java {
+			srcDir 'src/main/java'
+			srcDir 'src/main/resources'
+			srcDir 'src/gens/java'
+			srcDir 'src/gens/proto'
+			srcDir 'build/generated/source/proto/main/java'
+		}
+		resources {
+			srcDir 'src/resources'
+			srcDir 'src/gens/resources'
+		}
+	}
+}
+
+dependencies {
+	//ibatis3
+	compile "onight.tfw:onight.tfw.ordbutils:2.0.0"
+	compile 'com.google.protobuf:protobuf-java:3.0.0-alpha-3.1'
+	//	 testCompile 'junit:junit:4.12'
+}
+
+jar {
+	manifest{
+		//		attributes( 'Spring-Context': 'applicationContext-common.xml, applicationContext-beans.xml')
+		attributes( 'Import-Ignore':'org.springframework,org.mybatis.spring,com.mchange.v2.c3p0')
+		attributes( 'DynamicImport-Package': '*')
+		attributes( 'Import-Lib': 'lib')
+	}
+}
