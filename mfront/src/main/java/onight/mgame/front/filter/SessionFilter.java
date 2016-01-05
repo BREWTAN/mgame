@@ -16,13 +16,16 @@ public class SessionFilter implements PacketFilter {
 
 	@Override
 	public boolean postRoute(String module, FramePacket pack, CompleteHandler handler) {
-		log.debug("postRoute:"+module+":" + pack);
+//		log.debug("postRoute:"+module+":" + pack);
+		if("SINSSM".equals(pack.getGlobalCMD())){
+//			pack.getBody()
+		}
 		return false;
 	}
 
 	@Override
 	public boolean preRoute(String module, FramePacket pack, CompleteHandler handler) {
-		log.debug("preRoute:"+module+":" + pack);
+//		log.debug("preRoute:"+module+":" + pack);
 		return false;
 	}
 
