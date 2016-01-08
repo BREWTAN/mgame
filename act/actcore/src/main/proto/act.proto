@@ -40,8 +40,8 @@ message PBFundLog	 //资金操作
 	string	flag_cancel		=20;// 冲销标志c:冲销，b:被冲销
 	string	related_trans_id	=21;//  相关流水id，用于冲销
 	string  ext_id1			=22 ;//相关流水id
-	string  ext_id2			=22 ;//相关流水id
-	string  ext_comments			=22 ;//相关流水id
+	string  ext_id2			=23 ;//相关流水id
+	string  ext_comments			=24 ;//相关流水id
 	string	from_fund_no          =30;// 资金账号
 	string	from_act_no           =31;// 账号
 	
