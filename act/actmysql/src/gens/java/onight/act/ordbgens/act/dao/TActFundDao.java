@@ -158,6 +158,9 @@ public class TActFundDao extends ExtendDaoSupper<TActFund, TActFundExample, TAct
 				if(record.getCatalog()!=null){
 				criteria.andCatalogEqualTo(record.getCatalog());
 				}
+				if(record.getChannelId()!=null){
+				criteria.andChannelIdEqualTo(record.getChannelId());
+				}
 				if(record.getCurBal()!=null){
 				criteria.andCurBalEqualTo(record.getCurBal());
 				}
@@ -275,6 +278,14 @@ public class TActFundDao extends ExtendDaoSupper<TActFund, TActFundExample, TAct
 						sb.append("'"+"0"+"'");						
 				}else{
 					sb.append("'"+record.getCatalog()+"'");
+				}
+			
+				sb.append(",");
+			
+				if(record.getChannelId()==null){
+						sb.append("null");
+				}else{
+					sb.append("'"+record.getChannelId()+"'");
 				}
 			
 				sb.append(",");

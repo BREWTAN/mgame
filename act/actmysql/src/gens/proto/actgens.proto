@@ -12,15 +12,16 @@ message PBTActFund
 	string act_type = 5;
 	string mny_smb = 6;
 	string catalog = 7;
-	double cur_bal = 8;
-	double freeze_total = 9;
-	double income_total = 10;
-	double payout_total = 11;
-	double fotbid_amount = 12;
-	string fotbid_flag = 13;
-	string act_stat = 14;
-	string act_bal_warn_flag = 15;
-	string update_act_log_id = 16;
+	string channel_id = 8;
+	double cur_bal = 9;
+	double freeze_total = 10;
+	double income_total = 11;
+	double payout_total = 12;
+	double fotbid_amount = 13;
+	string fotbid_flag = 14;
+	string act_stat = 15;
+	string act_bal_warn_flag = 16;
+	string update_act_log_id = 17;
 }
 
 message PBTActInfo
@@ -31,18 +32,19 @@ message PBTActInfo
 	string mchnt_id = 4;
 	string act_type = 5;
 	string mny_smb = 6;
-	string catalog = 7;
-	double act_yinit_bal = 8;
-	double act_dinit_bal = 9;
-	double act_cur_bal = 10;
-	double act_stat = 11;
-	double act_maxod_amt = 12;
-	double act_ctrl_bal = 13;
-	string act_bal_warn_flag = 14;
-	string create_time = 15;
-	string update_time = 16;
-	string modify_id = 17;
-	string memo = 18;
+	string channel_id = 7;
+	string catalog = 8;
+	double act_yinit_bal = 9;
+	double act_dinit_bal = 10;
+	double act_cur_bal = 11;
+	double act_stat = 12;
+	double act_maxod_amt = 13;
+	double act_ctrl_bal = 14;
+	string act_bal_warn_flag = 15;
+	string create_time = 16;
+	string update_time = 17;
+	string modify_id = 18;
+	string memo = 19;
 }
 
 message PBTActInterest
@@ -62,26 +64,6 @@ message PBTActInterest
 
 message PBTActLogs
 {
-	string uuid = 1;
-	string sett_date = 2;
-	string cons_date = 3;
-	string tx_sno = 4;
-	string send_mchnt_id = 5;
-	string msg_type = 6;
-	string act_no = 7;
-	string biz_type = 8;
-	string biz_dtl_type = 9;
-	string debt_cust_id = 10;
-	string crdt_cust_id = 11;
-	string dc_type = 12;
-	double amt = 13;
-	double act_bal_after = 14;
-	double act_bal_before = 15;
-	string updt_time = 16;
-}
-
-message PBTActTradeLogs
-{
 	string log_uuid = 1;
 	string sett_date = 2;
 	string cons_date = 3;
@@ -93,8 +75,8 @@ message PBTActTradeLogs
 	string act_no = 9;
 	string biz_type = 10;
 	string biz_dtl_type = 11;
-	string debt_cust_id = 12;
-	string crdt_cust_id = 13;
+	string from_cust_id = 12;
+	string to_cust_id = 13;
 	string dc_type = 14;
 	double amt = 15;
 	int32 cnt = 16;
@@ -103,11 +85,14 @@ message PBTActTradeLogs
 	string status = 19;
 	double act_bal_after = 20;
 	double act_bal_before = 21;
-	string create_time = 22;
-	string update_time = 23;
+	string ext_id1 = 22;
+	string ext_id2 = 23;
+	string ext_commets = 24;
+	string create_time = 25;
+	string update_time = 26;
 }
 
-message PBTActTradeLogsHis
+message PBTActLogsHis
 {
 	string log_uuid = 1;
 	string sett_date = 2;
@@ -120,8 +105,8 @@ message PBTActTradeLogsHis
 	string act_no = 9;
 	string biz_type = 10;
 	string biz_dtl_type = 11;
-	string debt_cust_id = 12;
-	string crdt_cust_id = 13;
+	string from_cust_id = 12;
+	string to_cust_id = 13;
 	string dc_type = 14;
 	double amt = 15;
 	string flag_cancel = 16;

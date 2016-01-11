@@ -72,9 +72,9 @@ create index INX_T_ACT_FUND_CUSTID on T_ACT_FUND
 );
 
 
-drop table if exists T_ACT_TRADE_LOGS;
+drop table if exists T_ACT_LOGS;
 
-create table T_ACT_TRADE_LOGS
+create table T_ACT_LOGS
 (
   	LOG_UUID         VARCHAR(64)  NOT NULL COMMENT '唯一字段',
 	SETT_DATE         VARCHAR(8)  NOT NULL COMMENT '清算日期',
@@ -87,8 +87,8 @@ create table T_ACT_TRADE_LOGS
 	ACT_NO         VARCHAR(64)  NOT NULL COMMENT '账号',
 	BIZ_TYPE         VARCHAR(8)  COMMENT '业务类型',
 	BIZ_DTL_TYPE         VARCHAR(8)   COMMENT '业务种类',
-	DEBT_CUST_ID         VARCHAR(128)  NOT NULL COMMENT '借记客户号转出账户',
-	CRDT_CUST_ID         VARCHAR(128)  NOT NULL COMMENT '贷记客户号转入账户',
+	FROM_CUST_ID         VARCHAR(128)  NOT NULL COMMENT '借记客户号转出账户',
+	TO_CUST_ID         VARCHAR(128)  NOT NULL COMMENT '贷记客户号转入账户',
 	DC_TYPE         VARCHAR(8)  NOT NULL COMMENT '借贷类型',
 	AMT         DECIMAL(24,8)  NOT NULL COMMENT '发生额',
 	CNT         INT	  NOT NULL COMMENT '发生总数',
@@ -106,19 +106,19 @@ create table T_ACT_TRADE_LOGS
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8 COMMENT = "账务明细表";
 
 
-create index T_ACT_LOGS_ACT_NO on T_ACT_TRADE_LOGS
+create index T_ACT_LOGS_ACT_NO on T_ACT_LOGS
 (
    ACT_NO
 );
-create index T_ACT_LOGS_FUND_NO on T_ACT_TRADE_LOGS
+create index T_ACT_LOGS_FUND_NO on T_ACT_LOGS
 (
    FUND_NO
 );
 
 
-drop table if exists T_ACT_TRADE_LOGS_HIS;
+drop table if exists T_ACT_LOGS_HIS;
 
-create table T_ACT_TRADE_LOGS_HIS
+create table T_ACT_LOGS_HIS
 (
   	LOG_UUID         VARCHAR(64)  NOT NULL COMMENT '唯一字段',
 	SETT_DATE         VARCHAR(8)  NOT NULL COMMENT '清算日期',
@@ -131,8 +131,8 @@ create table T_ACT_TRADE_LOGS_HIS
 	ACT_NO         VARCHAR(64)  NOT NULL COMMENT '账号',
 	BIZ_TYPE         VARCHAR(8)  COMMENT '业务类型',
 	BIZ_DTL_TYPE         VARCHAR(8)   COMMENT '业务种类',
-	DEBT_CUST_ID         VARCHAR(128)  NOT NULL COMMENT '借记客户号转出账户',
-	CRDT_CUST_ID         VARCHAR(128)  NOT NULL COMMENT '贷记客户号转入账户',
+	FROM_CUST_ID         VARCHAR(128)  NOT NULL COMMENT '借记客户号转出账户',
+	TO_CUST_ID         VARCHAR(128)  NOT NULL COMMENT '贷记客户号转入账户',
 	DC_TYPE         VARCHAR(8)  NOT NULL COMMENT '借贷类型',
 	AMT         DECIMAL(24,8)  NOT NULL COMMENT '发生额',
 	FLAG_CANCEL		CHAR(1)	COMMENT '冲销标志C:冲销，B:被冲销',
@@ -146,16 +146,16 @@ create table T_ACT_TRADE_LOGS_HIS
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8 COMMENT = "账务明细表历史";
 
 
-create index T_ACT_LOGS_HIS_ACT_NO on T_ACT_TRADE_LOGS_HIS
+create index T_ACT_LOGS_HIS_ACT_NO on T_ACT_LOGS_HIS
 (
    ACT_NO
 );
-create index T_ACT_LOGS_HIS_FUND_NO on T_ACT_TRADE_LOGS_HIS
+create index T_ACT_LOGS_HIS_FUND_NO on T_ACT_LOGS_HIS
 (
    FUND_NO
 );
 
-create index T_ACT_LOGS_HIS_SETT_DATE on T_ACT_TRADE_LOGS_HIS
+create index T_ACT_LOGS_HIS_SETT_DATE on T_ACT_LOGS_HIS
 (
    SETT_DATE
 );

@@ -1,0 +1,119 @@
+
+syntax = "proto3";
+package onight.act.ordbgens.act.pbo;
+
+message PBTActFund
+{
+	string fund_no = 1;
+	string act_no = 2;
+	string cust_id = 3;
+	string mchnt_id = 4;
+	string act_type = 5;
+	string mny_smb = 6;
+	string catalog = 7;
+	string channel_id = 8;
+	double cur_bal = 9;
+	double freeze_total = 10;
+	double income_total = 11;
+	double payout_total = 12;
+	double fotbid_amount = 13;
+	string fotbid_flag = 14;
+	string act_stat = 15;
+	string act_bal_warn_flag = 16;
+	string update_act_log_id = 17;
+}
+
+message PBTActInfo
+{
+	string act_no = 1;
+	string act_name = 2;
+	string cust_id = 3;
+	string mchnt_id = 4;
+	string act_type = 5;
+	string mny_smb = 6;
+	string channel_id = 7;
+	string catalog = 8;
+	double act_yinit_bal = 9;
+	double act_dinit_bal = 10;
+	double act_cur_bal = 11;
+	double act_stat = 12;
+	double act_maxod_amt = 13;
+	double act_ctrl_bal = 14;
+	string act_bal_warn_flag = 15;
+	string create_time = 16;
+	string update_time = 17;
+	string modify_id = 18;
+	string memo = 19;
+}
+
+message PBTActInterest
+{
+	string inst_logid = 1;
+	string interest_date = 2;
+	string fund_no = 3;
+	string act_no = 4;
+	string interest_type = 5;
+	double interest_amount = 6;
+	string gmt_create = 7;
+	string gmt_modify = 8;
+	string trade_date = 9;
+	double rate_value = 10;
+	string unit_no = 11;
+}
+
+message PBTActLogs
+{
+	string log_uuid = 1;
+	string sett_date = 2;
+	string cons_date = 3;
+	string tx_sno = 4;
+	string send_mchnt_id = 5;
+	string trans_code = 6;
+	string sub_trans_code = 7;
+	string fund_no = 8;
+	string act_no = 9;
+	string biz_type = 10;
+	string biz_dtl_type = 11;
+	string from_cust_id = 12;
+	string to_cust_id = 13;
+	string dc_type = 14;
+	double amt = 15;
+	int32 cnt = 16;
+	string flag_cancel = 17;
+	string related_trans_id = 18;
+	string status = 19;
+	double act_bal_after = 20;
+	double act_bal_before = 21;
+	string ext_id1 = 22;
+	string ext_id2 = 23;
+	string ext_commets = 24;
+	string create_time = 25;
+	string update_time = 26;
+}
+
+message PBTActLogsHis
+{
+	string log_uuid = 1;
+	string sett_date = 2;
+	string cons_date = 3;
+	string tx_sno = 4;
+	string send_mchnt_id = 5;
+	string trans_code = 6;
+	string sub_trans_code = 7;
+	string fund_no = 8;
+	string act_no = 9;
+	string biz_type = 10;
+	string biz_dtl_type = 11;
+	string from_cust_id = 12;
+	string to_cust_id = 13;
+	string dc_type = 14;
+	double amt = 15;
+	string flag_cancel = 16;
+	string related_trans_id = 17;
+	string status = 18;
+	double act_bal_after = 19;
+	double act_bal_before = 20;
+	string create_time = 21;
+	string update_time = 22;
+}
+

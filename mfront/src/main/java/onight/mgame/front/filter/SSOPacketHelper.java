@@ -1,4 +1,4 @@
-package onight.mgame.front.action;
+package onight.mgame.front.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import onight.sm.Ssm.PBCommand;

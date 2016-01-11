@@ -3,7 +3,6 @@ package onight.mgame.front.filter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import onight.mgame.front.action.ModuleStarter;
-import onight.mgame.front.action.SSOPacketHelper;
 import onight.osgi.annotation.iPojoBean;
 import onight.sm.Ssm.PBModule;
 import onight.sm.Ssm.PBSSORet;
@@ -46,7 +45,7 @@ public class SessionFilter implements PacketFilter,PSenderService {
 	public boolean preRoute(final ActWrapper actor, final FramePacket pack, final CompleteHandler handler) {
 		// log.debug("preRoute:"+module+":" + pack);
 		if (!PBModule.SSM.name().equals(pack.getModule())) {//
-			log.debug("Should I Check this:cmd=" + pack.getGlobalCMD());
+			log.debug("I Should Check this:cmd=" + pack.getGlobalCMD());
 			if (SSOPacketHelper.getSSOGetPacket(pack) == null) {
 				handler.onFinished(PacketHelper.toPBReturn(pack, new ExceptionBody("NOT_AUTHORIED", null)));
 				return true;
@@ -64,7 +63,7 @@ public class SessionFilter implements PacketFilter,PSenderService {
 							log.debug("get session success:session==" + ssoret.getSession());
 							actor.onPacket(pack, handler);
 						} else {
-							handler.onFinished(PacketHelper.toPBReturn(pack, new ExceptionBody("Session_Not_Found", null)));
+							handler.onFinished(PacketHelper.toPBReturn(pack, new ExceptionBody("NOT_AUTHORIED", null)));
 						}
 					} catch (Exception e) {
 						log.warn("error In Process SSORET:" + vldpack, e);

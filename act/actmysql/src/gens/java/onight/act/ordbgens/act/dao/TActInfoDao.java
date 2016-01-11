@@ -155,6 +155,9 @@ public class TActInfoDao extends ExtendDaoSupper<TActInfo, TActInfoExample, TAct
 				if(record.getMnySmb()!=null){
 				criteria.andMnySmbEqualTo(record.getMnySmb());
 				}
+				if(record.getChannelId()!=null){
+				criteria.andChannelIdEqualTo(record.getChannelId());
+				}
 				if(record.getCatalog()!=null){
 				criteria.andCatalogEqualTo(record.getCatalog());
 				}
@@ -273,6 +276,14 @@ public class TActInfoDao extends ExtendDaoSupper<TActInfo, TActInfoExample, TAct
 						sb.append("'"+"CNY"+"'");						
 				}else{
 					sb.append("'"+record.getMnySmb()+"'");
+				}
+			
+				sb.append(",");
+			
+				if(record.getChannelId()==null){
+						sb.append("null");
+				}else{
+					sb.append("'"+record.getChannelId()+"'");
 				}
 			
 				sb.append(",");

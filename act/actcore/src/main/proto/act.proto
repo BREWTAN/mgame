@@ -2,73 +2,46 @@
 
 syntax = "proto3";
 
-package onight.mgame.accounts;
+package onight.act.ordbgens.act.pbo;
 
+import "actgens.proto";
 
-message PBAccountInfo //账户信息
-{
-	string  act_no		=1;				//账户号
-	string  act_name		=2;//账户名称
-	string  cust_id			=10;//客户号
-	string  mchnt_id		=20;//所属商户号
-	string  channel_id		=21;//所属渠道号
-	string  act_type		=30;//账户类型
-	string  mny_smb			=40;//货币符号
-	string  catalog			=50;//机构类型
-	string  modify_id	    =60;//更新人
-	string  create_time	   	=70;//创建时间
-	string  update_time	   	=80;//更新时间
-	string  memo	   		=90;//备注
-}
-
-
-message PBFundLog	 //资金操作
-{
-	string	sett_date        =1;//清算日期
-	string	cons_date        =2;//委托日期
-	string	tx_sno           =3;//交易序号
-	string	send_mchnt_id    =4;//发起商户号
-	string	trans_code       =5;//交易代号
-	string	sub_trans_code   =6;//   交易子代号
-	string	biz_type         =9;//  业务类型
-	string	biz_dtl_type     =10;//       业务种类
-	string	debt_cust_id     =11;//      借记客户号转出账户
-	string	crdt_cust_id     =12;//      贷记客户号转入账户
-	string	dc_type          =13;// 借贷类型
-	string	amt            =14;//发生额
-	string	cnt            =15;//发生总数
-	string	flag_cancel		=20;// 冲销标志c:冲销，b:被冲销
-	string	related_trans_id	=21;//  相关流水id，用于冲销
-	string  ext_id1			=22 ;//相关流水id
-	string  ext_id2			=23 ;//相关流水id
-	string  ext_comments			=24 ;//相关流水id
-	string	from_fund_no          =30;// 资金账号
-	string	from_act_no           =31;// 账号
-	
-	string	to_fund_no          =32;// 资金账号
-	string	to_act_no           =33;// 账号
-
-}
-
-
-message PBActCRUD	//账户操作
-{
-	PBAccountInfo  pb_act_info		=1;//账户名称
-	enum Operator{
-		CREATE = 0 ;//创建
-		MODIFY = 1 ;//修改
-		FREEZE = 2 ;//冻结
-		QUERY  = 3 ;//查询
-		DELETE = 4 ;//删除
-		QUERYBYEXAMPLE  = 30 ;//根据条件相等查询
-	}
-	Operator  op = 20;//操作方式
+enum PBModule{
+	ACT = 0;
 };
+
+
+enum PBCommand{
+	CRT = 0 ;//创建主账户
+	CRF = 1 ;//创建资金账户
+	MOD = 2 ;//修改主账户
+	MOF = 3 ;//修改资金账户
+	FRZ = 4 ;//冻结资金账户
+	ADD = 5 ;//增加金额
+	QUR = 6 ;//查询
+	DEL = 7 ;//删除
+	TRN = 8 ;//转账资金账户
+	QUE = 30;//根据条件相等查询
+};
+
+message PBFundOP	//账户操作
+{
+	PBTActLogs  logs = 1;//账户名称
+	PBCommand  op = 20;//操作方式
+};
+
+
+message PBActCreate //创建资金账户
+{
+	string  act_no		=1;				//资金子账户号
+	PBTActInfo  pb_act_info		=2;				//账户信息，如果act_no为空，则创建一个账户，再创建资金账户
+}
+
 
 message PBFundCreate //创建资金子账户
 {
 	string  fund_no		=1;				//资金子账户号
-	PBAccountInfo  pb_act_info		=2;				//账户信息，如果act_no为空，则创建一个账户，再创建资金账户
+	PBTActFund  pb_act_info		=2;				//账户信息，如果act_no为空，则创建一个账户，再创建资金账户
 }
 
 message PBActRet 
@@ -77,14 +50,14 @@ message PBActRet
 		SUCCESS = 0;//成功
 		FAILED = -1;//失败
 	}
-	 int32 retcode = 1;//返回码
-	 string status = 2;//状态信息
-	 string desc = 3;//描述信息
+	RetCode retcode = 1;//返回码
+	string status = 2;//状态信息
+	string desc = 3;//描述信息
 	 
-	 string  fund_no=50;				//资金账户号
-	 string  act_no=60;				//账户号
+	string  fund_no=50;				//资金账户号
+	string  act_no=60;				//账户号
 	 
-	 repeated PBAccountInfo  pb_act_info		=70;//账户信息，查询的时候使用
-	 repeated PBFundLog	pb_fund_log	= 80;//转账记录，查询的时候使用
-	 
+	repeated PBTActInfo  pb_act_info		=70;//账户信息，查询的时候使用
+	repeated PBTActLogs	pb_fund_log	= 80;//转账记录，查询的时候使用
+	
 }

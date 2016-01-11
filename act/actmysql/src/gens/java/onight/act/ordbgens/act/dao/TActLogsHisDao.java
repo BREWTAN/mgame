@@ -12,54 +12,54 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 //import org.springframework.transaction.annotation.Transactional;
 
-import onight.act.ordbgens.act.entity.TActTradeLogsHis;
-import onight.act.ordbgens.act.entity.TActTradeLogsHisExample;
-import onight.act.ordbgens.act.entity.TActTradeLogsHisExample.Criteria;
-import onight.act.ordbgens.act.entity.TActTradeLogsHisKey;
-import onight.act.ordbgens.act.mapper.TActTradeLogsHisMapper;
+import onight.act.ordbgens.act.entity.TActLogsHis;
+import onight.act.ordbgens.act.entity.TActLogsHisExample;
+import onight.act.ordbgens.act.entity.TActLogsHisExample.Criteria;
+import onight.act.ordbgens.act.entity.TActLogsHisKey;
+import onight.act.ordbgens.act.mapper.TActLogsHisMapper;
 import onight.tfw.ojpa.api.annotations.Tab;
 import onight.tfw.ojpa.ordb.ExtendDaoSupper;
 
 
 @Data
-@Tab(name="T_ACT_TRADE_LOGS_HIS")
-public class TActTradeLogsHisDao extends ExtendDaoSupper<TActTradeLogsHis, TActTradeLogsHisExample, TActTradeLogsHisKey>{
+@Tab(name="T_ACT_LOGS_HIS")
+public class TActLogsHisDao extends ExtendDaoSupper<TActLogsHis, TActLogsHisExample, TActLogsHisKey>{
 
-	private TActTradeLogsHisMapper mapper;
+	private TActLogsHisMapper mapper;
 
 	private SqlSessionFactory sqlSessionFactory;
 	
 	
 	@Override
-	public int countByExample(TActTradeLogsHisExample example) {
+	public int countByExample(TActLogsHisExample example) {
 		return mapper.countByExample(example);
 	}
 
 	@Override
-	public int deleteByExample(TActTradeLogsHisExample example) {
+	public int deleteByExample(TActLogsHisExample example) {
 		return mapper.deleteByExample(example);
 	}
 
 	@Override
-	public int deleteByPrimaryKey(TActTradeLogsHisKey key) {
+	public int deleteByPrimaryKey(TActLogsHisKey key) {
 		return mapper.deleteByPrimaryKey(key);
 	}
 
 	@Override
-	public int insert(TActTradeLogsHis record)  {
+	public int insert(TActLogsHis record)  {
 		return mapper.insert(record);
 	}
 
 	@Override
-	public int insertSelective(TActTradeLogsHis record)  {
+	public int insertSelective(TActLogsHis record)  {
 		return mapper.insertSelective(record);
 	}
 
 	@Override
 	//@Transactional
-	public int batchUpdate(List<TActTradeLogsHis> records)
+	public int batchUpdate(List<TActLogsHis> records)
 			 {
-		for(TActTradeLogsHis record : records){
+		for(TActLogsHis record : records){
 			mapper.updateByPrimaryKeySelective(record);
 		}
 		return records.size();
@@ -67,34 +67,34 @@ public class TActTradeLogsHisDao extends ExtendDaoSupper<TActTradeLogsHis, TActT
 
 	@Override
 	//@Transactional
-	public int batchDelete(List<TActTradeLogsHis> records)
+	public int batchDelete(List<TActLogsHis> records)
 			 {
-		for(TActTradeLogsHis record : records){
+		for(TActLogsHis record : records){
 			mapper.deleteByPrimaryKey(record);
 		}
 		return records.size();
 	}
 
 	@Override
-	public List<TActTradeLogsHis> selectByExample(TActTradeLogsHisExample example)
+	public List<TActLogsHis> selectByExample(TActLogsHisExample example)
 			 {
 		return mapper.selectByExample(example);
 	}
 
 	@Override
-	public TActTradeLogsHis selectByPrimaryKey(TActTradeLogsHisKey key)
+	public TActLogsHis selectByPrimaryKey(TActLogsHisKey key)
 			 {
 		return mapper.selectByPrimaryKey(key);
 	}
 
 	@Override
-	public List<TActTradeLogsHis> findAll(List<TActTradeLogsHis> records) {
+	public List<TActLogsHis> findAll(List<TActLogsHis> records) {
 		if(records==null||records.size()<=0){
-			return mapper.selectByExample(new TActTradeLogsHisExample());
+			return mapper.selectByExample(new TActLogsHisExample());
 		}
-		List<TActTradeLogsHis> list = new ArrayList();
-		for(TActTradeLogsHis record : records){
-			TActTradeLogsHis result = mapper.selectByPrimaryKey(record);
+		List<TActLogsHis> list = new ArrayList();
+		for(TActLogsHis record : records){
+			TActLogsHis result = mapper.selectByPrimaryKey(record);
 			if(result!=null){
 				list.add(result);
 			}
@@ -103,38 +103,38 @@ public class TActTradeLogsHisDao extends ExtendDaoSupper<TActTradeLogsHis, TActT
 	}
 
 	@Override
-	public int updateByExampleSelective(TActTradeLogsHis record, TActTradeLogsHisExample example)  {
+	public int updateByExampleSelective(TActLogsHis record, TActLogsHisExample example)  {
 		return mapper.updateByExampleSelective(record, example);
 	}
 
 	@Override
-	public int updateByExample(TActTradeLogsHis record, TActTradeLogsHisExample example) {
+	public int updateByExample(TActLogsHis record, TActLogsHisExample example) {
 		return mapper.updateByExample(record, example);
 	}
 
 	@Override
-	public int updateByPrimaryKeySelective(TActTradeLogsHis record) {
+	public int updateByPrimaryKeySelective(TActLogsHis record) {
 		return mapper.updateByPrimaryKeySelective(record);
 	}
 
 	@Override
-	public int updateByPrimaryKey(TActTradeLogsHis record) {
+	public int updateByPrimaryKey(TActLogsHis record) {
 		return mapper.updateByPrimaryKey(record);
 	}
 
 	@Override
-	public int sumByExample(TActTradeLogsHisExample example) {
+	public int sumByExample(TActLogsHisExample example) {
 		return 0;
 	}
 
 	@Override
 	public void deleteAll()  {
-		mapper.deleteByExample(new TActTradeLogsHisExample());
+		mapper.deleteByExample(new TActLogsHisExample());
 	}
 
 	@Override
-	public TActTradeLogsHisExample getExample(TActTradeLogsHis record) {
-		TActTradeLogsHisExample example = new TActTradeLogsHisExample();
+	public TActLogsHisExample getExample(TActLogsHis record) {
+		TActLogsHisExample example = new TActLogsHisExample();
 		if(record!=null){
 			Criteria criteria = example.createCriteria();
 							if(record.getLogUuid()!=null){
@@ -170,11 +170,11 @@ public class TActTradeLogsHisDao extends ExtendDaoSupper<TActTradeLogsHis, TActT
 				if(record.getBizDtlType()!=null){
 				criteria.andBizDtlTypeEqualTo(record.getBizDtlType());
 				}
-				if(record.getDebtCustId()!=null){
-				criteria.andDebtCustIdEqualTo(record.getDebtCustId());
+				if(record.getFromCustId()!=null){
+				criteria.andFromCustIdEqualTo(record.getFromCustId());
 				}
-				if(record.getCrdtCustId()!=null){
-				criteria.andCrdtCustIdEqualTo(record.getCrdtCustId());
+				if(record.getToCustId()!=null){
+				criteria.andToCustIdEqualTo(record.getToCustId());
 				}
 				if(record.getDcType()!=null){
 				criteria.andDcTypeEqualTo(record.getDcType());
@@ -208,10 +208,10 @@ public class TActTradeLogsHisDao extends ExtendDaoSupper<TActTradeLogsHis, TActT
 		return example;
 	}
 	
-	public TActTradeLogsHis selectOneByExample(TActTradeLogsHisExample example)
+	public TActLogsHis selectOneByExample(TActLogsHisExample example)
 			 {
 		example.setLimit(1);
-		List<TActTradeLogsHis> list=mapper.selectByExample(example);
+		List<TActLogsHis> list=mapper.selectByExample(example);
 		if(list!=null&&list.size()>0){
 			return list.get(0);
 		}
@@ -220,7 +220,7 @@ public class TActTradeLogsHisDao extends ExtendDaoSupper<TActTradeLogsHis, TActT
 	
 	@Override
 	//@Transactional
-	public int batchInsert(List<TActTradeLogsHis> records) {
+	public int batchInsert(List<TActLogsHis> records) {
 		SqlSession session=sqlSessionFactory.openSession();
 		Connection conn = session.getConnection();
 		Statement st = null;
@@ -230,9 +230,9 @@ public class TActTradeLogsHisDao extends ExtendDaoSupper<TActTradeLogsHis, TActT
 			
 			st = conn.createStatement();
 			StringBuffer sb=new StringBuffer();
-			sb.append("INSERT INTO T_ACT_TRADE_LOGS_HIS() values");
+			sb.append("INSERT INTO T_ACT_LOGS_HIS() values");
 			int i=0;
-			for (TActTradeLogsHis record : records) {
+			for (TActLogsHis record : records) {
 				if(i>0){
 					sb.append(",");
 				}
@@ -329,18 +329,18 @@ public class TActTradeLogsHisDao extends ExtendDaoSupper<TActTradeLogsHis, TActT
 			
 				sb.append(",");
 			
-				if(record.getDebtCustId()==null){
+				if(record.getFromCustId()==null){
 						sb.append("null");
 				}else{
-					sb.append("'"+record.getDebtCustId()+"'");
+					sb.append("'"+record.getFromCustId()+"'");
 				}
 			
 				sb.append(",");
 			
-				if(record.getCrdtCustId()==null){
+				if(record.getToCustId()==null){
 						sb.append("null");
 				}else{
-					sb.append("'"+record.getCrdtCustId()+"'");
+					sb.append("'"+record.getToCustId()+"'");
 				}
 			
 				sb.append(",");

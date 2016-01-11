@@ -137,8 +137,8 @@ public class TActLogsDao extends ExtendDaoSupper<TActLogs, TActLogsExample, TAct
 		TActLogsExample example = new TActLogsExample();
 		if(record!=null){
 			Criteria criteria = example.createCriteria();
-							if(record.getUuid()!=null){
-				criteria.andUuidEqualTo(record.getUuid());
+							if(record.getLogUuid()!=null){
+				criteria.andLogUuidEqualTo(record.getLogUuid());
 				}
 				if(record.getSettDate()!=null){
 				criteria.andSettDateEqualTo(record.getSettDate());
@@ -152,8 +152,14 @@ public class TActLogsDao extends ExtendDaoSupper<TActLogs, TActLogsExample, TAct
 				if(record.getSendMchntId()!=null){
 				criteria.andSendMchntIdEqualTo(record.getSendMchntId());
 				}
-				if(record.getMsgType()!=null){
-				criteria.andMsgTypeEqualTo(record.getMsgType());
+				if(record.getTransCode()!=null){
+				criteria.andTransCodeEqualTo(record.getTransCode());
+				}
+				if(record.getSubTransCode()!=null){
+				criteria.andSubTransCodeEqualTo(record.getSubTransCode());
+				}
+				if(record.getFundNo()!=null){
+				criteria.andFundNoEqualTo(record.getFundNo());
 				}
 				if(record.getActNo()!=null){
 				criteria.andActNoEqualTo(record.getActNo());
@@ -164,11 +170,11 @@ public class TActLogsDao extends ExtendDaoSupper<TActLogs, TActLogsExample, TAct
 				if(record.getBizDtlType()!=null){
 				criteria.andBizDtlTypeEqualTo(record.getBizDtlType());
 				}
-				if(record.getDebtCustId()!=null){
-				criteria.andDebtCustIdEqualTo(record.getDebtCustId());
+				if(record.getFromCustId()!=null){
+				criteria.andFromCustIdEqualTo(record.getFromCustId());
 				}
-				if(record.getCrdtCustId()!=null){
-				criteria.andCrdtCustIdEqualTo(record.getCrdtCustId());
+				if(record.getToCustId()!=null){
+				criteria.andToCustIdEqualTo(record.getToCustId());
 				}
 				if(record.getDcType()!=null){
 				criteria.andDcTypeEqualTo(record.getDcType());
@@ -176,14 +182,38 @@ public class TActLogsDao extends ExtendDaoSupper<TActLogs, TActLogsExample, TAct
 				if(record.getAmt()!=null){
 				criteria.andAmtEqualTo(record.getAmt());
 				}
+				if(record.getCnt()!=null){
+				criteria.andCntEqualTo(record.getCnt());
+				}
+				if(record.getFlagCancel()!=null){
+				criteria.andFlagCancelEqualTo(record.getFlagCancel());
+				}
+				if(record.getRelatedTransId()!=null){
+				criteria.andRelatedTransIdEqualTo(record.getRelatedTransId());
+				}
+				if(record.getStatus()!=null){
+				criteria.andStatusEqualTo(record.getStatus());
+				}
 				if(record.getActBalAfter()!=null){
 				criteria.andActBalAfterEqualTo(record.getActBalAfter());
 				}
 				if(record.getActBalBefore()!=null){
 				criteria.andActBalBeforeEqualTo(record.getActBalBefore());
 				}
-				if(record.getUpdtTime()!=null){
-				criteria.andUpdtTimeEqualTo(record.getUpdtTime());
+				if(record.getExtId1()!=null){
+				criteria.andExtId1EqualTo(record.getExtId1());
+				}
+				if(record.getExtId2()!=null){
+				criteria.andExtId2EqualTo(record.getExtId2());
+				}
+				if(record.getExtCommets()!=null){
+				criteria.andExtCommetsEqualTo(record.getExtCommets());
+				}
+				if(record.getCreateTime()!=null){
+				criteria.andCreateTimeEqualTo(record.getCreateTime());
+				}
+				if(record.getUpdateTime()!=null){
+				criteria.andUpdateTimeEqualTo(record.getUpdateTime());
 				}
 
 		}
@@ -223,10 +253,10 @@ public class TActLogsDao extends ExtendDaoSupper<TActLogs, TActLogsExample, TAct
 			
 				sb.append("(");
 			
-				if(record.getUuid()==null){
+				if(record.getLogUuid()==null){
 						sb.append("null");
 				}else{
-					sb.append("'"+record.getUuid()+"'");
+					sb.append("'"+record.getLogUuid()+"'");
 				}
 			
 				sb.append(",");
@@ -263,10 +293,26 @@ public class TActLogsDao extends ExtendDaoSupper<TActLogs, TActLogsExample, TAct
 			
 				sb.append(",");
 			
-				if(record.getMsgType()==null){
+				if(record.getTransCode()==null){
 						sb.append("null");
 				}else{
-					sb.append("'"+record.getMsgType()+"'");
+					sb.append("'"+record.getTransCode()+"'");
+				}
+			
+				sb.append(",");
+			
+				if(record.getSubTransCode()==null){
+						sb.append("null");
+				}else{
+					sb.append("'"+record.getSubTransCode()+"'");
+				}
+			
+				sb.append(",");
+			
+				if(record.getFundNo()==null){
+						sb.append("null");
+				}else{
+					sb.append("'"+record.getFundNo()+"'");
 				}
 			
 				sb.append(",");
@@ -295,18 +341,18 @@ public class TActLogsDao extends ExtendDaoSupper<TActLogs, TActLogsExample, TAct
 			
 				sb.append(",");
 			
-				if(record.getDebtCustId()==null){
+				if(record.getFromCustId()==null){
 						sb.append("null");
 				}else{
-					sb.append("'"+record.getDebtCustId()+"'");
+					sb.append("'"+record.getFromCustId()+"'");
 				}
 			
 				sb.append(",");
 			
-				if(record.getCrdtCustId()==null){
+				if(record.getToCustId()==null){
 						sb.append("null");
 				}else{
-					sb.append("'"+record.getCrdtCustId()+"'");
+					sb.append("'"+record.getToCustId()+"'");
 				}
 			
 				sb.append(",");
@@ -327,6 +373,38 @@ public class TActLogsDao extends ExtendDaoSupper<TActLogs, TActLogsExample, TAct
 			
 				sb.append(",");
 			
+				if(record.getCnt()==null){
+						sb.append("null");
+				}else{
+					sb.append("'"+record.getCnt()+"'");
+				}
+			
+				sb.append(",");
+			
+				if(record.getFlagCancel()==null){
+						sb.append("null");
+				}else{
+					sb.append("'"+record.getFlagCancel()+"'");
+				}
+			
+				sb.append(",");
+			
+				if(record.getRelatedTransId()==null){
+						sb.append("null");
+				}else{
+					sb.append("'"+record.getRelatedTransId()+"'");
+				}
+			
+				sb.append(",");
+			
+				if(record.getStatus()==null){
+						sb.append("'"+"0000"+"'");						
+				}else{
+					sb.append("'"+record.getStatus()+"'");
+				}
+			
+				sb.append(",");
+			
 				if(record.getActBalAfter()==null){
 						sb.append("null");
 				}else{
@@ -343,10 +421,42 @@ public class TActLogsDao extends ExtendDaoSupper<TActLogs, TActLogsExample, TAct
 			
 				sb.append(",");
 			
-				if(record.getUpdtTime()==null){
+				if(record.getExtId1()==null){
+						sb.append("null");
+				}else{
+					sb.append("'"+record.getExtId1()+"'");
+				}
+			
+				sb.append(",");
+			
+				if(record.getExtId2()==null){
+						sb.append("null");
+				}else{
+					sb.append("'"+record.getExtId2()+"'");
+				}
+			
+				sb.append(",");
+			
+				if(record.getExtCommets()==null){
+						sb.append("null");
+				}else{
+					sb.append("'"+record.getExtCommets()+"'");
+				}
+			
+				sb.append(",");
+			
+				if(record.getCreateTime()==null){
 						sb.append("'"+"CURRENT_TIMESTAMP"+"'");						
 				}else{
-					sb.append("'"+record.getUpdtTime()+"'");
+					sb.append("'"+record.getCreateTime()+"'");
+				}
+			
+				sb.append(",");
+			
+				if(record.getUpdateTime()==null){
+						sb.append("'"+"CURRENT_TIMESTAMP"+"'");						
+				}else{
+					sb.append("'"+record.getUpdateTime()+"'");
 				}
 							sb.append(")");
 			
