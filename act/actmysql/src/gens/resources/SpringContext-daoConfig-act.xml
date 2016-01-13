@@ -33,20 +33,20 @@
  		<property name="mapper" ref="tActInterestMapper" />
  		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
  	</bean>
-	<bean id="tActLogsMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="onight.act.ordbgens.act.mapper.TActLogsMapper" />
+	<bean id="tActTransLogsMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.act.ordbgens.act.mapper.TActTransLogsMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
-	 <bean id="tactlogsDao" class="onight.act.ordbgens.act.dao.TActLogsDao" >
- 		<property name="mapper" ref="tActLogsMapper" />
+	 <bean id="tacttranslogsDao" class="onight.act.ordbgens.act.dao.TActTransLogsDao" >
+ 		<property name="mapper" ref="tActTransLogsMapper" />
  		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
  	</bean>
-	<bean id="tActLogsHisMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="onight.act.ordbgens.act.mapper.TActLogsHisMapper" />
+	<bean id="tActTransLogsHisMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.act.ordbgens.act.mapper.TActTransLogsHisMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
-	 <bean id="tactlogshisDao" class="onight.act.ordbgens.act.dao.TActLogsHisDao" >
- 		<property name="mapper" ref="tActLogsHisMapper" />
+	 <bean id="tacttranslogshisDao" class="onight.act.ordbgens.act.dao.TActTransLogsHisDao" >
+ 		<property name="mapper" ref="tActTransLogsHisMapper" />
  		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
  	</bean>
 	

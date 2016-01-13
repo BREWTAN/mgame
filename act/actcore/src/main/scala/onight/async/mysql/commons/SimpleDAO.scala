@@ -1,8 +1,10 @@
 package onight.async.mysql.commons
 
 import java.lang.reflect.Field
+import java.sql.Timestamp
 
 import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -48,6 +50,37 @@ trait SimpleDAO[T] extends AsyncDB {
   });
   lazy val constructor = ttag.runtimeClass.getConstructors()(0);
 
+  def instanceFromMap(row: HashMap[String, Object]) = {
+    val map = fields.map({ field =>
+      val v = row.get(field.getName())
+      //      println("FF:" + field.getName() + "(" + field.getType() + ")" +  "(" + field.getGenericType() + ")" +",=>" + v + ",type=" + v.getClass + ",v=" + v)
+      if (v == null) {
+        null
+      } else {
+        val cv = v match {
+          case s: Some[_] =>
+            val clazz = s.get.getClass()
+            val sv = {
+              if (field.getGenericType().eq(classOf[java.lang.String])) {
+                s.get.asInstanceOf[String]
+              } else if (field.getGenericType().eq(classOf[java.sql.Timestamp])) {
+                new Timestamp(s.get.asInstanceOf[Long])
+              } else if (field.getType == classOf[Option[_]]) {
+                Option(s.get)
+              } else {
+                s.get.asInstanceOf[String]
+              }
+            }
+            //            s.get.asInstanceOf[String]
+            sv
+          case None => null
+        }
+        cv
+      }
+    })
+    constructor.newInstance(map.toArray[AnyRef]: _*).asInstanceOf[T]
+  }
+
   def resultRow(queryResult: QueryResult): Any = {
     //    println(UpdateString)
     //    val fields = ttag.runtimeClass.getDeclaredFields();
@@ -60,7 +93,7 @@ trait SimpleDAO[T] extends AsyncDB {
             if (row(field.getName()) == null) {
               null
             } else {
-              println("FF:" + field.getName() + "(" + field.getType() + ")" + ",=>" + row(field.getName()) + ",type=" + row(field.getName()).getClass)
+              //              println("FF:" + field.getName() + "(" + field.getType() + ")" + ",=>" + row(field.getName()) + ",type=" + row(field.getName()).getClass)
               if (field.getType() == classOf[String]) {
                 row(field.getName()).asInstanceOf[String]
               } else if (field.getType() == classOf[Option[Int]] && row(field.getName()).isInstanceOf[java.lang.Integer]) {
@@ -80,9 +113,7 @@ trait SimpleDAO[T] extends AsyncDB {
               } else if (field.getType() == classOf[Option[Long]] && row(field.getName()).isInstanceOf[java.lang.Long]) {
                 Option(row(field.getName()).asInstanceOf[Long])
               } else {
-
                 row(field.getName()).asInstanceOf[String]
-                //          row(field.getName()).asInstanceOf[String]
               }
             }
           })
@@ -168,12 +199,11 @@ trait SimpleDAO[T] extends AsyncDB {
 
   def bean2KeyArray(bean: T): Seq[Any] = beanValue(bean, _.getName() == keyname)
 
-  def fieldValueIsNotNull(fv:Any) =  fv != null && fv!=None 
-  
-  
+  def fieldValueIsNotNull(fv: Any) = fv != null && fv != None
+
   def bean2SelectiveArray(bean: T): Seq[Any] = beanValue(bean, { v =>
-       val vv=v.get(bean);
-        vv != null && vv!=None 
+    val vv = v.get(bean);
+    vv != null && vv != None
   })
 
   def bean2NoKeySelectiveArray(bean: T): Seq[Any] = beanValue(bean, { field =>
@@ -194,7 +224,7 @@ trait SimpleDAO[T] extends AsyncDB {
 
   }
   def exec(query: String, values: Seq[Any] = List())(implicit f: DBResult => Unit = null, noexec: Boolean = false): Future[QueryResult] = {
-    log.info("exec:" + query + ",obj=" + values)
+    log.debug("exec:" + query + ",obj=" + values)
 
     if (noexec) return Future { new QueryResultWithArray(values, 0L, query) }
 
@@ -213,6 +243,31 @@ trait SimpleDAO[T] extends AsyncDB {
     }
     return result
   }
+
+  def flatExec(r: Future[QueryResult], c: Connection, query: String, vals: List[Seq[Any]], index: Int)(implicit f: (QueryResult,Int) => Unit = null, noexec: Boolean = false): Future[QueryResult] = {
+
+    if (f != null) {
+      r.onComplete { x => f(x.get,index) }
+    }
+    if (index < vals.size) {
+      val v = r.flatMap { x => c.sendPreparedStatement(query, vals(index)) }
+      flatExec(v, c, query, vals, index + 1)
+    } else {
+      r
+    }
+  }
+
+  def execBatch(query: String, vals: List[Seq[Any]])(implicit f: (QueryResult,Int) => Unit = null, noexec: Boolean = false): Future[QueryResult] = {
+    log.debug("execBatch:" + query + ",vals=" + vals)
+    //    pool.sendPreparedStatement(query, values)
+    val result = pool.use { x =>
+      x.inTransaction { c =>
+        flatExec(c.sendPreparedStatement(query, vals(0)), c, query, vals, 1)(f)
+      }
+    }
+    result
+  }
+
   def execQuery(query: String)(implicit f: DBResult => Unit = null, noexec: Boolean = false): Future[QueryResult] = {
     log.info("exec:" + query)
     if (noexec) return Future { new QueryResult(0L, query) }
@@ -239,6 +294,9 @@ trait SimpleDAO[T] extends AsyncDB {
     ("UPDATE " + tablename + " SET ") + fields.filter(_.getName() != keyname).map({ _.getName() }).mkString("=(?) , ") + " =(?) WHERE " + keyname + " = (?)"
   }
 
+  private lazy val SubtractString: String = {
+    ("UPDATE " + tablename + " SET ") + fields.filter(_.getName() != keyname).map({ _.getName() }).mkString("=(?) , ") + " =(?) WHERE " + keyname + " = (?)"
+  }
   private def SelectString: String = {
     ("SELECT ") + fields.map({ _.getName() }).mkString(",") + " from " + tablename;
   }
@@ -258,9 +316,9 @@ trait SimpleDAO[T] extends AsyncDB {
 
   private def SelectByCond(bean: T)(implicit condition: String = "AND"): String = {
     ("SELECT ") + fields.map({ _.getName() }).mkString(",") + " from " + tablename + " WHERE " +
-      fields.filter({ v=>
-        val vv=v.get(bean);
-        vv != null && vv!=None 
+      fields.filter({ v =>
+        val vv = v.get(bean);
+        vv != null && vv != None
       }).map({ _.getName() }).mkString("", "=(?) " + condition + " ", "=(?) ")
   }
   private def CountByCond(cond: String): String = {

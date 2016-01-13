@@ -188,6 +188,15 @@ public class TActFundDao extends ExtendDaoSupper<TActFund, TActFundExample, TAct
 				if(record.getUpdateActLogId()!=null){
 				criteria.andUpdateActLogIdEqualTo(record.getUpdateActLogId());
 				}
+				if(record.getCreateTime()!=null){
+				criteria.andCreateTimeEqualTo(record.getCreateTime());
+				}
+				if(record.getUpdateTime()!=null){
+				criteria.andUpdateTimeEqualTo(record.getUpdateTime());
+				}
+				if(record.getModifyId()!=null){
+				criteria.andModifyIdEqualTo(record.getModifyId());
+				}
 
 		}
 		return example;
@@ -358,6 +367,30 @@ public class TActFundDao extends ExtendDaoSupper<TActFund, TActFundExample, TAct
 						sb.append("null");
 				}else{
 					sb.append("'"+record.getUpdateActLogId()+"'");
+				}
+			
+				sb.append(",");
+			
+				if(record.getCreateTime()==null){
+						sb.append("'"+"CURRENT_TIMESTAMP"+"'");						
+				}else{
+					sb.append("'"+record.getCreateTime()+"'");
+				}
+			
+				sb.append(",");
+			
+				if(record.getUpdateTime()==null){
+						sb.append("'"+"0000-00-00 00:00:00"+"'");						
+				}else{
+					sb.append("'"+record.getUpdateTime()+"'");
+				}
+			
+				sb.append(",");
+			
+				if(record.getModifyId()==null){
+						sb.append("null");
+				}else{
+					sb.append("'"+record.getModifyId()+"'");
 				}
 							sb.append(")");
 			
