@@ -19,7 +19,7 @@ enum PBCommand{
 	FRZ = 4 ;//冻结资金账户
 	ADD = 5 ;//增加金额
 	QUR = 6 ;//查询
-	DEL = 7 ;//删除
+	DEL = 7 ;//删除（暂时不支持）
 	TRN = 8 ;//转账资金账户
 	QUE = 30;//根据条件相等查询
 };
@@ -39,6 +39,12 @@ message PBIActCreate //创建资金主账户
 	string memo = 19;
 }
 
+
+message PBIActQuery //查询账户
+{
+	string act_no = 1; //这个为空，=cust_id
+	string fund_no = 2; 
+}
 
 message PBIFundCreate //创建资金子账户
 {
@@ -94,4 +100,7 @@ message PBIActRet
 	string  fund_no=50;				//资金子账户号
 	string  act_no=60;				//账户号
 	
+	PBTActFund	pbfund = 70;//资金子账户信息
+	PBTActInfo	pbact = 80;//主账户信息
 }
+

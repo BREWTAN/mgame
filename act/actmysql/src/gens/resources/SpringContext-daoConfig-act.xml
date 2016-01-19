@@ -41,6 +41,14 @@
  		<property name="mapper" ref="tActTransLogsMapper" />
  		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
  	</bean>
+	<bean id="tActTransLogsDebtMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="onight.act.ordbgens.act.mapper.TActTransLogsDebtMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	 <bean id="tacttranslogsdebtDao" class="onight.act.ordbgens.act.dao.TActTransLogsDebtDao" >
+ 		<property name="mapper" ref="tActTransLogsDebtMapper" />
+ 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+ 	</bean>
 	<bean id="tActTransLogsHisMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="onight.act.ordbgens.act.mapper.TActTransLogsHisMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />

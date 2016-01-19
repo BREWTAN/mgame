@@ -122,6 +122,24 @@ object ACTDAOs {
   }
 
 
+  case class KOTActTransLogsDebt(
+ val LOG_UUID: String = null
+, val FROM_FUND_NO: String = null
+, val TO_FUND_NO: String = null
+, val FLAG_CANCEL: Option[Char] = null
+, val RELATED_TRANS_ID: String = null
+, val STATUS: String = null
+, val CREATE_TIME: Timestamp = null
+, val UPDATE_TIME: Timestamp = null
+  	)
+
+  object TActTransLogsDebtDAO extends SimpleDAO[KOTActTransLogsDebt] {
+    val ttag = classTag[KOTActTransLogsDebt];
+    val tablename = "T_ACT_TRANS_LOGS_DEBT";
+    val keyname = "LOG_UUID"
+  }
+
+
   case class KOTActTransLogsHis(
  val LOG_UUID: String = null
 , val SETT_DATE: String = null

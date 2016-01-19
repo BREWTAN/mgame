@@ -66,7 +66,6 @@ object FundACTCreateService extends OLog with PBUtils with LService[PBIFundCreat
       vmap.put("CREATE_TIME",  java.lang.Long.valueOf(System.currentTimeMillis()))
       vmap.put("ACT_STAT", "0")
       vmap.put("CUR_BAL",java.lang.Double.valueOf(0.0))
-
       val v = TActFundDAO.instanceFromMap(vmap.asInstanceOf[HashMap[String, Object]])
 
       ret.setActNo(v.ACT_NO)

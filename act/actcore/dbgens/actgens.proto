@@ -92,6 +92,18 @@ message PBTActTransLogs
 	int64 update_time = 23;
 }
 
+message PBTActTransLogsDebt
+{
+	string log_uuid = 1;
+	string from_fund_no = 2;
+	string to_fund_no = 3;
+	string flag_cancel = 4;
+	string related_trans_id = 5;
+	string status = 6;
+	int64 create_time = 7;
+	int64 update_time = 8;
+}
+
 message PBTActTransLogsHis
 {
 	string log_uuid = 1;
