@@ -55,12 +55,13 @@ class BatchRunner[E](val runner: BatcherCallback[E],
           syncList(list.toList);
           list.clear();
         }
-      } else {
-        if (list.size > 0) {
-          syncList(list.toList);
-          list.clear();
-        }
+      }else{
+        Thread.sleep(10)
       }
+    }
+    if (list.size > 0) {
+      syncList(list.toList);
+      list.clear();
     }
   }
 }

@@ -80,11 +80,11 @@ object FundADDService extends OLog with PBUtils with LService[PBIFundTrans] {
         println("getresult:" + "@@" + index +",R="+ result)
       }
       val ff = TActTransLogsDAO.execBatch("UPDATE T_ACT_FUND SET CUR_BAL = CUR_BAL-(?) WHERE FUND_NO = (?) AND CUR_BAL>(?);",
-        List(Seq(200, "a001", 200), Seq(200, "a001", 200), Seq(200, "a001", 200)))
+        List(Seq(200, "a001", 200),Seq(-200, "a001", -200),Seq(200, "a001", 200),Seq(200, "a001", 200)))
       //      val ff = TActFundDAO.updateSelective(new KOTActFund("a0001",CUR_BAL = Some(1000.0)))
       ff onSuccess {
         case result @ _ => {
-          println("result::" + result)
+//          println("result::" + result)
           handler.onFinished(PacketHelper.toPBReturn(pack, ret));
         }
       }

@@ -2,23 +2,21 @@ package onight.async.mysql.commons
 
 import java.lang.reflect.Field
 import java.sql.Timestamp
-
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.reflect.ClassTag
 import scala.util.Failure
 import scala.util.Success
-
 import org.slf4j.LoggerFactory
-
 import com.github.mauricio.async.db.Connection
 import com.github.mauricio.async.db.QueryResult
 import com.github.mauricio.async.db.QueryResult
 import com.github.mauricio.async.db.ResultSet
+import scala.concurrent.ExecutionContextExecutor
+import onight.act.scala.persist.BatchCheckExc
 
 //import akka.util.Timeout
 
@@ -37,6 +35,9 @@ class NoneQueryResult()
 
 }
 trait SimpleDAO[T] extends AsyncDB {
+  
+   implicit lazy val global: ExecutionContextExecutor = ExecutionContext.fromExecutor(BatchCheckExc.daoexec)
+   
   val log = LoggerFactory.getLogger("SimpleDAO")
   //  implicit val timeout = Timeout(60000)
   //  def mapToBean(row: RowData): T;
@@ -244,11 +245,11 @@ trait SimpleDAO[T] extends AsyncDB {
     return result
   }
 
-  def flatExec(r: Future[QueryResult], c: Connection, query: String, vals: List[Seq[Any]], index: Int)(implicit f: (QueryResult,Int) => Unit = null, noexec: Boolean = false): Future[QueryResult] = {
+  def flatExec(r: Future[QueryResult], c: Connection, query: String, vals: List[Seq[Any]], index: Int)(implicit f: (QueryResult, Int) => Unit = null, noexec: Boolean = false): Future[QueryResult] = {
 
     if (f != null) {
-      r.onComplete { x => f(x.get,index) }
-    }
+      r.onComplete { x => f(x.get, index) }
+    } 
     if (index < vals.size) {
       val v = r.flatMap { x => c.sendPreparedStatement(query, vals(index)) }
       flatExec(v, c, query, vals, index + 1)
@@ -257,12 +258,67 @@ trait SimpleDAO[T] extends AsyncDB {
     }
   }
 
-  def execBatch(query: String, vals: List[Seq[Any]])(implicit f: (QueryResult,Int) => Unit = null, noexec: Boolean = false): Future[QueryResult] = {
+  def flatExecBatch(r: Future[QueryResult], c: Connection, query: List[String], vals: List[Seq[Any]], index: Int)(implicit f: (QueryResult, Int) => Unit = null, noexec: Boolean = false): Future[QueryResult] = {
+
+    if (f != null) {
+      r.onComplete { x => f(x.get, index) }
+    }
+    if (index < vals.size) {
+      val v = r.flatMap { x => c.sendPreparedStatement(query(index), vals(index)) }
+      flatExecBatch(v, c, query, vals, index + 1)
+    } else {
+      r
+    }
+  }
+
+  def execBatch(query: String, vals: List[Seq[Any]])(implicit f: (QueryResult, Int) => Unit = null, noexec: Boolean = false): Future[QueryResult] = {
     log.debug("execBatch:" + query + ",vals=" + vals)
     //    pool.sendPreparedStatement(query, values)
     val result = pool.use { x =>
       x.inTransaction { c =>
+       
         flatExec(c.sendPreparedStatement(query, vals(0)), c, query, vals, 1)(f)
+      }
+    }
+    result
+  }
+
+  def execBatchUpdates(query: List[String], vals: List[Seq[Any]])(implicit f: (QueryResult, Int) => Unit = null, noexec: Boolean = false): Future[QueryResult] = {
+    log.debug("execBatch:" + query + ",vals=" + vals)
+    //    pool.sendPreparedStatement(query, values)
+    val result = pool.use { x =>
+      x.inTransaction { c =>
+        flatExecBatch(c.sendPreparedStatement(query(0), vals(0)), c, query, vals, 1)(f)
+      }
+    }
+    result
+  }
+
+  def flatExecInsertAndUpdate(r: Future[QueryResult], c: Connection, query: String, vals: List[Seq[Any]], index: Int)(implicit f: (QueryResult, Int) => Unit = null, noexec: Boolean = false): Future[QueryResult] = {
+    if (index < vals.size) {
+      val v = r.flatMap { x =>
+         val xf=c.sendPreparedStatement(query, vals(index))
+         xf
+      }
+//      futures.+=:(v)
+      if (f != null) {
+          v.onComplete { xv => f(xv.get, index) }
+      }
+//      log.error("ff,2.size="+futures.size)
+
+      flatExecInsertAndUpdate(v, c, query, vals, index + 1)
+    } else {
+      r
+    }
+  }
+
+  def execInsertUpdateBatch(insertQuery: String, insertArray: Seq[Any], update: String, vals: List[Seq[Any]])(implicit f: (QueryResult, Int) => Unit = null, noexec: Boolean = false): Future[QueryResult] = {
+    //    log.debug("execBatch:" + insertQuery + ",vals=" + vals)
+    //    pool.sendPreparedStatement(query, values)
+    val result = pool.use { x =>
+      x.inTransaction { c =>
+        val exec1 = c.sendPreparedStatement(insertQuery, insertArray)
+        flatExecInsertAndUpdate(exec1, c, update, vals, 0)(f)
       }
     }
     result
@@ -286,7 +342,7 @@ trait SimpleDAO[T] extends AsyncDB {
     }
     return result
   }
-  private lazy val InsertString: String = {
+  lazy val InsertString: String = {
     ("INSERT INTO " + tablename + " (") + fields.map({ _.getName() }).mkString(",") + ") values(" + "?," * (fields.size - 1) + "?)"
   }
 
@@ -333,7 +389,7 @@ trait SimpleDAO[T] extends AsyncDB {
   //    ("INSERT INTO " + tablename + " (") + fields.map({ _.getName() }).mkString(",") + ") " +  beans2Values(beans)
   //  }
 
-  private def InsertBatchString(beans: List[T]): String = {
+  def InsertBatchString(beans: List[T]): String = {
     ("INSERT INTO " + tablename + " (") + fields.map({ _.getName() }).mkString(",") + ") " + beans2Prepare(beans)
   }
 

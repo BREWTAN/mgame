@@ -73,7 +73,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry sourcepath="/Users/brew/.gradle/caches/modules-2/files-2.1/com.googlecode.protobuf-java-format/protobuf-java-format/1.2/bd99f02be67659d9f3f4ee353743c3f40e51f1d1/protobuf-java-format-1.2-sources.jar" kind="lib" path="/Users/brew/.gradle/caches/modules-2/files-2.1/com.googlecode.protobuf-java-format/protobuf-java-format/1.2/17eea21983ff3ba6d3863ed29687e6d64a89eed0/protobuf-java-format-1.2.jar">
+	<classpathentry sourcepath="/Users/brew/.gradle/caches/modules-2/files-2.1/com.googlecode.protobuf-java-format/protobuf-java-format/1.4/e6c64967db7ccbf2455d4bb120527a81cb8f2950/protobuf-java-format-1.4-sources.jar" kind="lib" path="/Users/brew/.gradle/caches/modules-2/files-2.1/com.googlecode.protobuf-java-format/protobuf-java-format/1.4/b81e7d188c2cc766bc150bd3c77154178b3541d5/protobuf-java-format-1.4.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
