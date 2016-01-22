@@ -32,7 +32,7 @@ import onight.act.ordbgens.act.so.ACTDAOs.TActFundDAO
 import onight.act.ordbgens.act.so.ACTDAOs.KOTActFund
 import com.github.mauricio.async.db.QueryResult
 import onight.tfw.outils.serialize.UUIDGenerator
-import onight.act.scala.persist.FundAddRunner
+import onight.act.scala.persist.FundFRZRunner
 
 @NActorProvider
 object FundFRZCreateActor extends SessionModules[PBIFundTrans] {
@@ -43,14 +43,14 @@ object FundFRZService extends OLog with PBUtils with LService[PBIFundTrans] {
 
   override def cmd: String = PBCommand.FRZ.name();
 
-  val buckets = new ConcurrentLinkedQueue[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket,Option[Double])]();
+  val buckets = new ConcurrentLinkedQueue[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket,Option[Double], Option[Double])]();
   {
     for (i <- 1 to NodeHelper.getPropInstance.get("insert.run.checkcount", 5)) {
-      BatchCheckExc.exec.scheduleAtFixedRate(new BatchRunner[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket,Option[Double])](FundAddRunner, buckets), 10, NodeHelper.getPropInstance.get("insert.run.periodms", 100), TimeUnit.MICROSECONDS);
+      BatchCheckExc.exec.scheduleAtFixedRate(new BatchRunner[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket,Option[Double], Option[Double])](FundFRZRunner, buckets), 10, NodeHelper.getPropInstance.get("insert.run.periodms", 100), TimeUnit.MICROSECONDS);
     }
   }
 
-  //http://localhost:8081/act/pbcrf.do?fh=VCRFACT000000J00&bd={"fund_no":"a001","act_no":"1235","cust_id":"abcdefg","act_name":"你好","mchnt_id":"abc","channel_id":"abc"}&gcmd=CRTACF
+  //http://localhost:18080/act/pbfrz.do?fh=VFRZACT000000J00&bd={%22to_fund_no%22:%22a006%22,%22amt%22:10000.0,%22sett_date%22:%2220160118%22,%22cons_date%22:%2220160118%22,%22tx_sno%22:%22123%22,%22from_fund_no%22:%22S0000%22,%22cnt%22:1}&gcmd=FRZACT
 
   def onPBPacket(pack: FramePacket, pbo: PBIFundTrans, handler: CompleteHandler) = {
     //    log.debug("guava==" + VMDaos.guCache.getIfPresent(pbo.getLogid()));      val ret = PBActRet.newBuilder();
@@ -74,10 +74,10 @@ object FundFRZService extends OLog with PBUtils with LService[PBIFundTrans] {
       val v = TActTransLogsDAO.instanceFromMap(vmap.asInstanceOf[HashMap[String, Object]])
       ret.setFundNo(v.TO_FUND_NO)
       if(v.AMT.get>=0)
-      {
-         buckets.offer((v, handler, ret, pack,Some(Double.MinValue))); 
-      }else{
-        buckets.offer((v, handler, ret, pack,Some(-v.AMT.get)));
+      {//冻结
+         buckets.offer((v, handler, ret, pack,Some(v.AMT.get),Some(Double.MinValue))); 
+      }else{//解冻
+        buckets.offer((v, handler, ret, pack,Some(Double.MinValue),Some(-v.AMT.get)));
       }
       
 //      val v = TActTransLogsDAO.instanceFromMap(vmap.asInstanceOf[HashMap[String, Object]])

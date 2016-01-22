@@ -303,13 +303,12 @@ trait SimpleDAO[T] extends AsyncDB {
     //    pool.sendPreparedStatement(query, values)
     val result = pool.use { x =>
       x.inTransaction { c =>
-
         flatExec(c.sendPreparedStatement(query, vals(0)), c, query, vals, 1)(f)
       }
     }
     result
   }
-
+  
   def execBatchUpdates(query: List[String], vals: List[Seq[Any]])(implicit f: (QueryResult, Int) => Unit = null, noexec: Boolean = false): Future[QueryResult] = {
     log.debug("execBatch:" + query + ",vals=" + vals)
     //    pool.sendPreparedStatement(query, values)

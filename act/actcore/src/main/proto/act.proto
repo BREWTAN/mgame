@@ -21,6 +21,7 @@ enum PBCommand{
 	QUR = 6 ;//查询
 	DEL = 7 ;//删除（暂时不支持）
 	TRN = 8 ;//转账资金账户
+	BUY = 9 ;//产品购买
 	QUE = 30;//根据条件相等查询
 };
 
@@ -85,6 +86,29 @@ message PBIFundTrans //转账交易
 	string ext_id2 = 20;
 	string ext_commets = 21;
 	int64 create_time = 22;
+}
+
+
+message PBIFundBuy //产品购买交易
+{
+	string sett_date = 2;
+	string cons_date = 3;
+	string tx_sno = 4;
+	string trans_code = 5;
+	string sub_trans_code = 6;
+	string biz_type = 7;
+	string biz_dtl_type = 8;
+	repeated string from_fund_no = 9;
+	string to_fund_no = 10;
+	string dc_type = 11;
+	double amt = 12;
+	int32 cnt = 13;
+
+	string related_trans_id = 15;
+	string status = 16;
+	string ext_id1 = 19;
+	string ext_id2 = 20;
+	string ext_commets = 21;
 }
 
 message PBIActRet 

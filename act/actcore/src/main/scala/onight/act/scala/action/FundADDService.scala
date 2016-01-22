@@ -43,14 +43,14 @@ object FundADDService extends OLog with PBUtils with LService[PBIFundTrans] {
 
   override def cmd: String = PBCommand.ADD.name();
 
-  val buckets = new ConcurrentLinkedQueue[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket,Option[Double])]();
+  val buckets = new ConcurrentLinkedQueue[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, Option[Double])]();
   {
     for (i <- 1 to NodeHelper.getPropInstance.get("insert.run.checkcount", 5)) {
-      BatchCheckExc.exec.scheduleAtFixedRate(new BatchRunner[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket,Option[Double])](FundAddRunner, buckets), 10, NodeHelper.getPropInstance.get("insert.run.periodms", 100), TimeUnit.MICROSECONDS);
+      BatchCheckExc.exec.scheduleAtFixedRate(new BatchRunner[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, Option[Double])](FundAddRunner, buckets), 10, NodeHelper.getPropInstance.get("insert.run.periodms", 100), TimeUnit.MICROSECONDS);
     }
   }
 
-  //http://localhost:8081/act/pbcrf.do?fh=VCRFACT000000J00&bd={"fund_no":"a001","act_no":"1235","cust_id":"abcdefg","act_name":"你好","mchnt_id":"abc","channel_id":"abc"}&gcmd=CRTACF
+  //http://localhost:18080/act/pbadd.do?fh=VADDACT000000J00&bd={%22to_fund_no%22:%22a006%22,%22amt%22:10000.0,%22sett_date%22:%2220160118%22,%22cons_date%22:%2220160118%22,%22tx_sno%22:%22123%22,%22from_fund_no%22:%22S0000%22,%22cnt%22:1}&gcmd=ADDACT
 
   def onPBPacket(pack: FramePacket, pbo: PBIFundTrans, handler: CompleteHandler) = {
     //    log.debug("guava==" + VMDaos.guCache.getIfPresent(pbo.getLogid()));      val ret = PBActRet.newBuilder();
@@ -73,36 +73,40 @@ object FundADDService extends OLog with PBUtils with LService[PBIFundTrans] {
       vmap.put("LOG_UUID", UUIDGenerator.generate())
       val v = TActTransLogsDAO.instanceFromMap(vmap.asInstanceOf[HashMap[String, Object]])
       ret.setFundNo(v.TO_FUND_NO)
-      if(v.AMT.get>=0)
-      {
-         buckets.offer((v, handler, ret, pack,Some(Double.MinValue))); 
-      }else{
-        buckets.offer((v, handler, ret, pack,Some(-v.AMT.get)));
+      if (v.AMT.get >= 0) {
+        buckets.offer((v, handler, ret, pack, Some(Double.MinValue)));
+      } else {
+        buckets.offer((v, handler, ret, pack, Some(-v.AMT.get)));
       }
-      
-//      val v = TActTransLogsDAO.instanceFromMap(vmap.asInstanceOf[HashMap[String, Object]])
-//
-//      ret.setFundNo(v.TO_FUND_NO)
-//
-//      import scala.concurrent.ExecutionContext.Implicits.global
-//
+
+      //      val v = TActTransLogsDAO.instanceFromMap(vmap.asInstanceOf[HashMap[String, Object]])
+      //
+      //      ret.setFundNo(v.TO_FUND_NO)
+      //
+//            import scala.concurrent.ExecutionContext.Implicits.global
+      //
 //      implicit def qresult(result: QueryResult, index: Int) = {
-//        println("getresult:" + "@@" + index +",R="+ result)
+//        println("getresult:" + "@@" + index + ",R=" + result)
 //      }
-//      val ff = TActTransLogsDAO.execBatch("UPDATE T_ACT_FUND SET CUR_BAL = CUR_BAL-(?) WHERE FUND_NO = (?) AND CUR_BAL>(?);",
-//        List(Seq(200, "a001", 200),Seq(-200, "a001", -200),Seq(200, "a001", 200),Seq(200, "a001", 200)))
+//      val ff = TActTransLogsDAO.execBatch("UPDATE T_ACT_FUND SET CUR_BAL = CUR_BAL-(?) WHERE FUND_NO IN (?) AND CUR_BAL>=(?);",
+//        List(Seq(200, Seq("'a001'", "'a002'", "'a001'").mkString(","), 200)))(qresult);
+//      
 //      //      val ff = TActFundDAO.updateSelective(new KOTActFund("a0001",CUR_BAL = Some(1000.0)))
-//      ff onSuccess {
-//        case result @ _ => {
-////          println("result::" + result)
-//          handler.onFinished(PacketHelper.toPBReturn(pack, ret));
-//        }
+//      ff.onComplete { x =>
+//        handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
+//
 //      }
-//      ff onFailure ({
-//        case t @ _ => {
-//          handler.onFinished(PacketHelper.toPBReturn(pack, new ExceptionBody(t.getMessage, null)));
-//        }
-//      })
+      //      ff onSuccess {
+      //        case result @ _ => {
+      //          println("result::" + result)
+      //          handler.onFinished(PacketHelper.toPBReturn(pack, ret));
+      //        }
+      //      }
+      //      ff onFailure ({
+      //        case t @ _ => {
+      //          handler.onFinished(PacketHelper.toPBReturn(pack, new ExceptionBody(t.getMessage, null)));
+      //        }
+      //      })
       //      buckets.offer((v, handler, ret, pack));
     }
 

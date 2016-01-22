@@ -100,11 +100,11 @@ object FundTransRunner extends BatcherCallback[(KOTActTransLogs, CompleteHandler
 object FundTransStep2_AddRunner extends BatcherCallback[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket)] with OLog {
 
   val bucketsStep2_update = new ConcurrentLinkedQueue[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket)]();
-  {
-    for (i <- 1 to NodeHelper.getPropInstance.get("insert.run.checkcount", 5)) {
-      BatchCheckExc.exec.scheduleAtFixedRate(new BatchRunner[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket)](FundTransStep2_AddRunner, bucketsStep2_update), 10, NodeHelper.getPropInstance.get("insert.run.periodms", 100), TimeUnit.MICROSECONDS);
-    }
-  }
+//  {
+//    for (i <- 1 to NodeHelper.getPropInstance.get("insert.run.checkcount", 5)) {
+//      BatchCheckExc.exec.scheduleAtFixedRate(new BatchRunner[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket)](FundTransStep2_AddRunner, bucketsStep2_update), 10, NodeHelper.getPropInstance.get("insert.run.periodms", 100), TimeUnit.MICROSECONDS);
+//    }
+//  }
 
 //  val updateSQLMap = new ConcurrentHashMap[Int, List[String]]();
   val insertSQLMap = new ConcurrentHashMap[Int, String]();

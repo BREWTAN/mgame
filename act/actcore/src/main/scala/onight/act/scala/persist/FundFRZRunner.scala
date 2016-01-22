@@ -22,12 +22,12 @@ import scala.concurrent.ExecutionContextExecutor
 import scala.concurrent.ExecutionContext
 import onight.act.ordbgens.act.so.ACTDAOs.TActTransLogsHisDAO
 
-object FundFRZRunner extends BatcherCallback[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, Option[Double])] with OLog {
+object FundFRZRunner extends BatcherCallback[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, Option[Double], Option[Double])] with OLog {
   implicit lazy val global: ExecutionContextExecutor = ExecutionContext.fromExecutor(BatchCheckExc.daoexec)
  
   val insertSQLMap = new ConcurrentHashMap[Int, String]();
 
-  def onBatch(vs: List[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, Option[Double])]): Future[Any] = {
+  def onBatch(vs: List[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, Option[Double], Option[Double])]): Future[Any] = {
     //2.update金额
     //    log.error("onBatch:" + "@@,size=" + vs.size)
     val start = System.currentTimeMillis()
@@ -43,10 +43,10 @@ object FundFRZRunner extends BatcherCallback[(KOTActTransLogs, CompleteHandler, 
       }
     };
     val insertVals = TActTransLogsDAO.beans2Array(batchv)
-    val updateSQL = "UPDATE T_ACT_FUND SET CUR_BAL = CUR_BAL-(?),FREEZE_TOTAL = FREEZE_TOTAL+(?),UPDATE_ACT_LOG_ID = (?) WHERE FUND_NO = (?) AND CUR_BAL>=(?);"
+    val updateSQL = "UPDATE T_ACT_FUND SET CUR_BAL = CUR_BAL-(?),FREEZE_TOTAL = FREEZE_TOTAL+(?),UPDATE_ACT_LOG_ID = (?) WHERE FUND_NO = (?) AND CUR_BAL>=(?) AND FREEZE_TOTAL>=(?);"
     //3.update状态
     val updateVals = vs.map(x => {
-      Seq(x._1.AMT, x._1.LOG_UUID, x._1.TO_FUND_NO, x._5)
+      Seq(x._1.AMT,x._1.AMT, x._1.LOG_UUID, x._1.TO_FUND_NO, x._5,x._6)
     })
 
     implicit def qresult(result: QueryResult, index: Int) = {
@@ -67,19 +67,19 @@ object FundFRZRunner extends BatcherCallback[(KOTActTransLogs, CompleteHandler, 
     ret
   }
 
-  def onOne(v: (KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, Option[Double])): Future[Any] = {
+  def onOne(v: (KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, Option[Double], Option[Double])): Future[Any] = {
     //    TActTransLogsDAO.insert(v._1)
     log.error("onOne in Step.1:")
     onBatch(List(v))
   }
 
-  def onSuccess(x: (KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, Option[Double])) = {
+  def onSuccess(x: (KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, Option[Double], Option[Double])) = {
     //第一步插入都成功了
     //第二步是update金额
     //    x._2.onFinished(PacketHelper.toPBReturn(x._4, x._3.build()));
   }
 
-  def onFailed(x: (KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, Option[Double]), t: Throwable) = {
+  def onFailed(x: (KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, Option[Double], Option[Double]), t: Throwable) = {
     x._2.onFinished(PacketHelper.toPBReturn(x._4, new ExceptionBody(t.getMessage, null)));
   }
 

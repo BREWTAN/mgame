@@ -21,7 +21,7 @@ import onight.tfw.mservice.NodeHelper
 import onight.tfw.otransio.api.PacketHelper
 import onight.tfw.otransio.api.beans.FramePacket
 import onight.act.scala.persist.BatchRunner
-import onight.act.scala.persist.FundTransRunner
+import onight.act.scala.persist.FundTransXRunner
 import org.apache.commons.lang3.StringUtils
 import onight.act.scala.persist.BatchCheckExc
 import java.util.concurrent.TimeUnit
@@ -47,13 +47,13 @@ object FundTransService extends OLog with PBUtils with LService[PBIFundTrans] {
   val buckets_insertAndSub = new ConcurrentLinkedQueue[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket)]();
   {
     for (i <- 1 to NodeHelper.getPropInstance.get("insert.run.checkcount", 5)) {
-      BatchCheckExc.exec.scheduleAtFixedRate(new BatchRunner[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket)](FundTransRunner, buckets_insertAndSub), 10, NodeHelper.getPropInstance.get("insert.run.periodms", 100), TimeUnit.MICROSECONDS);
+      BatchCheckExc.exec.scheduleAtFixedRate(new BatchRunner[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket)](FundTransXRunner, buckets_insertAndSub), 10, NodeHelper.getPropInstance.get("insert.run.periodms", 100), TimeUnit.MICROSECONDS);
     }
   }
 
   //http://localhost:8081/act/pbtrn.do?fh=VTRNACT000000J00&bd={%22from_fund_no%22:%22S0001%22,%22to_fund_no%22:%22a001%22,%22amt%22:100.0,%22sett_date%22:%2220160118%22,%22cons_date%22:%2220160118%22,%22tx_sno%22:%221%22,%22dc_type%22:%22001%22,%22cnt%22:1}&gcmd=CRTTRN
   
-  //ab -n 1000000 -k -r -c 1000 "http://localhost:8081/act/pbtrn.do?fh=VTRNACT000000J00&bd={%22from_fund_no%22:%22S0001%22,%22to_fund_no%22:%22a001%22,%22amt%22:100.0,%22sett_date%22:%2220160118%22,%22cons_date%22:%2220160118%22,%22tx_sno%22:%221%22,%22dc_type%22:%22001%22,%22cnt%22:1}&gcmd=CRTTRN"
+  //ab -n 1000000 -k -r -c 1000 "http://localhost:18080/act/pbtrn.do?fh=VTRNACT000000J00&bd={%22from_fund_no%22:%22S0001%22,%22to_fund_no%22:%22a001%22,%22amt%22:100.0,%22sett_date%22:%2220160118%22,%22cons_date%22:%2220160118%22,%22tx_sno%22:%221%22,%22dc_type%22:%22001%22,%22cnt%22:1}&gcmd=CRTTRN"
 
   
   def onPBPacket(pack: FramePacket, pbo: PBIFundTrans, handler: CompleteHandler) = {
