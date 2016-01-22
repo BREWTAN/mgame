@@ -136,7 +136,7 @@ object FundTransStep2_AddRunner extends BatcherCallback[(KOTActTransLogs, Comple
 
     val ret = TActTransLogsHisDAO.execInsertUpdateBatch(insertSQL, insertVals.toSeq, updateSQL, updateVals)
 
-    //    log.error("onBatch:" + "@@,size=" + vs.size + ".end:" + (System.currentTimeMillis() - start) + ",ret=" + ret)
+        log.error("onBatch:" + "@@,size=" + vs.size + ".end:" + (System.currentTimeMillis() - start) + ",ret=" + ret)
 
     ret
 

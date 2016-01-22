@@ -36,6 +36,8 @@ object FundTransXRunner extends BatcherCallback[(KOTActTransLogs, CompleteHandle
             v._3.setRetcode(RetCode.SUCCESS).setDesc("Success").setStatus("0000")
             v._2.onFinished(PacketHelper.toPBReturn(v._4, v._3.build()));
             c.sendPreparedStatement("UPDATE T_ACT_FUND SET CUR_BAL = CUR_BAL+(?),UPDATE_ACT_LOG_ID = (?) WHERE FUND_NO = (?)", Seq(v._1.AMT, v._1.LOG_UUID, v._1.TO_FUND_NO))
+//            c.sendPreparedStatement("INSERT INTO T_ACT_TRANS_LOGS_DEBT(LOG_UUID,FROM_FUND_NO,TO_FUND_NO) values(?,?,?) ", Seq(v._1.LOG_UUID, v._1.FROM_FUND_NO, v._1.TO_FUND_NO))
+            
           } else {
             v._3.setRetcode(RetCode.FAILED).setDesc("First_BAL_NOT_ENOUGH").setStatus("0010")
             v._2.onFinished(PacketHelper.toPBReturn(v._4, v._3.build()));
@@ -61,13 +63,16 @@ object FundTransXRunner extends BatcherCallback[(KOTActTransLogs, CompleteHandle
     };
 
     val insertVals = TActTransLogsDAO.beans2Array(batchv)
-    TActTransLogsDAO.pool.use { x =>
+    val ret = TActTransLogsDAO.pool.use { x =>
       x.inTransaction { c =>
         val s = c.sendPreparedStatement(insertSQL, insertVals);
         vs.foldLeft(s)((p, v) =>
           updateSeq(p, c, v))
       }
     }
+//    log.error("onBatch:" + "@@,size=" + vs.size + ".end:" + (System.currentTimeMillis() - start) + ",ret=" + ret)
+
+    ret
   }
 
   def onOne(v: (KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket)): Future[Any] = {

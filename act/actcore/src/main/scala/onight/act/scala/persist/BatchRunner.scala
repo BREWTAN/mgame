@@ -2,7 +2,6 @@ package onight.act.scala.persist
 
 import java.util.concurrent.ConcurrentLinkedQueue
 import scala.collection.mutable.ListBuffer
-import scala.concurrent.ExecutionContext.Implicits.global
 import onight.oapi.scala.traits.OLog
 import onight.tfw.mservice.NodeHelper
 import onight.tfw.async.CompleteHandler
@@ -11,9 +10,15 @@ import onight.act.ordbgens.act.so.ACTDAOs._
 import scala.concurrent.Future
 import onight.tfw.otransio.api.PacketHelper
 import onight.tfw.otransio.api.beans.ExceptionBody
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContextExecutor
+import scala.concurrent.Await
+import scala.concurrent.duration._
+import scala.concurrent.duration._
 
 class BatchRunner[E](val runner: BatcherCallback[E],
   val buckets: ConcurrentLinkedQueue[E]) extends Runnable with OLog {
+  implicit lazy val global: ExecutionContextExecutor = ExecutionContext.fromExecutor(BatchCheckExc.daoexec)
 
   val BATCH_SIZE = NodeHelper.getPropInstance.get("insert.batchsize", 10);
 
@@ -43,6 +48,7 @@ class BatchRunner[E](val runner: BatcherCallback[E],
         }
       }
     })
+    
 
   }
   override def run() = {
