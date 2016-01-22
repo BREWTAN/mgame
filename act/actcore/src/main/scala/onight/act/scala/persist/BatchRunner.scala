@@ -17,7 +17,7 @@ import scala.concurrent.duration._
 import scala.concurrent.duration._
 
 class BatchRunner[E](val runner: BatcherCallback[E],
-  val buckets: ConcurrentLinkedQueue[E]) extends Runnable with OLog {
+    val buckets: ConcurrentLinkedQueue[E]) extends Runnable with OLog {
   implicit lazy val global: ExecutionContextExecutor = ExecutionContext.fromExecutor(BatchCheckExc.daoexec)
 
   val BATCH_SIZE = NodeHelper.getPropInstance.get("insert.batchsize", 10);
@@ -37,18 +37,13 @@ class BatchRunner[E](val runner: BatcherCallback[E],
     ff onFailure ({
       case t @ _ => {
         log.error("insert failed:!", t)
-        if (list.size > 1) {
-          list.map({ x =>
-            val oneresult = runner.onOne(x)
-            oneresult onSuccess { case _ => runner.onSuccess(x) }
-            oneresult onFailure { case t @ _ => runner.onFailed(x, t) }
-          })
-        } else {
-          runner.onFailed(list(0), t)
-        }
+        list.map({ x =>
+          val oneresult = runner.onOne(x)
+          oneresult onSuccess { case _ => runner.onSuccess(x) }
+          oneresult onFailure { case t @ _ => runner.onFailed(x, t) }
+        })
       }
     })
-    
 
   }
   override def run() = {
@@ -61,7 +56,7 @@ class BatchRunner[E](val runner: BatcherCallback[E],
           syncList(list.toList);
           list.clear();
         }
-      }else{
+      } else {
         Thread.sleep(10)
       }
     }

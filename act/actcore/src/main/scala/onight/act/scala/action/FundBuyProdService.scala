@@ -32,7 +32,7 @@ import onight.act.ordbgens.act.so.ACTDAOs.TActFundDAO
 import onight.act.ordbgens.act.so.ACTDAOs.KOTActFund
 import com.github.mauricio.async.db.QueryResult
 import onight.tfw.outils.serialize.UUIDGenerator
-import onight.act.scala.persist.FundBuyRunner
+import onight.act.scala.persist.FundBuyXRunner
 import io.netty.util.concurrent.FailedFuture
 import io.netty.util.concurrent.GlobalEventExecutor
 import scala.util.Failure
@@ -56,7 +56,7 @@ object FundBuyService extends OLog with PBUtils with LService[PBIFundBuy] {
   val buckets = new ConcurrentLinkedQueue[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, PBIFundBuy)]();
   {
     for (i <- 1 to NodeHelper.getPropInstance.get("insert.run.checkcount", 5)) {
-      BatchCheckExc.exec.scheduleAtFixedRate(new BatchRunner[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, PBIFundBuy)](FundBuyRunner, buckets), 10, NodeHelper.getPropInstance.get("insert.run.periodms", 100), TimeUnit.MICROSECONDS);
+      BatchCheckExc.exec.scheduleAtFixedRate(new BatchRunner[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, PBIFundBuy)](FundBuyXRunner, buckets), 10, NodeHelper.getPropInstance.get("insert.run.periodms", 100), TimeUnit.MICROSECONDS);
     }
   }
 
