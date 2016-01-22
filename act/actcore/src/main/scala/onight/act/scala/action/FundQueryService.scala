@@ -39,6 +39,7 @@ import scala.concurrent.ExecutionContextExecutor
 import scala.concurrent.ExecutionContext
 import onight.act.ordbgens.act.pbo.Actgens.PBTActInfo
 import com.github.mauricio.async.db.QueryResult
+import onight.act.ordbgens.act.pbo.Actgens.PBTActFund
 
 @NActorProvider
 object FundQueryCreateActor extends SessionModules[PBIActQuery] {
@@ -50,7 +51,7 @@ object FundQueryService extends OLog with PBUtils with LService[PBIActQuery] {
   implicit lazy val global: ExecutionContextExecutor = ExecutionContext.fromExecutor(BatchCheckExc.daoexec)
 
   override def cmd: String = PBCommand.QUE.name();
- 
+
   val buckets = new ConcurrentLinkedQueue[(KOTActTransLogs, CompleteHandler, PBIActRet.Builder, FramePacket, Option[Double])]();
   {
     for (i <- 1 to NodeHelper.getPropInstance.get("insert.run.checkcount", 5)) {
@@ -58,7 +59,8 @@ object FundQueryService extends OLog with PBUtils with LService[PBIActQuery] {
     }
   }
 
-  //http://localhost:8081/act/pbcrf.do?fh=VCRFACT000000J00&bd={"fund_no":"a001","act_no":"1235","cust_id":"abcdefg","act_name":"你好","mchnt_id":"abc","channel_id":"abc"}&gcmd=CRTACF
+  //
+  //  http://localhost:18080/act/pbque.do?fh=VQUEACT000000J00&bd={%22act_no%22:%22abc%22}&gcmd=QUEACT
 
   def onPBPacket(pack: FramePacket, pbo: PBIActQuery, handler: CompleteHandler) = {
     //    log.debug("guava==" + VMDaos.guCache.getIfPresent(pbo.getLogid()));      val ret = PBActRet.newBuilder();
@@ -69,41 +71,56 @@ object FundQueryService extends OLog with PBUtils with LService[PBIActQuery] {
       handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
     } else if (StringUtils.isBlank(pbo.getActNo) && StringUtils.isBlank(pbo.getFundNo)) {
       ret.setDesc("账户号和资金子账户不能同时为空").setStatus("0002") setRetcode (RetCode.FAILED);
+      handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
+
     } else {
 
-      if (pbo.getActNo != null) {
+      if (StringUtils.isNoneBlank(pbo.getActNo)) {
         //先查主账户，如果不为空则肯定需要查出这个用户的信息的；
         //如果为空则不管
         TActInfoDAO.findByKey(pbo.getActNo) onComplete { x =>
           try {
-            x.map {
-              case qr: QueryResult => {
-                if (qr.rowsAffected > 0) {
-                  val actbuilder = PBTActInfo.newBuilder();
-                  TActInfoDAO.resultRowTOPB(actbuilder, qr)
-                  ret.setPbact(actbuilder.build())
-                } else {
-                  ret.setDesc("未找到:").setRetcode(RetCode.FAILED)
-                }
-                handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
-              }
-              case u @ _ => {
-                log.error("unkonw error:1:", u)
-                ret.setDesc("未找到:" + u).setRetcode(RetCode.FAILED)
-                handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
-
-              }
+            val actbuilder = PBTActInfo.newBuilder();
+            if (TActInfoDAO.resultRowTOPB(actbuilder, x)) {
+              ret.setPbact(actbuilder.build())
+            } else {
+              ret.setDesc("未找到:").setRetcode(RetCode.FAILED)
             }
+            handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
           } catch {
-            case e :Throwable => {
+            case e: Throwable => {
               log.error("unkonw error:2:", e)
               ret.setDesc("出错了:" + e.getMessage).setRetcode(RetCode.FAILED)
               handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
             }
           }
-
           //          ret.setPbact(pbBeanUtil.toPB(PBTActInfo.newBuilder(), x))            
         }
+      } else if (StringUtils.isNoneBlank(pbo.getFundNo)) {
+        //先查主账户，如果不为空则肯定需要查出这个用户的信息的；
+        //如果为空则不管
+        TActFundDAO.findByKey(pbo.getFundNo) onComplete { x =>
+          try {
+            val builder = PBTActFund.newBuilder();
+            if (TActFundDAO.resultRowTOPB(builder, x)) {
+              ret.setPbfund(builder.build())
+            } else {
+              ret.setDesc("未找到:").setRetcode(RetCode.FAILED)
+            }
+            handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
+          } catch {
+            case e: Throwable => {
+              log.error("unkonw error:2:", e)
+              ret.setDesc("出错了:" + e.getMessage).setRetcode(RetCode.FAILED)
+              handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
+            }
+          }
+          //          ret.setPbact(pbBeanUtil.toPB(PBTActInfo.newBuilder(), x))            
+        }
+      } else {
+        ret.setDesc("账户号和资金子账户不能同时为空").setStatus("0002") setRetcode (RetCode.FAILED);
+        handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
+
       }
 
       //      val v = KOTActFund(UUIDGenerator.generate(), pbo.getActNo, UUIDGenerator.generate(), "123", "aff", "aabb");

@@ -40,7 +40,7 @@ message PBTActInfo
 	double act_yinit_bal = 9;
 	double act_dinit_bal = 10;
 	double act_cur_bal = 11;
-	double act_stat = 12;
+	string act_stat = 12;
 	double act_maxod_amt = 13;
 	double act_ctrl_bal = 14;
 	string act_bal_warn_flag = 15;

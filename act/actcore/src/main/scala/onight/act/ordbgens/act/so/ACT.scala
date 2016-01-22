@@ -51,7 +51,7 @@ object ACTDAOs {
 , val ACT_YINIT_BAL: Option[Double] = null
 , val ACT_DINIT_BAL: Option[Double] = null
 , val ACT_CUR_BAL: Option[Double] = null
-, val ACT_STAT: Option[Double] = null
+, val ACT_STAT: String = null
 , val ACT_MAXOD_AMT: Option[Double] = null
 , val ACT_CTRL_BAL: Option[Double] = null
 , val ACT_BAL_WARN_FLAG: String = null

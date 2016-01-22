@@ -23,6 +23,8 @@ import scala.collection.JavaConversions._
 import com.github.mauricio.async.db.RowData
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
+import scala.util.Try
+import scala.math.BigDecimal
 
 //import akka.util.Timeout
 
@@ -32,12 +34,12 @@ case class Range(offset: Int, limit: Int)
 class QueryResultWithArray(
   val seqs: Seq[Any],
   override val rowsAffected: Long, override val statusMessage: String, override val rows: Option[ResultSet] = None)
-  extends QueryResult(rowsAffected, statusMessage, rows) {
+    extends QueryResult(rowsAffected, statusMessage, rows) {
 
 }
 
 class NoneQueryResult()
-  extends QueryResult(0, null) {
+    extends QueryResult(0, null) {
 
 }
 trait SimpleDAO[T] extends AsyncDB {
@@ -88,46 +90,47 @@ trait SimpleDAO[T] extends AsyncDB {
     constructor.newInstance(map.toArray[AnyRef]: _*).asInstanceOf[T]
   }
 
-  def resultRowTOPB(builder: Message.Builder, queryResult: QueryResult): Boolean = {
-    //    println(UpdateString)
-    //    val fields = ttag.runtimeClass.getDeclaredFields();
-    queryResult.rows match {
-      case Some(rs) =>
-        for (row <- queryResult.rows.head) {
-          println("row==" + row)
-          for (fd <- builder.getDescriptorForType().getFields()) {
-            val v = fieldValue(row,fd.getName.toUpperCase())
-            println ("nv::"+fd.getName.toUpperCase()+"-->"+v+",r="+row(fd.getName.toUpperCase()))
-            if(v!=null)
-            {
-              try{
-                println ("setfield::"+fd.getName.toUpperCase()+"-->"+v+",r="+row(fd.getName.toUpperCase()))
-               builder.setField(fd, v)
-               println ("setfield.okok::"+fd.getName.toUpperCase()+"-->"+v+",r="+row(fd.getName.toUpperCase()))
-              }catch{
-                case a:Throwable => log.error("cannot set v:"+fd.getName+",v="+v)
+  def resultRowTOPB(builder: Message.Builder, qr: Try[QueryResult]): Boolean = {
+    val ret = qr.map {
+      case qr: QueryResult => {
+        if (qr.rowsAffected > 0) {
+          for (row <- qr.rows.head) {
+            for (fd <- builder.getDescriptorForType().getFields()) {
+              val v = fieldValue(row, fd.getName.toUpperCase())
+              if (v != null) {
+                try {
+                  builder.setField(fd, v)
+                } catch {
+                  case a: Throwable => {
+                    log.error("cannot set v:" + fd.getName + ",v=" + v)
+                  }
+                }
               }
             }
           }
+          true
+        } else {
+          false
         }
-        return true
-      case _ => return false
+      }
+      case u @ _ => false
     }
-    //    println(queryResult.rows)
+    ret.get
   }
   def fieldValue(row: RowData, name: String): Any = {
-    row(name) match{
-      case v:String => v
-      case n@null =>{
+    row(name) match {
+      case v: String => v
+      case n @ null => {
         return null;
       }
-      case v:org.joda.time.LocalDateTime =>{
+      case v: org.joda.time.LocalDateTime => {
         v.toDateTime().getMillis
       }
       case Some(v) => return v
-      case v@_ => {
-        log.warn("unknow type:"+v.getClass()+":"+row(name))
-        return v 
+      case v: scala.math.BigDecimal => v.doubleValue()
+      case v @ _ => {
+        log.warn("unknow type:" + v.getClass() + ":" + row(name))
+        return v
       }
     }
   }
@@ -140,7 +143,7 @@ trait SimpleDAO[T] extends AsyncDB {
         for (row <- queryResult.rows.head) ret.append({
           val map = fields.map({ field =>
             //            println("FF:" + field.getName() + ",=>" + row(field.getName()))
-             fieldValue(row,field.getName)
+            fieldValue(row, field.getName)
           })
           val instance = constructor.newInstance(map)
           instance.asInstanceOf[T]

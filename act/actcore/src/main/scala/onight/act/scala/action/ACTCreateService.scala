@@ -67,6 +67,8 @@ object ACTCreateService extends OLog with PBUtils with LService[PBIActCreate] {
   //Time per request:       76.068 [ms] (mean)
   //Time per request:       0.076 [ms] (mean, across all concurrent requests)
   //Transfer rate:          2606.13 [Kbytes/sec] received
+  //http://localhost:18080/act/pbcrt.do?fh=VCRTACT000000J00&bd={%22act_no%22:%22abc%22,%22act_name%22:%22%E4%BD%A0%E5%A5%BD%22,%22cust_id%22:%22abc%22,%22mchnt_id%22:%2211123%22,%22channel_id%22:%22a%22}&gcmd=CRTACT
+  
   val buckets = new ConcurrentLinkedQueue[(KOTActInfo, CompleteHandler, PBIActRet.Builder, FramePacket)]();
   {
     for (i <- 1 to NodeHelper.getPropInstance.get("insert.run.checkcount", 5)) {
