@@ -21,6 +21,8 @@ import com.google.protobuf.Message
 import com.google.protobuf.Descriptors.FieldDescriptor
 import scala.collection.JavaConversions._
 import com.github.mauricio.async.db.RowData
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 
 //import akka.util.Timeout
 
@@ -86,7 +88,7 @@ trait SimpleDAO[T] extends AsyncDB {
     constructor.newInstance(map.toArray[AnyRef]: _*).asInstanceOf[T]
   }
 
-  def resultRowTOPB(builder: Message.Builder, queryResult: QueryResult): Any = {
+  def resultRowTOPB(builder: Message.Builder, queryResult: QueryResult): Boolean = {
     //    println(UpdateString)
     //    val fields = ttag.runtimeClass.getDeclaredFields();
     queryResult.rows match {
@@ -95,10 +97,16 @@ trait SimpleDAO[T] extends AsyncDB {
           println("row==" + row)
           for (fd <- builder.getDescriptorForType().getFields()) {
             val v = fieldValue(row,fd.getName.toUpperCase())
-            println ("nv::"+fd.getName.toUpperCase()+"-->"+v)
+            println ("nv::"+fd.getName.toUpperCase()+"-->"+v+",r="+row(fd.getName.toUpperCase()))
             if(v!=null)
             {
-             builder.setField(fd, v) 
+              try{
+                println ("setfield::"+fd.getName.toUpperCase()+"-->"+v+",r="+row(fd.getName.toUpperCase()))
+               builder.setField(fd, v)
+               println ("setfield.okok::"+fd.getName.toUpperCase()+"-->"+v+",r="+row(fd.getName.toUpperCase()))
+              }catch{
+                case a:Throwable => log.error("cannot set v:"+fd.getName+",v="+v)
+              }
             }
           }
         }
@@ -107,29 +115,19 @@ trait SimpleDAO[T] extends AsyncDB {
     }
     //    println(queryResult.rows)
   }
-  def fieldValue(row: RowData, name: String): Unit = {
-    if (row(name) == null) {
-      null
-    } else {
-      //              println("FF:" + field.getName() + "(" + field.getType() + ")" + ",=>" + row(field.getName()) + ",type=" + row(field.getName()).getClass)
-      if (row(name).isInstanceOf[String]) {
-        row(name).asInstanceOf[String]
-      } else if (row(name).isInstanceOf[java.lang.Integer]) {
-        row(name) match {
-          case str: String =>
-            Some(str.toLong)
-          case a @ _ =>
-            Some(a.asInstanceOf[Int])
-        }
-
-      } else if (row(name).isInstanceOf[java.lang.Float]) {
-        Option(row(name).asInstanceOf[Float])
-      } else if (row(name).isInstanceOf[scala.math.BigDecimal]) {
-        Option(row(name).asInstanceOf[scala.math.BigDecimal].toLong)
-      } else if (row(name).isInstanceOf[java.lang.Long]) {
-        Option(row(name).asInstanceOf[Long])
-      } else {
-        row(name).asInstanceOf[String]
+  def fieldValue(row: RowData, name: String): Any = {
+    row(name) match{
+      case v:String => v
+      case n@null =>{
+        return null;
+      }
+      case v:org.joda.time.LocalDateTime =>{
+        v.toDateTime().getMillis
+      }
+      case Some(v) => return v
+      case v@_ => {
+        log.warn("unknow type:"+v.getClass()+":"+row(name))
+        return v 
       }
     }
   }
