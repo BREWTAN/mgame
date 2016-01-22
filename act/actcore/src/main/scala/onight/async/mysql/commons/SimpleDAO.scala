@@ -17,6 +17,10 @@ import com.github.mauricio.async.db.QueryResult
 import com.github.mauricio.async.db.ResultSet
 import scala.concurrent.ExecutionContextExecutor
 import onight.act.scala.persist.BatchCheckExc
+import com.google.protobuf.Message
+import com.google.protobuf.Descriptors.FieldDescriptor
+import scala.collection.JavaConversions._
+import com.github.mauricio.async.db.RowData
 
 //import akka.util.Timeout
 
@@ -35,9 +39,9 @@ class NoneQueryResult()
 
 }
 trait SimpleDAO[T] extends AsyncDB {
-  
-   implicit lazy val global: ExecutionContextExecutor = ExecutionContext.fromExecutor(BatchCheckExc.daoexec)
-   
+
+  implicit lazy val global: ExecutionContextExecutor = ExecutionContext.fromExecutor(BatchCheckExc.daoexec)
+
   val log = LoggerFactory.getLogger("SimpleDAO")
   //  implicit val timeout = Timeout(60000)
   //  def mapToBean(row: RowData): T;
@@ -82,6 +86,53 @@ trait SimpleDAO[T] extends AsyncDB {
     constructor.newInstance(map.toArray[AnyRef]: _*).asInstanceOf[T]
   }
 
+  def resultRowTOPB(builder: Message.Builder, queryResult: QueryResult): Any = {
+    //    println(UpdateString)
+    //    val fields = ttag.runtimeClass.getDeclaredFields();
+    queryResult.rows match {
+      case Some(rs) =>
+        for (row <- queryResult.rows.head) {
+          println("row==" + row)
+          for (fd <- builder.getDescriptorForType().getFields()) {
+            val v = fieldValue(row,fd.getName.toUpperCase())
+            println ("nv::"+fd.getName.toUpperCase()+"-->"+v)
+            if(v!=null)
+            {
+             builder.setField(fd, v) 
+            }
+          }
+        }
+        return true
+      case _ => return false
+    }
+    //    println(queryResult.rows)
+  }
+  def fieldValue(row: RowData, name: String): Unit = {
+    if (row(name) == null) {
+      null
+    } else {
+      //              println("FF:" + field.getName() + "(" + field.getType() + ")" + ",=>" + row(field.getName()) + ",type=" + row(field.getName()).getClass)
+      if (row(name).isInstanceOf[String]) {
+        row(name).asInstanceOf[String]
+      } else if (row(name).isInstanceOf[java.lang.Integer]) {
+        row(name) match {
+          case str: String =>
+            Some(str.toLong)
+          case a @ _ =>
+            Some(a.asInstanceOf[Int])
+        }
+
+      } else if (row(name).isInstanceOf[java.lang.Float]) {
+        Option(row(name).asInstanceOf[Float])
+      } else if (row(name).isInstanceOf[scala.math.BigDecimal]) {
+        Option(row(name).asInstanceOf[scala.math.BigDecimal].toLong)
+      } else if (row(name).isInstanceOf[java.lang.Long]) {
+        Option(row(name).asInstanceOf[Long])
+      } else {
+        row(name).asInstanceOf[String]
+      }
+    }
+  }
   def resultRow(queryResult: QueryResult): Any = {
     //    println(UpdateString)
     //    val fields = ttag.runtimeClass.getDeclaredFields();
@@ -91,34 +142,9 @@ trait SimpleDAO[T] extends AsyncDB {
         for (row <- queryResult.rows.head) ret.append({
           val map = fields.map({ field =>
             //            println("FF:" + field.getName() + ",=>" + row(field.getName()))
-            if (row(field.getName()) == null) {
-              null
-            } else {
-              //              println("FF:" + field.getName() + "(" + field.getType() + ")" + ",=>" + row(field.getName()) + ",type=" + row(field.getName()).getClass)
-              if (field.getType() == classOf[String]) {
-                row(field.getName()).asInstanceOf[String]
-              } else if (field.getType() == classOf[Option[Int]] && row(field.getName()).isInstanceOf[java.lang.Integer]) {
-                row(field.getName()) match {
-                  case str: String =>
-                    Some(str.toLong)
-                  case a @ _ =>
-                    Some(a.asInstanceOf[Int])
-                }
-
-              } else if (field.getType() == classOf[Option[Float]] && row(field.getName()).isInstanceOf[java.lang.Float]) {
-                Option(row(field.getName()).asInstanceOf[Float])
-              } else if (field.getType() == classOf[Option[Long]] && row(field.getName()).isInstanceOf[scala.math.BigDecimal]) {
-                Option(row(field.getName()).asInstanceOf[scala.math.BigDecimal].toLong)
-              } else if (field.getType() == classOf[Option[Long]] && row(field.getName()).isInstanceOf[java.lang.String]) {
-                Option(row(field.getName()).asInstanceOf[String].toLong)
-              } else if (field.getType() == classOf[Option[Long]] && row(field.getName()).isInstanceOf[java.lang.Long]) {
-                Option(row(field.getName()).asInstanceOf[Long])
-              } else {
-                row(field.getName()).asInstanceOf[String]
-              }
-            }
+             fieldValue(row,field.getName)
           })
-          val instance = constructor.newInstance(map.toArray[AnyRef]: _*)
+          val instance = constructor.newInstance(map)
           instance.asInstanceOf[T]
         })
       case _ => return queryResult
@@ -249,7 +275,7 @@ trait SimpleDAO[T] extends AsyncDB {
 
     if (f != null) {
       r.onComplete { x => f(x.get, index) }
-    } 
+    }
     if (index < vals.size) {
       val v = r.flatMap { x => c.sendPreparedStatement(query, vals(index)) }
       flatExec(v, c, query, vals, index + 1)
@@ -276,7 +302,7 @@ trait SimpleDAO[T] extends AsyncDB {
     //    pool.sendPreparedStatement(query, values)
     val result = pool.use { x =>
       x.inTransaction { c =>
-       
+
         flatExec(c.sendPreparedStatement(query, vals(0)), c, query, vals, 1)(f)
       }
     }
@@ -297,14 +323,14 @@ trait SimpleDAO[T] extends AsyncDB {
   def flatExecInsertAndUpdate(r: Future[QueryResult], c: Connection, query: String, vals: List[Seq[Any]], index: Int)(implicit f: (QueryResult, Int) => Unit = null, noexec: Boolean = false): Future[QueryResult] = {
     if (index < vals.size) {
       val v = r.flatMap { x =>
-         val xf=c.sendPreparedStatement(query, vals(index))
-         xf
+        val xf = c.sendPreparedStatement(query, vals(index))
+        xf
       }
-//      futures.+=:(v)
+      //      futures.+=:(v)
       if (f != null) {
-          v.onComplete { xv => f(xv.get, index) }
+        v.onComplete { xv => f(xv.get, index) }
       }
-//      log.error("ff,2.size="+futures.size)
+      //      log.error("ff,2.size="+futures.size)
 
       flatExecInsertAndUpdate(v, c, query, vals, index + 1)
     } else {
