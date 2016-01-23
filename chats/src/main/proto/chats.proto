@@ -1,0 +1,56 @@
+
+
+syntax = "proto3";
+
+package onight.chats.pbo;
+
+
+enum PBModule{
+	P2P = 0;//点对点消息
+	ROM = 1;//聊天室消息
+};
+
+enum PBP2PCommand{
+	SND = 0 ;//发送消息
+	RCV = 1 ;//接受消息
+	POS = 2 ;//广播消息
+	HIS = 3 ;//获取历史消息
+	BLK = 4 ;//黑名单控制,增加或者删除
+	UNR = 5 ;//获取未读消息个数
+	SUB = 6 ;//消息订阅
+};
+
+enum PBROOMCommand{
+	NEW = 0 ;//新建聊天室
+	DEL = 1 ;//销毁聊天室
+	EIN = 2 ;//加入聊天室
+	OUT = 3 ;//退出聊天室
+	
+	BLK = 4 ;//黑名单控制,增加或者删除
+	MUT = 5 ;//禁止或者开放某人在聊天室说话
+	
+	QUR = 6 ;//查询
+	DEL = 7 ;//删除（暂时不支持）
+	TRN = 8 ;//转账资金账户
+	BUY = 9 ;//产品购买
+	QUE = 30;//根据条件相等查询
+};
+
+
+message PBIChatRet 
+{
+	enum RetCode{
+		SUCCESS = 0;//成功
+		FAILED = -1;//失败
+	}
+	RetCode retcode = 1;//返回码
+	string status = 2;//状态信息
+	string desc = 3;//描述信息
+	
+	string  fund_no=50;				//资金子账户号
+	string  act_no=60;				//账户号
+	
+	PBTActFund	pbfund = 70;//资金子账户信息
+	PBTActInfo	pbact = 80;//主账户信息
+}
+
