@@ -35,13 +35,13 @@ object FundTransXRunner extends BatcherCallback[(KOTActTransLogs, CompleteHandle
         .flatMap { qr =>
           if (qr.rowsAffected > 0) {
             v._3.setRetcode(RetCode.SUCCESS).setDesc("Success").setStatus("0000")
-            v._2.onFinished(PacketHelper.toPBReturn(v._4, v._3.build()));
+            //            v._2.onFinished(PacketHelper.toPBReturn(v._4, v._3.build()));
             c.sendPreparedStatement("UPDATE T_ACT_FUND SET CUR_BAL = CUR_BAL+(?),UPDATE_ACT_LOG_ID = (?) WHERE FUND_NO = (?)", Seq(v._1.AMT, v._1.LOG_UUID, v._1.TO_FUND_NO))
             //            c.sendPreparedStatement("INSERT INTO T_ACT_TRANS_LOGS_DEBT(LOG_UUID,FROM_FUND_NO,TO_FUND_NO) values(?,?,?) ", Seq(v._1.LOG_UUID, v._1.FROM_FUND_NO, v._1.TO_FUND_NO))
 
           } else {
             v._3.setRetcode(RetCode.FAILED).setDesc("First_BAL_NOT_ENOUGH").setStatus("0010")
-            v._2.onFinished(PacketHelper.toPBReturn(v._4, v._3.build()));
+            //            v._2.onFinished(PacketHelper.toPBReturn(v._4, v._3.build()));
             Future.successful(qr)
           }
         }
@@ -132,7 +132,7 @@ object FundTransXRunner extends BatcherCallback[(KOTActTransLogs, CompleteHandle
     }
     ret onFailure ({
       case t @ _ => {
-        log.error("mapreduce failed:　Trying Batch", t)
+        log.warn("mapreduce failed:　Trying Batch", t)
         val ret2 = TActTransLogsDAO.pool.use { x =>
           x.inTransaction { c =>
             val s = c.sendPreparedStatement(insertSQL, insertVals);
@@ -140,11 +140,18 @@ object FundTransXRunner extends BatcherCallback[(KOTActTransLogs, CompleteHandle
               updateSeq(p, c, v))
           }
         }
-        ret2 onFailure ({//批量还是失败了。
+        ret2 onSuccess {
+          case result @ _ => {
+            vs.map({ v =>
+              v._2.onFinished(PacketHelper.toPBReturn(v._4, v._3.build()));
+            })
+          }
+        }
+        ret2 onFailure ({ //批量还是失败了。
           case t @ _ => {
-            log.error("mapreduce failed:　Trying ONE", t)
+            log.warn("mapreduce failed:　Trying ONE", t)
             if (vs.size > 0) {
-              vs.map({ v=>
+              vs.map({ v =>
                 val oneresult = onOne(v)
                 oneresult onSuccess {
                   case _ =>
