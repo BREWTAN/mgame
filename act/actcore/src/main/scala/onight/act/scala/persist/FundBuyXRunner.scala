@@ -175,14 +175,14 @@ object FundBuyXRunner extends BatcherCallback[(KOTActTransLogs, CompleteHandler,
         ret2 onFailure ({ //批量还是失败了。
           case t @ _ => {
             log.warn("mapreduce failed:　Trying ONE", t)
-            if (vs.size > 0) {
+            if (vs.size > 1) {
               vs.map({ v =>
                 val oneresult = onOne(v)
-                oneresult onSuccess {
-                  case _ =>
-                    v._3.setRetcode(RetCode.SUCCESS).setDesc("Success").setStatus("0000")
-                    v._2.onFinished(PacketHelper.toPBReturn(v._4, v._3.build()));
-                }
+//                oneresult onSuccess {
+//                  case _ =>
+//                    v._3.setRetcode(RetCode.SUCCESS).setDesc("Success").setStatus("0000")
+//                    v._2.onFinished(PacketHelper.toPBReturn(v._4, v._3.build()));
+//                }
                 oneresult onFailure { case t @ _ => onFailed(v, t) }
               })
             } else {
