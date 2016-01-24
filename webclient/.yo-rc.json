@@ -1,0 +1,7 @@
+{
+  "generator-react-webpack": {
+    "appName": "webclient",
+    "style": "sass",
+    "postcss": false
+  }
+}
