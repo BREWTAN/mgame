@@ -6,10 +6,17 @@ RaisedButton = require("material-ui/lib/raised-button");
 TextField = require('material-ui/lib/text-field');
 
 Timer = require("./ui/Timer.coffee")
-login = require("./ui/login.js")
+Login = require("./ui/login.js")
 
 CommentBox = require("./ui/CommentBox.jsx")
+
+{ Router, Route, Link ,hashHistory,browserHistory} =require( 'react-router')
+
+
 mountNode = document.getElementById("app")
+
+
+
 TodoList = React.createClass(
     displayName: "TodoList"
     render: ->
@@ -18,8 +25,9 @@ TodoList = React.createClass(
 
         React.createElement "ul", null, @props.items.map(createItem)
 )
-TodoApp = React.createClass(
-    displayName: "TodoApp"
+
+WAPP = React.createClass(
+    displayName: "WAPP"
     getInitialState: ->
         items: []
         text: ""
@@ -49,20 +57,34 @@ TodoApp = React.createClass(
 
     render: ->
 
-        if @state.logined
-            React.createElement "div", null, React.createElement(TodoList,
-                items: @state.items
-            ), React.createElement("form",
-                onSubmit: @handleSubmit
-            , React.createElement(TextField,
-                    onChange: @onChange
-                    value: @state.text
-                ), React.createElement(RaisedButton,
-                    onClick: @handleSubmit, "Add #" + (@state.items.length + 1))), React.createElement(Timer, null)
-            , React.createElement(CommentBox, null)
-        else
-            React.createElement "div", null, React.createElement(login, {onLoginSuccess:@onLoginSuccess})
+#        if @state.logined
+#            React.createElement "div", null, React.createElement(TodoList,
+#                items: @state.items
+#            ), React.createElement("form",
+#                onSubmit: @handleSubmit
+#            , React.createElement(TextField,
+#                    onChange: @onChange
+#                    value: @state.text
+#                ), React.createElement(RaisedButton,
+#                    onClick: @handleSubmit, "Add #" + (@state.items.length + 1))), React.createElement(Timer, null)
+#            , React.createElement(CommentBox, null)
+            @props.children
+#        else
+#            React.createElement "div", null, React.createElement(Login, {onLoginSuccess:@onLoginSuccess})
 )
-ReactDOM.render React.createElement(TodoApp, null), mountNode
+
+
+routeConfig = {
+    path: '/',
+    component: WAPP,
+    indexRoute: { component: Login },
+
+    childRoutes: [
+        { path: 'comment', component: CommentBox },
+        { path: 'login', component: Login },
+    ]
+}
+
+ReactDOM.render React.createElement(Router, routes:routeConfig,history:hashHistory), mountNode
 
 

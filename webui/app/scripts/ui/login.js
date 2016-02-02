@@ -1,4 +1,4 @@
-var Dialog, FlatButton, Paper, RaisedButton, React, TextField, injectTapEventPlugin, login;
+var Dialog, FlatButton, Login, Paper, PromiseState, RaisedButton, React, Router, TextField, connect, injectTapEventPlugin, ref;
 
 React = require("react");
 
@@ -14,15 +14,22 @@ TextField = require('material-ui/lib/text-field');
 
 Paper = require('material-ui/lib/paper');
 
-login = React.createClass({
+ref = require('react-refetch'), connect = ref.connect, PromiseState = ref.PromiseState;
+
+Router = require('react-router').Router;
+
+Login = React.createClass({
+  contextTypes: {
+    router: React.PropTypes.object
+  },
   getInitialState: function() {
     return {
       open: false
     };
   },
   handleOpen: function() {
-    console.log("handleOpen::" + this.props.onLoginSuccess);
-    this.props.onLoginSuccess("abc");
+    console.log("handleOpen::" + this.context.router);
+    this.context.router.replace("comment");
     console.log("handleOpen:oookk");
   },
   handleClose: function() {
@@ -88,6 +95,6 @@ login = React.createClass({
   }
 });
 
-module.exports = login;
+module.exports = Login;
 
 injectTapEventPlugin();

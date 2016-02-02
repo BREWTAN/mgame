@@ -2,20 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e0698c81-4666-4961-96bd-efe56520ee0b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../webclient/.bowerrc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../webclient/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../webclient/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../webclient/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../webclient/.idea/webclient.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../webclient/.idea/workspace.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../webclient/.jshintrc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../webclient/bower.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../webclient/gulpfile.coffee" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../webclient/gulpfile.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/scripts/ui/CommentBox.jsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/scripts/ui/login.cjsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/scripts/ui/logindiag.cjsx" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../webclient/.babelrc" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../webclient/.eslintrc" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../webclient/.yo-rc.json" afterPath="" />
@@ -53,7 +39,17 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../act/actmysql/.settings/org.eclipse.wst.common.component" afterPath="$PROJECT_DIR$/../act/actmysql/.settings/org.eclipse.wst.common.component" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../webclient/.editorconfig" afterPath="$PROJECT_DIR$/../webclient/.editorconfig" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../webclient/.gitignore" afterPath="$PROJECT_DIR$/../webclient/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../webclient/.idea/webclient.iml" afterPath="$PROJECT_DIR$/../webclient/.idea/webclient.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../webclient/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../webclient/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../webclient/bower.json" afterPath="$PROJECT_DIR$/../webclient/bower.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../webclient/package.json" afterPath="$PROJECT_DIR$/../webclient/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/app.coffee" afterPath="$PROJECT_DIR$/app/scripts/app.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/ui/login.cjsx" afterPath="$PROJECT_DIR$/app/scripts/ui/login.cjsx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/ui/login.js" afterPath="$PROJECT_DIR$/app/scripts/ui/login.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower.json" afterPath="$PROJECT_DIR$/bower.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
     </list>
     <ignored path="webui.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -78,8 +74,26 @@
         <entry file="file://$PROJECT_DIR$/app/scripts/ui/login.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="27" column="4" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="4" />
-              <folding />
+              <caret line="33" column="4" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="4" />
+              <folding>
+                <marker date="1454394673000" expanded="true" signature="881:925" placeholder="{...}" />
+                <marker date="1454394673000" expanded="true" signature="881:2635" placeholder="{...}" />
+                <marker date="1454394673000" expanded="true" signature="953:992" placeholder="{...}" />
+                <marker date="1454394673000" expanded="true" signature="1015:2633" placeholder="{...}" />
+                <marker date="1454394673000" expanded="true" signature="1100:1384" placeholder="[...]" />
+                <marker date="1454394673000" expanded="true" signature="1140:1242" placeholder="{&quot;label&quot;: &quot;Cancel&quot;...}" />
+                <marker date="1454394673000" expanded="true" signature="1277:1377" placeholder="{&quot;label&quot;: &quot;Submit&quot;...}" />
+                <marker date="1454394673000" expanded="true" signature="1398:1422" placeholder="{&quot;margin&quot;: 12...}" />
+                <marker date="1454394673000" expanded="true" signature="1437:1561" placeholder="{&quot;height&quot;: '100%'...}" />
+                <marker date="1454394673000" expanded="true" signature="1634:1683" placeholder="{&quot;zDepth&quot;: 1....}" />
+                <marker date="1454394673000" expanded="true" signature="1786:1818" placeholder="{&quot;className&quot;: &quot;row&quot;...}" />
+                <marker date="1454394673000" expanded="true" signature="1851:1932" placeholder="{&quot;hintText&quot;: &quot;Email/UserID&quot;...}" />
+                <marker date="1454394673000" expanded="true" signature="1963:1995" placeholder="{&quot;className&quot;: &quot;row&quot;...}" />
+                <marker date="1454394673000" expanded="true" signature="2028:2126" placeholder="{&quot;type&quot;: &quot;password&quot;...}" />
+                <marker date="1454394673000" expanded="true" signature="2224:2256" placeholder="{&quot;className&quot;: &quot;row&quot;...}" />
+                <marker date="1454394673000" expanded="true" signature="2285:2322" placeholder="{&quot;className&quot;: &quot;col-lg-6&quot;...}" />
+                <marker date="1454394673000" expanded="true" signature="2358:2469" placeholder="{&quot;label&quot;: &quot;登录&quot;...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -87,8 +101,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.5">
-              <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
+            <state vertical-scroll-proportion="-26.875">
+              <caret line="43" column="23" selection-start-line="43" selection-start-column="23" selection-end-line="43" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -97,8 +111,8 @@
       <file leaf-file-name="login.cjsx" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/scripts/ui/login.cjsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.36679536">
-              <caret line="15" column="8" selection-start-line="15" selection-start-column="8" selection-end-line="15" selection-end-column="8" />
+            <state vertical-scroll-proportion="0.51934826">
+              <caret line="77" column="28" selection-start-line="77" selection-start-column="28" selection-end-line="77" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -107,8 +121,8 @@
       <file leaf-file-name="app.coffee" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/scripts/app.coffee">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.185184">
-              <caret line="63" column="103" selection-start-line="63" selection-start-column="88" selection-end-line="63" selection-end-column="103" />
+            <state vertical-scroll-proportion="-10.407408">
+              <caret line="82" column="48" selection-start-line="82" selection-start-column="38" selection-end-line="82" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -118,7 +132,7 @@
         <entry file="file://$PROJECT_DIR$/app/scripts/ui/CommentBox.jsx">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="36" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
+              <caret line="2" column="14" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -154,16 +168,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dist/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="6.25">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -181,7 +185,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/bower.json" />
         <option value="$PROJECT_DIR$/app/scripts/ui/TestDialog.cjsx" />
         <option value="$PROJECT_DIR$/app/scripts/ui/TestDialog.coffee" />
         <option value="$PROJECT_DIR$/app/scripts/ui/TestDialog.jsx" />
@@ -192,6 +195,7 @@
         <option value="$PROJECT_DIR$/gulpfile.coffee" />
         <option value="$PROJECT_DIR$/app/index.html" />
         <option value="$PROJECT_DIR$/app/styles/main.scss" />
+        <option value="$PROJECT_DIR$/bower.json" />
         <option value="$PROJECT_DIR$/app/scripts/app.coffee" />
         <option value="$PROJECT_DIR$/app/scripts/ui/login.cjsx" />
       </list>
@@ -368,57 +372,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="dist" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dist" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bower_components" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="styles" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -459,6 +413,72 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="ui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bower_components" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bower_components" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jquery" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bower_components" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jquery" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dist" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -746,14 +766,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bower.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.5">
-          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dist/favicon.ico">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -895,26 +907,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dist/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="6.25">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/_forms.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.34817815">
           <caret line="553" column="1" selection-start-line="553" selection-start-column="1" selection-end-line="553" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/styles/main.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.098039">
-          <caret line="86" column="0" selection-start-line="86" selection-start-column="0" selection-end-line="89" selection-end-column="5" />
           <folding />
         </state>
       </provider>
@@ -935,14 +931,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/ui/CommentBox.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="36" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/scripts/ui/logindiag.cjsx">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -951,34 +939,84 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/bower.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.24291497">
+          <caret line="8" column="1" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dist/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.72672063">
+          <caret line="41" column="22" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/styles/main.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.098039">
+          <caret line="86" column="0" selection-start-line="86" selection-start-column="0" selection-end-line="89" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/ui/CommentBox.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="14" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/scripts/ui/login.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="27" column="4" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="4" />
-          <folding />
+          <caret line="33" column="4" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="4" />
+          <folding>
+            <marker date="1454394673000" expanded="true" signature="881:925" placeholder="{...}" />
+            <marker date="1454394673000" expanded="true" signature="881:2635" placeholder="{...}" />
+            <marker date="1454394673000" expanded="true" signature="953:992" placeholder="{...}" />
+            <marker date="1454394673000" expanded="true" signature="1015:2633" placeholder="{...}" />
+            <marker date="1454394673000" expanded="true" signature="1100:1384" placeholder="[...]" />
+            <marker date="1454394673000" expanded="true" signature="1140:1242" placeholder="{&quot;label&quot;: &quot;Cancel&quot;...}" />
+            <marker date="1454394673000" expanded="true" signature="1277:1377" placeholder="{&quot;label&quot;: &quot;Submit&quot;...}" />
+            <marker date="1454394673000" expanded="true" signature="1398:1422" placeholder="{&quot;margin&quot;: 12...}" />
+            <marker date="1454394673000" expanded="true" signature="1437:1561" placeholder="{&quot;height&quot;: '100%'...}" />
+            <marker date="1454394673000" expanded="true" signature="1634:1683" placeholder="{&quot;zDepth&quot;: 1....}" />
+            <marker date="1454394673000" expanded="true" signature="1786:1818" placeholder="{&quot;className&quot;: &quot;row&quot;...}" />
+            <marker date="1454394673000" expanded="true" signature="1851:1932" placeholder="{&quot;hintText&quot;: &quot;Email/UserID&quot;...}" />
+            <marker date="1454394673000" expanded="true" signature="1963:1995" placeholder="{&quot;className&quot;: &quot;row&quot;...}" />
+            <marker date="1454394673000" expanded="true" signature="2028:2126" placeholder="{&quot;type&quot;: &quot;password&quot;...}" />
+            <marker date="1454394673000" expanded="true" signature="2224:2256" placeholder="{&quot;className&quot;: &quot;row&quot;...}" />
+            <marker date="1454394673000" expanded="true" signature="2285:2322" placeholder="{&quot;className&quot;: &quot;col-lg-6&quot;...}" />
+            <marker date="1454394673000" expanded="true" signature="2358:2469" placeholder="{&quot;label&quot;: &quot;登录&quot;...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.5">
-          <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
+        <state vertical-scroll-proportion="-26.875">
+          <caret line="43" column="23" selection-start-line="43" selection-start-column="23" selection-end-line="43" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/scripts/app.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.185184">
-          <caret line="63" column="103" selection-start-line="63" selection-start-column="88" selection-end-line="63" selection-end-column="103" />
+        <state vertical-scroll-proportion="-10.407408">
+          <caret line="82" column="48" selection-start-line="82" selection-start-column="38" selection-end-line="82" selection-end-column="48" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/scripts/ui/login.cjsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36679536">
-          <caret line="15" column="8" selection-start-line="15" selection-start-column="8" selection-end-line="15" selection-end-column="8" />
+        <state vertical-scroll-proportion="0.51934826">
+          <caret line="77" column="28" selection-start-line="77" selection-start-column="28" selection-end-line="77" selection-end-column="28" />
           <folding />
         </state>
       </provider>
