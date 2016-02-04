@@ -1,0 +1,71 @@
+
+
+syntax = "proto3";
+
+package onight.chats.rooms.pbo;
+
+
+enum PBModule{
+	ROM = 0;//聊天室消息
+};
+
+enum PBRoomCommand{
+	NEW = 0 ;//新建聊天室
+	DEL = 1 ;//销毁聊天室
+	EIN = 2 ;//加入聊天室
+	OUT = 3 ;//退出聊天室
+	
+	BLK = 4 ;//黑名单控制,增加或者删除
+	MUT = 5 ;//禁止或者开放某人在聊天室说话
+	
+	QUR = 6 ;//查询
+	SND = 8 ;//发送消息
+	QUE = 30;//根据条件相等查询
+};
+
+message PBIRoomInfo
+{
+	string room_id = 1 ; //聊天室id号
+	string room_name = 2 ;//聊天室名字
+	
+	repeated string admins = 3 ;//聊天室拥有者
+	repeated string users = 4 ;//聊天室所有人
+	repeated string blockusers = 5 ;//黑名单
+	int64  create_timems = 6 ;//创建时间
+	string create_user = 7 ;//创建者
+	
+	string audit_user = 8 ;//审批员
+	string audit_timems = 9 ;//审批时间
+	int32  max_user = 10 ;//最大人数
+};
+
+message PBIRoomCreate
+{
+	string room_name = 1;//聊天室名字
+	string create_user = 2;//创建者
+	int32  max_user = 10 ;//最大人数
+};
+
+
+message PBIRoomMessage
+{
+	string room_id = 1;//聊天室ID
+	string from_u = 2;//发送者
+	string to_u = 3;//接收者，如果为空则全部人
+	int32  readed=4;//标识是否已读
+	int64  create_timems = 6 ;//创建时间
+	string msg  = 10;//消息体本身
+};
+
+message PBIRoomRet
+{
+	enum RetCode{
+		SUCCESS = 0;//成功
+		FAILED = -1;//失败
+	}
+	RetCode retcode = 1;//返回码
+	string 	status = 2;//状态信息
+	string 	desc = 3;//描述信息
+	PBIRoomInfo pbroom = 10;//房间信息
+}
+

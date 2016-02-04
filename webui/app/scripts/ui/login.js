@@ -1,4 +1,4 @@
-var Dialog, FlatButton, Login, Paper, PromiseState, RaisedButton, React, Router, TextField, connect, injectTapEventPlugin, ref;
+var Dialog, FlatButton, History, Loader, LoadingDiag, Login, Paper, PromiseState, RaisedButton, React, Router, TextField, connect, injectTapEventPlugin, linkState, ref, ref1, request;
 
 React = require("react");
 
@@ -14,30 +14,61 @@ TextField = require('material-ui/lib/text-field');
 
 Paper = require('material-ui/lib/paper');
 
+Loader = require('halogen/RingLoader');
+
+LoadingDiag = require("./loadingDiag.js");
+
 ref = require('react-refetch'), connect = ref.connect, PromiseState = ref.PromiseState;
 
-Router = require('react-router').Router;
+ref1 = require('react-router'), Router = ref1.Router, History = ref1.History;
+
+request = require('superagent');
+
+linkState = require('react-link-state');
 
 Login = React.createClass({
   contextTypes: {
-    router: React.PropTypes.object
+    router: React.PropTypes.object,
+    history: React.PropTypes.object
   },
   getInitialState: function() {
     return {
-      open: false
+      open: false,
+      login_id: '',
+      password: '',
+      message: ''
     };
   },
+  handleLoginCB: function(err, res) {
+    console.log("LoginCB:" + JSON.stringify(res.body));
+    if (res.body.body.code === "0000") {
+      console.log("login Success");
+      this.context.history.pushState(null, "/comment");
+    } else {
+      this.setState({
+        open: true,
+        message: "登录失败:" + res.body.body.desc
+      });
+    }
+  },
   handleOpen: function() {
-    console.log("handleOpen::" + this.context.router);
-    this.context.router.replace("comment");
-    console.log("handleOpen:oookk");
+    console.log("handleOpen::" + this.context.history);
+    request.post('/orest/ssm/pbsin.do?fh=VSINSSM000000J00').send({
+      login_id: this.state.login_id,
+      password: this.state.password,
+      op: '0',
+      res_id: 'web'
+    }).end(this.handleLoginCB);
   },
   handleClose: function() {
     console.log("handleClose::");
+    this.setState({
+      open: false
+    });
   },
   render: function() {
     var actions, pstyle, style;
-    console.log("render::login.cs");
+    console.log("render::login:message=" + this.state.message);
     actions = [
       React.createElement(FlatButton, {
         "label": "Cancel",
@@ -68,13 +99,15 @@ Login = React.createClass({
       "className": "row"
     }, React.createElement(TextField, {
       "hintText": "Email/UserID",
-      "floatingLabelText": "请输入邮箱或者用户名"
+      "floatingLabelText": "请输入邮箱或者用户名",
+      "valueLink": linkState(this, 'login_id')
     })), React.createElement("div", {
       "className": "row"
     }, React.createElement(TextField, {
       "type": "password",
       "hintText": "Password",
-      "floatingLabelText": "请输入密码"
+      "floatingLabelText": "请输入密码",
+      "valueLink": linkState(this, 'password')
     })), React.createElement("div", {
       "className": "clearfix"
     }), React.createElement("div", {
@@ -91,7 +124,11 @@ Login = React.createClass({
     }, React.createElement(RaisedButton, {
       "label": "注册",
       "style": style
-    }))))));
+    }))))), React.createElement(LoadingDiag, {
+      "open": this.state.open,
+      "message": this.state.message,
+      "handleDiagClose": this.handleClose
+    }));
   }
 });
 

@@ -5,10 +5,15 @@ RaisedButton = require("material-ui/lib/raised-button");
 
 TextField = require('material-ui/lib/text-field');
 
+
 Timer = require("./ui/Timer.coffee")
 Login = require("./ui/login.js")
+Loading = require("./ui/loading.js")
 
 CommentBox = require("./ui/CommentBox.jsx")
+
+ReactCSSTransitionGroup = require('react-addons-css-transition-group');
+
 
 { Router, Route, Link ,hashHistory,browserHistory} =require( 'react-router')
 
@@ -16,15 +21,6 @@ CommentBox = require("./ui/CommentBox.jsx")
 mountNode = document.getElementById("app")
 
 
-
-TodoList = React.createClass(
-    displayName: "TodoList"
-    render: ->
-        createItem = (itemText) ->
-            React.createElement "li", null, itemText
-
-        React.createElement "ul", null, @props.items.map(createItem)
-)
 
 WAPP = React.createClass(
     displayName: "WAPP"
@@ -56,7 +52,7 @@ WAPP = React.createClass(
         return
 
     render: ->
-
+#        console.log("render app");
 #        if @state.logined
 #            React.createElement "div", null, React.createElement(TodoList,
 #                items: @state.items
@@ -68,7 +64,18 @@ WAPP = React.createClass(
 #                ), React.createElement(RaisedButton,
 #                    onClick: @handleSubmit, "Add #" + (@state.items.length + 1))), React.createElement(Timer, null)
 #            , React.createElement(CommentBox, null)
-            @props.children
+        console.log("render app:"+@props.location.pathname)
+        React.createElement(ReactCSSTransitionGroup,
+                transitionName:"fade",
+                transitionEnterTimeout:500,
+#                transitionAppear:true,
+#                transitionAppearTimeout:2000,
+                transitionLeaveTimeout:500,
+                React.createElement("div",className:"appdiv container",key:@props.location.pathname,@props.children)
+#                React.cloneElement(@props.children, {
+#                  key: @props.location.pathname
+#                })
+        )
 #        else
 #            React.createElement "div", null, React.createElement(Login, {onLoginSuccess:@onLoginSuccess})
 )
@@ -82,6 +89,7 @@ routeConfig = {
     childRoutes: [
         { path: 'comment', component: CommentBox },
         { path: 'login', component: Login },
+        { path: 'loading', component: Loading}
     ]
 }
 

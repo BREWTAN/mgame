@@ -1,0 +1,1 @@
+docker run --name cass1 -d -p 9042:9042 cassandra:2.2.4

@@ -1,0 +1,33 @@
+
+
+syntax = "proto3";
+
+package onight.chats.msg.pbo;
+
+
+enum PBModule{
+	P2P = 0;//点对点消息
+};
+
+enum PBP2PCommand{
+	SND = 0 ;//发送消息
+	RCV = 1 ;//接受消息
+	POS = 2 ;//广播消息
+	HIS = 3 ;//获取历史消息
+	BLK = 4 ;//黑名单控制,增加或者删除
+	UNR = 5 ;//获取未读消息个数
+	SUB = 6 ;//消息订阅
+};
+
+message PBIP2PRet 
+{
+	enum RetCode{
+		SUCCESS = 0;//成功
+		FAILED = -1;//失败
+	}
+	RetCode retcode = 1;//返回码
+	string 	status = 2;//状态信息
+	string 	desc = 3;//描述信息
+	
+}
+

@@ -6,39 +6,60 @@ FlatButton = require('material-ui/lib/flat-button');
 RaisedButton = require('material-ui/lib/raised-button');
 TextField = require('material-ui/lib/text-field');
 Paper = require( 'material-ui/lib/paper');
+Loader = require('halogen/RingLoader');
+LoadingDiag = require("./loadingDiag.js")
 
 { connect, PromiseState } = require( 'react-refetch');
-{ Router } =require( 'react-router')
-
+{ Router,History } =require( 'react-router')
+request = require('superagent');
+linkState = require('react-link-state')
 
 Login = React.createClass(
 
     contextTypes: {
         router: React.PropTypes.object
+        history:　React.PropTypes.object
     },
 
     getInitialState:() ->
         open: false
+        login_id: '',
+        password: '',
+        message: ''
+
+    handleLoginCB:(err,res) ->
+        console.log("LoginCB:"+JSON.stringify(res.body))
+        #router.push("comment")
+        if res.body.body.code=="0000"
+            console.log("login Success")
+            @context.history.pushState(null,"/comment")
+        else
+            @setState
+                open:true
+                message:"登录失败:"+res.body.body.desc
+        return
 
     handleOpen :()  ->
-        console.log("handleOpen::"+@context.router);
+        console.log("handleOpen::"+@context.history);
         #@props.onLoginSuccess("abc")
-        @context.router.replace("comment")
 
-        console.log("handleOpen:oookk");
-
+        #@setState({open:true})
+        request.post('/orest/ssm/pbsin.do?fh=VSINSSM000000J00')
+           .send({ login_id: @state.login_id, password: @state.password, op: '0', res_id: 'web' })
+           .end(@handleLoginCB);
+　
         #@setState open: true
         return
 
 
     handleClose : ()  ->
         console.log("handleClose::");
-        #@setState open: false
+        @setState open: false
         return
 
 
     render:() ->
-        console.log("render::login.cs")
+        console.log("render::login:message="+@state.message)
         actions = [
             <FlatButton
                 label="Cancel"
@@ -62,6 +83,7 @@ Login = React.createClass(
             textAlign: 'center',
             display: 'inline-block',
         }
+
         return (
             <div>
                 <Paper style={pstyle} zDepth={1}>
@@ -69,14 +91,15 @@ Login = React.createClass(
                         <div className="row">
                             <TextField
                                 hintText="Email/UserID"
-                                floatingLabelText="请输入邮箱或者用户名"
+                                floatingLabelText="请输入邮箱或者用户名" valueLink={linkState(this,'login_id')}
                             />
                         </div>
                         <div className="row">
                             <TextField
                                 type="password"
                                 hintText="Password"
-                                floatingLabelText="请输入密码"  />
+                                floatingLabelText="请输入密码"  valueLink={linkState(this,'password')}
+                            />
                         </div>
                         <div className="clearfix">
                         </div>
@@ -90,6 +113,7 @@ Login = React.createClass(
                         </div>
                     </form>
                 </Paper>
+                <LoadingDiag open={@state.open} message={@state.message} handleDiagClose={@handleClose}/>
             </div>
         )
 

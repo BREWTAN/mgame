@@ -1,23 +1,13 @@
+version = '1.0.0'
 
-version = '2.0.0'
+apply plugin: 'ofw.actor'
 
-sourceSets {
-	main {
-		java {
-			srcDir 'src/main/java'
-			srcDir 'src/main/resources'
-		}
-		resources {
-			srcDir 'src/resources'
-		}
-	}
-}
 
 dependencies {
-	compile project(':ojpa:ojapi')
-	includeInJar ('org.springframework.data:spring-data-cassandra:1.2.0.RELEASE')
-	includeInJar 'com.datastax.cassandra:cassandra-driver-core:2.1.5'
-			//	 testCompile 'junit:junit:4.12'
+	includeInJar ('org.springframework.data:spring-data-cassandra:1.3.2.RELEASE')
+	includeInJar 'com.datastax.cassandra:cassandra-driver-core:2.1.9'	
+	compile "onight.tfw:onight.tfw.ordbutils:2.0.0"
+	compile 'com.google.protobuf:protobuf-java:3.0.0-alpha-3.1'
 }
 
 jar {

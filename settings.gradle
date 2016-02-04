@@ -9,4 +9,7 @@ include 'act:actcore'
 include 'act:actmysql'
 include 'act:actcass'
 
+include 'chats'
+include 'chatscassimpl'
+
 rootProject.name = 'mgame'
