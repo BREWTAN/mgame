@@ -8,6 +8,7 @@ import onight.mgame.chats.cass.entity.RoomMessage
 import onight.osgi.annotation.NActorProvider
 import onight.oapi.scala.commons.SessionModules
 import com.google.protobuf.Message
+import onight.mgame.chats.cass.entity.RoomUsers
 
 @NActorProvider
 object CassDAOs extends SessionModules[Message] {
@@ -16,6 +17,11 @@ object CassDAOs extends SessionModules[Message] {
   @BeanProperty
   @StoreDAO(domain = classOf[RoomInfo], target = "cass")
   var roomInfodao: OJpaDAO[RoomInfo] = null
+  
+  
+    @BeanProperty
+  @StoreDAO(domain = classOf[RoomUsers], target = "cass")
+  var roomUserdao: OJpaDAO[RoomUsers] = null
   
   
     @BeanProperty

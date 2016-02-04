@@ -11,6 +11,8 @@ import com.datastax.driver.core.DataType;
 import com.datastax.driver.core.ProtocolVersion;
 import com.datastax.driver.core.Row;
 
+import onight.tfw.outils.serialize.TransBeanSerializer;
+
 public class RowMapper {
 	
 	@SuppressWarnings({ "incomplete-switch", "unchecked" })
@@ -38,7 +40,7 @@ public class RowMapper {
 
 	
 	public static HashMap<String,Object> parseFromRow(Row row) {
-		HashMap<String,Object> hb = new HashMap<String,Object>();
+		HashMap<String,Object> hb = new TransBeanSerializer.BeanMap<String,Object>();
 		Iterator<Definition> it = row.getColumnDefinitions().iterator();
 		while (it.hasNext()) {
 			Definition def = it.next();

@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils
 import onight.oapi.scala.commons.PBUtils
 import onight.oapi.scala.commons.LService
 import onight.chats.scala.commons.RoomModules
-import onight.chats.rooms.pbo.Rooms.PBIRoomCreate
 import onight.chats.rooms.pbo.Rooms.PBIRoomRet.RetCode
 import onight.chats.rooms.pbo.Rooms.PBRoomCommand
 import onight.chats.rooms.pbo.Rooms.PBIRoomRet
@@ -29,7 +28,7 @@ object SendRoomMessageService extends OLog with PBUtils with LService[PBIRoomMes
   override def cmd: String = PBRoomCommand.SND.name();
 
   val idGenerator = new SessionIDGenerator(null);
-  
+//  http://localhost:18080/rom/pbsnd.do?fh=VSNDROM000000J00&bd={%22room_id%22:%22r001%22,%22from_u%22:%22u001%22,%22msg%22:%22hello%22}&gcmd=SNDROM
   def onPBPacket(pack: FramePacket, pbo: PBIRoomMessage, handler: CompleteHandler) = {
     //    log.debug("guava==" + VMDaos.guCache.getIfPresent(pbo.getLogid()));      val ret = PBActRet.newBuilder();
     val ret = PBIRoomRet.newBuilder();
@@ -47,7 +46,7 @@ object SendRoomMessageService extends OLog with PBUtils with LService[PBIRoomMes
       })
       bmap.put("msg_id", idGenerator.generate(pbo.getRoomId))
       
-      bmap.put("create_timems", java.lang.Long.valueOf(System.currentTimeMillis()))
+      bmap.put("create_timems", java.lang.String.valueOf(System.currentTimeMillis()))
       val v = CassDAOs.roomMsgdao.insert(bmap)
       log.debug("send message:insert back={}", v);
       handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));

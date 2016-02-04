@@ -45,7 +45,7 @@ public class SelectStatement extends CQLStatement {
 		return this;
 	}
 	
-	private Select generateSelectByExample(Class<?> clazz,HashMap<String,Object> mb) {
+	public Select generateSelectByExample(Class<?> clazz,HashMap<String,Object> mb) {
 		Table tb = (Table) clazz.getAnnotation(Table.class);
 		Selection selection = QueryBuilder.select();
 		Select select = selection.from(tb.name());

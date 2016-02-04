@@ -11,12 +11,14 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.SimpleStatement;
 import com.datastax.driver.core.Statement;
+import com.datastax.driver.core.querybuilder.Select;
 
 import lombok.NoArgsConstructor;
 import onight.tfw.cass.enums.Table;
 import onight.tfw.cass.enums.TableType;
 import onight.tfw.cass.exception.CQLGenException;
 import onight.tfw.cass.mapping.CQLStatement;
+import onight.tfw.cass.mapping.SelectStatement;
 import onight.tfw.cass.util.RowMapper;
 import onight.tfw.ojpa.api.CASCriteria;
 import onight.tfw.ojpa.api.DomainDaoSupport;
@@ -217,7 +219,7 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 
 	@Override
 	public int deleteByPrimaryKey(Object o) {
-		return executeTorF(statements.deleteByKey.bind(mb(o)));
+		return executeTorF(statements.deleteIfExist.bind(mb(o)));
 	}
 
 	public int deleteIfExist(Object o) {
@@ -258,12 +260,13 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 
 	@Override
 	public List<Object> selectByExample(Object oe) {
-		BatchStatement batch = new BatchStatement();
-
-		for(Object lo:ex(oe).getCriterias()){
-			batch.add(statements.findAll.bind(mb(lo)));
+		KVExample kv=ex(oe);
+		Select select=new SelectStatement().generateSelectByExample(clazz, mb(kv.getCriterias().get(0)));
+		if(kv.getLimit()>0)
+		{
+			select.limit(kv.getLimit());
 		}
-		return getAllList(session.execute(batch));
+		return getAllList(session.execute(select));
 		
 	}
 
@@ -324,8 +327,14 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 	}
 
 	@Override
-	public Object selectOneByExample(Object arg0) {
-		throw new NotSuportException("doInTransaction");
+	public Object selectOneByExample(Object oe) {
+		KVExample kv=ex(oe);
+		Select select=new SelectStatement().generateSelectByExample(clazz, mb(kv.getCriterias().get(0)));
+		{
+			select.limit(1);
+		}
+		return getAllList(session.execute(select));
+		
 	}
 
 
