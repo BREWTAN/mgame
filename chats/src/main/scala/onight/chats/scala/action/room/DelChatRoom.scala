@@ -1,9 +1,7 @@
 package onight.chats.scala.action.room
 
 import scala.collection.JavaConversions.mapAsScalaMap
-
 import org.apache.commons.lang3.StringUtils
-
 import onight.chats.rooms.pbo.Rooms.PBIRoomOp
 import onight.chats.rooms.pbo.Rooms.PBIRoomRet
 import onight.chats.rooms.pbo.Rooms.PBIRoomRet.RetCode
@@ -18,6 +16,7 @@ import onight.tfw.async.CompleteHandler
 import onight.tfw.otransio.api.PacketHelper
 import onight.tfw.otransio.api.beans.FramePacket
 import onight.tfw.outils.serialize.TransBeanSerializer.BeanMap
+import onight.tfw.ojpa.api.KVExample
 
 @NActorProvider
 object DeleteChatRoom extends RoomModules[PBIRoomOp] {
@@ -50,7 +49,7 @@ object DeleteChatRoomService extends OLog with PBUtils with LService[PBIRoomOp] 
       
       val userbmap = new BeanMap[String, Object]()
       userbmap.put("room_id", pbo.getRoomId)
-      val dv=CassDAOs.roomUserdao.deleteByPrimaryKey(userbmap);
+      val dv=CassDAOs.roomUserdao.deleteByExample(userbmap);
       log.debug("delete roomusers return:{}",dv);
       if (v == 1) {
         ret.setDesc("SUCCESS").setRetcode(RetCode.SUCCESS).setStatus("0000");

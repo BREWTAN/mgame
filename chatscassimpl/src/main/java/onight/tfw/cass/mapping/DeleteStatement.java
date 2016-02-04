@@ -2,6 +2,7 @@ package onight.tfw.cass.mapping;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 
 import org.springframework.data.annotation.Transient;
 
@@ -27,6 +28,28 @@ public class DeleteStatement extends CQLStatement {
 			}
 			Annotation[] annotations = field.getAnnotations();
 			if(AnnotationUtils.hasKey(annotations)) {
+				delete.where().and(QueryBuilder.eq(field.getName(), "?"));
+				postFieldnames.add(field.getName());
+			}
+		}
+		cachedCQL = delete.getQueryString();
+		return this;
+	}
+	
+	
+	public CQLStatement deleteByExample(Class<?> clazz,HashMap<String,Object> kv) throws CQLGenException {
+		Table tb = (Table) clazz.getAnnotation(Table.class);
+		if (tb == null) {
+			throw new CQLGenException("TableName not found");
+		}
+		Delete delete = QueryBuilder.delete().from(tb.name());
+		for (Field field : clazz.getDeclaredFields()) {
+			Transient trans = (Transient) field.getAnnotation(Transient.class);
+			if (trans != null) {
+				continue;
+			}
+			Annotation[] annotations = field.getAnnotations();
+			if(AnnotationUtils.hasKey(annotations)&&kv.containsKey(field.getName())) {
 				delete.where().and(QueryBuilder.eq(field.getName(), "?"));
 				postFieldnames.add(field.getName());
 			}

@@ -38,6 +38,7 @@ public class StatementSet {
 	CQLStatement countAll;
 
 	CQLStatement deleteByKey;
+	
 	CQLStatement deleteIfExist;
 
 //	CQLStatement update;

@@ -18,8 +18,11 @@ enum PBRoomCommand{
 	BLK = 4 ;//黑名单控制,增加或者删除
 	MUT = 5 ;//禁止或者开放某人在聊天室说话
 	
-	QUR = 6 ;//查询
-	SND = 8 ;//发送消息
+	
+	LST = 6;//聊天室列表
+	WHO = 7;//列出聊天室的所有人
+	SND = 8;//发送消息
+	MSG = 10;//列出消息
 	QUE = 30;//根据条件相等查询
 };
 
@@ -48,6 +51,7 @@ message PBIRoomOp
 	string audit_user = 15;//审核员
 	
 	int32  max_user = 20 ;//最大人数
+	int32  limit = 30;//查詢的最大返回值
 };
 
 
@@ -70,6 +74,9 @@ message PBIRoomRet
 	RetCode retcode = 1;//返回码
 	string 	status = 2;//状态信息
 	string 	desc = 3;//描述信息
-	PBIRoomInfo pbroom = 10;//房间信息
+	repeated PBIRoomInfo pbrooms = 10;//房间信息
+	repeated string user_ids = 20;//用戶id列表
+	repeated string user_names=21;//用戶列表
+	repeated PBIRoomMessage msgs=30;//最近信息列表
 }
 

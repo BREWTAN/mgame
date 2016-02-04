@@ -19,12 +19,13 @@ public class RoomUsers {
 	
 	private String user_role="N";
 
+	
 	@KeyColumn(keyPart = KeyPart.PARTITION, ordinal = 1)
-	private String user_id;
-	
-	@KeyColumn(keyPart = KeyPart.PARTITION, ordinal = 2)
 	private String room_id;
-	
+
+	@KeyColumn(keyPart = KeyPart.CLUSTERING, ordinal = 2)
+	private String user_id;
+
 	private String user_name;
 
 	boolean is_muted=false;

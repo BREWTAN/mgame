@@ -18,6 +18,7 @@ import onight.tfw.cass.enums.Table;
 import onight.tfw.cass.enums.TableType;
 import onight.tfw.cass.exception.CQLGenException;
 import onight.tfw.cass.mapping.CQLStatement;
+import onight.tfw.cass.mapping.DeleteStatement;
 import onight.tfw.cass.mapping.SelectStatement;
 import onight.tfw.cass.util.RowMapper;
 import onight.tfw.ojpa.api.CASCriteria;
@@ -228,12 +229,15 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 
 	@Override
 	public int deleteByExample(Object oe) {
-		BatchStatement batch = new BatchStatement();
-
-		for(Object lo:ex(oe).getCriterias()){
-			batch.add(statements.deleteByKey.bind(mb(lo)));
+		
+		try {
+			HashMap<String, Object> example=mb(oe);
+			CQLStatement sts=new DeleteStatement().deleteByExample(clazz, example);
+			sts.prepare(this.session, statements.consistency);
+			return executeTorF(sts.bind(example));
+		} catch (CQLGenException e) {
+			return -1;
 		}
-		return executeTorF(batch);
 	}
 
 	@Override
