@@ -1,0 +1,30 @@
+
+version = '2.0.0'
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src/main/java'
+			srcDir 'src/main/resources'
+		}
+		resources {
+			srcDir 'src/resources'
+		}
+	}
+}
+
+dependencies {
+	compile project(':ojpa:ojapi')
+	includeInJar ('org.springframework.data:spring-data-cassandra:1.2.0.RELEASE')
+	includeInJar 'com.datastax.cassandra:cassandra-driver-core:2.1.5'
+			//	 testCompile 'junit:junit:4.12'
+}
+
+jar {
+	manifest{
+		//		attributes( 'Spring-Context': 'applicationContext-common.xml, applicationContext-beans.xml')
+		attributes( 'Import-Ignore':'org.springframework,com.datastax.driver,com.google.common.collect')
+		attributes( 'DynamicImport-Package': '*')
+		attributes( 'Import-Lib': 'lib')
+	}
+}
