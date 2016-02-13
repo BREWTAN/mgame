@@ -52,7 +52,10 @@ public abstract class CQLStatement {
 	public BoundStatement getStatement(Object obj) throws CQLGenException {
 		return bind(BeanPropertyMapper.hashbeanFrom(obj));
 	}
-
+	
+	public void ifExist(){
+		cachedCQL = cachedCQL.replace(';', ' ')+ " IF EXISTS ;";
+	}
 	public CQLStatement prepare(Session session, ConsistencyLevel consistency) {
 		prestmt = session.prepare(cachedCQL);
 		prestmt.setConsistencyLevel(consistency);

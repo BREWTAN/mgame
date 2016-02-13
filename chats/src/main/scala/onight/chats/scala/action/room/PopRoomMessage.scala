@@ -49,7 +49,7 @@ object PopRoomMessageService extends OLog with PBUtils with LService[PBIRoomOp] 
 
       val example = new KVExample();
 
-      example.setLimit(100)
+      example.setLimit(1000)
       example.getCriterias.add(bmap);
 
       val objs = CassDAOs.roomMsgdao.selectByExample(example);

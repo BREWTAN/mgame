@@ -84,7 +84,7 @@ public class SelectStatement extends CQLStatement {
 		}
 		for (Field field : clazz.getDeclaredFields()) {
 			Annotation[] annotations = field.getAnnotations();
-			if(AnnotationUtils.hasKey(annotations)) {
+			if(AnnotationUtils.hasPartitionKey(annotations)) {
 				select.where().and(QueryBuilder.eq(field.getName(), "?"));
 				postFieldnames.add(field.getName());
 			}

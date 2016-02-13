@@ -15,6 +15,7 @@ import onight.mgame.chats.cass.entity.RoomBlocks;
 import onight.mgame.chats.cass.entity.RoomInfo;
 import onight.mgame.chats.cass.entity.RoomMessage;
 import onight.mgame.chats.cass.entity.RoomUsers;
+import onight.mgame.chats.cass.entity.UserMessage;
 import onight.tfw.cass.dao.SimpleCassandraDAO;
 import onight.tfw.cass.enums.TableType;
 
@@ -64,6 +65,9 @@ public class KeyspaceManager {
 			warmup(RoomBlocks.class,TableType.UNIQUE);
 			warmup(RoomMessage.class,TableType.UNIQUE);
 			warmup(RoomCounters.class,TableType.COUNTER);
+			warmup(UserMessage.class,TableType.UNIQUE);
+			
+			
 		} catch (Exception e) {
 			throw new RuntimeException("init dao error..",e);
 		}

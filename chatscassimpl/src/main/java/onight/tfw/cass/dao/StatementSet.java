@@ -9,6 +9,7 @@ import com.datastax.driver.core.ConsistencyLevel;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 
+import lombok.extern.slf4j.Slf4j;
 import onight.tfw.cass.enums.TableType;
 import onight.tfw.cass.exception.CQLGenException;
 import onight.tfw.cass.mapping.CQLStatement;
@@ -21,6 +22,7 @@ import onight.tfw.cass.mapping.TableStatement;
 import onight.tfw.cass.mapping.UpdateStatement;
 import onight.tfw.cass.util.CQLStatementUtil;
 
+@Slf4j
 public class StatementSet {
 
 	Statement createTable;
@@ -106,7 +108,7 @@ public class StatementSet {
 	}
 
 	public void createTable(Session session) throws CQLGenException {
-		System.out.println("createTable::"+createTable);
+		log.debug("createTable::{}",createTable);
 		session.execute(createTable);
 	}
 
@@ -130,6 +132,7 @@ public class StatementSet {
 		CQLStatement statement =  updates.get(CQLStatementUtil.getUpdateKey(clazz, mb));
 		if(statement==null){
 			statement = new UpdateStatement().update(clazz, mb);
+			statement.ifExist();
 			statement.prepare(session,consistency);
 			updates.put(CQLStatementUtil.getUpdateKey(clazz, mb), statement);
 		}

@@ -33,16 +33,14 @@ import onight.tfw.outils.serialize.SerializerUtil;
 @Slf4j
 public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 
-	private Session session;
+	protected Session session;
 	private Class<?> clazz;
 	private StatementSet statements;
-	private String tablename; 
-//	private OJpaDAO dao;
+	private String tablename;
+	// private OJpaDAO dao;
 	private TableType tableType;
-	
-	
 
-	public SimpleCassandraDAO(Class<?> clazz,TableType tableType) throws CQLGenException {
+	public SimpleCassandraDAO(Class<?> clazz, TableType tableType) throws CQLGenException {
 		this.clazz = clazz;
 		this.tableType = tableType;
 		Table tb = (Table) clazz.getAnnotation(Table.class);
@@ -50,7 +48,7 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 			throw new CQLGenException("TableName not found");
 		}
 		tablename = tb.name();
-//		this.dao=dao;
+		// this.dao=dao;
 	}
 
 	public void initWithSession(Session session, ConsistencyLevel consistency) throws CQLGenException {
@@ -137,11 +135,10 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 	}
 
 	public Object doBySQL(String cql) {
-		Object ret= execute(new SimpleStatement(cql));
-		if(ret instanceof ResultSet){
-			return getAllList((ResultSet)ret);
-		}
-		else{
+		Object ret = execute(new SimpleStatement(cql));
+		if (ret instanceof ResultSet) {
+			return getAllList((ResultSet) ret);
+		} else {
 			return ret;
 		}
 	}
@@ -204,19 +201,19 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 
 	public int countAll() {
 		ResultSet set = (ResultSet) execute(statements.countAll.bind());
-		return set.one().getInt(0);
+		return (int)set.one().getLong(0);
 	}
 
 	@Override
 	public int countByExample(Object id) {
 		int size = 0;
-		for(Object lo:ex(id).getCriterias()){
-			ResultSet set = (ResultSet) execute(statements.countAll.bind(mb(lo)));
-			size += set.one().getInt(0);
+		for (Object lo : ex(id).getCriterias()) {
+			ResultSet set = (ResultSet) execute(statements.count.bind(mb(lo)));
+			size += set.one().getLong(0);
 		}
 
 		return size;
-		
+
 	}
 
 	@Override
@@ -230,10 +227,10 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 
 	@Override
 	public int deleteByExample(Object oe) {
-		
+
 		try {
-			HashMap<String, Object> example=mb(oe);
-			CQLStatement sts=new DeleteStatement().deleteByExample(clazz, example);
+			HashMap<String, Object> example = mb(oe);
+			CQLStatement sts = new DeleteStatement().deleteByExample(clazz, example);
 			sts.prepare(this.session, statements.consistency);
 			return executeTorF(sts.bind(example));
 		} catch (CQLGenException e) {
@@ -251,7 +248,7 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 	}
 
 	public void deleteAll() {
-		 executeTorF(statements.truncateTable);
+		executeTorF(statements.truncateTable);
 	}
 
 	public int truncate() {
@@ -262,29 +259,34 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 	public int insertSelective(Object record) {
 		return insert(record);
 	}
-	
-	HashMap<String,SelectStatement > cachedSelect=new HashMap<>();
+
+	HashMap<String, SelectStatement> cachedSelect = new HashMap<>();
 
 	@Override
 	public List<Object> selectByExample(Object oe) {
-		KVExample kv=ex(oe);
-		
-		SelectStatement selectst=new SelectStatement();
-		HashMap<String,Object> beanmap=mb(kv.getCriterias().get(0));
-		selectst.findByExample(clazz, mb(beanmap),kv.getLimit());
-		SelectStatement selectstc=cachedSelect.get(selectst.getCachedCQL());
-		if(selectstc==null){
-			synchronized(cachedSelect){
-				selectstc=cachedSelect.get(selectst.getCachedCQL());
-				if(selectstc==null){
-					selectstc = selectst;
-					selectst.prepare(session, statements.consistency);
-					cachedSelect.put(selectst.getCachedCQL(), selectst);
+		if (oe instanceof HashMap) {
+			KVExample kv = ex(oe);
+			SelectStatement selectst = new SelectStatement();
+			HashMap<String, Object> beanmap = mb(kv.getCriterias().get(0));
+			selectst.findByExample(clazz, mb(beanmap), kv.getLimit());
+			SelectStatement selectstc = cachedSelect.get(selectst.getCachedCQL());
+			if (selectstc == null) {
+				synchronized (cachedSelect) {
+					selectstc = cachedSelect.get(selectst.getCachedCQL());
+					if (selectstc == null) {
+						selectstc = selectst;
+						selectst.prepare(session, statements.consistency);
+						cachedSelect.put(selectst.getCachedCQL(), selectst);
+					}
 				}
 			}
+			return getAllList(session.execute(selectstc.bind(beanmap)));
+		} else {
+			String cql = (String) oe;
+			return getAllList(session.execute(cql));
+
 		}
-		return getAllList(session.execute(selectstc.bind(beanmap)));
-		
+
 	}
 
 	@Override
@@ -305,7 +307,7 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 	@Override
 	public int sumByExample(Object example) {
 		int size = 0;
-		for(Object lo:ex(example).getCriterias()){
+		for (Object lo : ex(example).getCriterias()) {
 			ResultSet set = (ResultSet) execute(statements.countAll.bind(mb(lo)));
 			size += set.one().getInt(0);
 		}
@@ -316,7 +318,6 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 	public Object getExample(Object record) {
 		throw new NotSuportException("getExample");
 	}
-
 
 	@Override
 	public Object doInTransaction(TransactionExecutor exec) throws JPAException {
@@ -345,15 +346,14 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 
 	@Override
 	public Object selectOneByExample(Object oe) {
-		KVExample kv=ex(oe);
+		KVExample kv = ex(oe);
 		kv.setLimit(1);
-		SelectStatement selectst=new SelectStatement();
-		HashMap<String,Object> beanmap=mb(kv.getCriterias().get(0));
-		selectst.findByExample(clazz, mb(beanmap),kv.getLimit());
+		SelectStatement selectst = new SelectStatement();
+		HashMap<String, Object> beanmap = mb(kv.getCriterias().get(0));
+		selectst.findByExample(clazz, mb(beanmap), kv.getLimit());
 		selectst.prepare(session, statements.consistency);
 		return getAllList(session.execute(selectst.bind(beanmap)));
-		
-	}
 
+	}
 
 }

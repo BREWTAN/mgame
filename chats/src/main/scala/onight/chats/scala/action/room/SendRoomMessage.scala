@@ -47,7 +47,8 @@ object SendRoomMessageService extends OLog with PBUtils with LService[PBIRoomMes
         bmap.put(kv._1.getName, kv._2)
       })
       bmap.put("insert_time",new Date(System.currentTimeMillis()));
-      bmap.put("msg_id",pbo.getRoomId+"_"+System.currentTimeMillis()+"_"+idGenerator.generate(pbo.getFromU))
+      bmap.put("readed",java.lang.Boolean.valueOf(false))
+      bmap.put("msg_id",pbo.getFromU+"_"+System.currentTimeMillis()+"_"+idGenerator.generate(pbo.getFromU))
       
       val v = CassDAOs.roomMsgdao.insert(bmap)
       log.debug("send message:insert back={}", v);

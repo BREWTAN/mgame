@@ -12,11 +12,23 @@ enum PBModule{
 enum PBP2PCommand{
 	SND = 0 ;//发送消息
 	RCV = 1 ;//接受消息
-	POS = 2 ;//广播消息
+	SET = 2 ;//读取消息
 	HIS = 3 ;//获取历史消息
 	BLK = 4 ;//黑名单控制,增加或者删除
 	UNR = 5 ;//获取未读消息个数
 	SUB = 6 ;//消息订阅
+};
+
+
+message PBIChatMessage
+{
+	string type = 1;//類型　
+	string from_u = 2;//发送者
+	string to_u = 3;//接收者，如果为空则全部人
+	string msg  = 10;//消息体本身
+	string msg_id = 20;//读取列表时时使用
+	
+	int32 limit = 21;//获取列表时使用
 };
 
 message PBIP2PRet 
@@ -28,6 +40,8 @@ message PBIP2PRet
 	RetCode retcode = 1;//返回码
 	string 	status = 2;//状态信息
 	string 	desc = 3;//描述信息
-	
+	repeated PBIChatMessage msgs = 10;//消息
+	int32	count = 11;//获取个数时使用
+	int32	total = 12;//总数
 }
 
