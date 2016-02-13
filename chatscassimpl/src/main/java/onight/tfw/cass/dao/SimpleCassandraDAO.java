@@ -14,6 +14,7 @@ import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.Select;
 
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import onight.tfw.cass.enums.Table;
 import onight.tfw.cass.enums.TableType;
 import onight.tfw.cass.exception.CQLGenException;
@@ -30,6 +31,7 @@ import onight.tfw.ojpa.api.exception.NotSuportException;
 import onight.tfw.outils.serialize.SerializerUtil;
 
 @NoArgsConstructor
+@Slf4j
 public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 
 	private Session session;
@@ -265,12 +267,11 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 	@Override
 	public List<Object> selectByExample(Object oe) {
 		KVExample kv=ex(oe);
-		Select select=new SelectStatement().generateSelectByExample(clazz, mb(kv.getCriterias().get(0)));
-		if(kv.getLimit()>0)
-		{
-			select.limit(kv.getLimit());
-		}
-		return getAllList(session.execute(select));
+		SelectStatement selectst=new SelectStatement();
+		HashMap<String,Object> beanmap=mb(kv.getCriterias().get(0));
+		selectst.findByExample(clazz, mb(beanmap),kv.getLimit());
+		selectst.prepare(session, statements.consistency);
+		return getAllList(session.execute(selectst.bind(beanmap)));
 		
 	}
 
@@ -333,11 +334,12 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 	@Override
 	public Object selectOneByExample(Object oe) {
 		KVExample kv=ex(oe);
-		Select select=new SelectStatement().generateSelectByExample(clazz, mb(kv.getCriterias().get(0)));
-		{
-			select.limit(1);
-		}
-		return getAllList(session.execute(select));
+		kv.setLimit(1);
+		SelectStatement selectst=new SelectStatement();
+		HashMap<String,Object> beanmap=mb(kv.getCriterias().get(0));
+		selectst.findByExample(clazz, mb(beanmap),kv.getLimit());
+		selectst.prepare(session, statements.consistency);
+		return getAllList(session.execute(selectst.bind(beanmap)));
 		
 	}
 

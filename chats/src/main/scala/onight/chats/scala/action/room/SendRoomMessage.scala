@@ -44,7 +44,7 @@ object SendRoomMessageService extends OLog with PBUtils with LService[PBIRoomMes
       pbo.getAllFields.map({ kv =>
         bmap.put(kv._1.getName, kv._2)
       })
-      bmap.put("msg_id", idGenerator.generate(pbo.getRoomId))
+      bmap.put("msg_id",pbo.getRoomId+"_"+idGenerator.generate(pbo.getFromU))
       
       bmap.put("create_timems", java.lang.String.valueOf(System.currentTimeMillis()))
       val v = CassDAOs.roomMsgdao.insert(bmap)

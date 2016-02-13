@@ -106,6 +106,7 @@ public class StatementSet {
 	}
 
 	public void createTable(Session session) throws CQLGenException {
+		System.out.println("createTable::"+createTable);
 		session.execute(createTable);
 	}
 
@@ -118,7 +119,7 @@ public class StatementSet {
 	public CQLStatement getFindByExampleStatement(Session session,HashMap<String,Object> mb) {
 		CQLStatement statement =  findByExamples.get(CQLStatementUtil.getFindKey(clazz, mb));
 		if(statement==null){
-			statement = new SelectStatement().findByExample(clazz, mb);
+			statement = new SelectStatement().findByExample(clazz, mb,0);
 			statement.prepare(session,consistency);
 			findByExamples.put(CQLStatementUtil.getFindKey(clazz, mb), statement);
 		}

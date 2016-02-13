@@ -56,7 +56,7 @@ object CreateChatRoomService extends OLog with PBUtils with LService[PBIRoomOp] 
       if(v==1){
         ret.setDesc("SUCCESS").setRetcode(RetCode.SUCCESS).setStatus("0000");
       }else{
-        ret.setDesc("RoomIDNotExisted").setRetcode(RetCode.FAILED).setStatus("0009")
+        ret.setDesc("RoomIDAlreadyExisted").setRetcode(RetCode.FAILED).setStatus("0009")
       }
       handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
     }

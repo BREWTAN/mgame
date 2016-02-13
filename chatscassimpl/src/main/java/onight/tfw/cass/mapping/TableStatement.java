@@ -1,8 +1,12 @@
 package onight.tfw.cass.mapping;
 
 import java.lang.reflect.Field;
+import java.sql.Timestamp;
 import java.util.HashMap;
 
+import lombok.extern.slf4j.Slf4j;
+
+import org.apache.felix.ipojo.util.Log;
 import org.springframework.cassandra.core.cql.generator.CreateTableCqlGenerator;
 import org.springframework.cassandra.core.keyspace.CreateTableSpecification;
 import org.springframework.cassandra.core.keyspace.Option;
@@ -27,6 +31,7 @@ import onight.tfw.cass.enums.Qualify;
 import onight.tfw.cass.enums.Table;
 import onight.tfw.cass.exception.CQLGenException;
 
+@Slf4j
 public class TableStatement {
 
 	public static Statement create(Class<?> clazz) throws CQLGenException {
@@ -35,8 +40,7 @@ public class TableStatement {
 			throw new CQLGenException("TableName not found");
 		}
 
-		CreateTableSpecification tableSpec = CreateTableSpecification.createTable(tb.name())
-				.ifNotExists(tb.ifNotExists());
+		CreateTableSpecification tableSpec = CreateTableSpecification.createTable(tb.name()).ifNotExists(tb.ifNotExists());
 		genColumns(clazz, tableSpec);
 		if (tb.compression() != null) {
 			HashMap<Option, String> compress = new HashMap<>();
@@ -82,15 +86,41 @@ public class TableStatement {
 	}
 
 	public static DataType dateTypeFor(Field field) {
-		Counter cc = field.getAnnotation(Counter.class);
-		if (cc != null) {
-			return DataType.counter();
-		}
 		Qualify qualify = field.getAnnotation(Qualify.class);
 		if (qualify != null) {
 			return getDataTypeFor(qualify);
 		}
-		return CassandraSimpleTypeHolder.getDataTypeFor(field.getType());
+		DataType dt = CassandraSimpleTypeHolder.getDataTypeFor(field.getType());
+		if(dt==null){
+			if(field.getType()==Timestamp.class){
+				return DataType.timestamp();
+			}
+		}
+		if (dt.getName().toString().equals("counter")) {
+			System.out.println("dt=="+dt.getName()+"@"+field.getType()+",field="+field.getName()+",fd="+field);
+			Counter cc = field.getAnnotation(Counter.class);
+			if (cc != null) {
+				return DataType.counter();
+			}
+			else{
+				if(field.getType()==long.class||field.getType()==Long.class)
+				{
+					System.out.println("type==Long"+DataType.bigint());
+					return DataType.bigint();
+				}else
+				{
+					return DataType.cint();
+				}
+			}
+		}
+
+		return dt;
+	}
+
+	public static void main(String[] args) {
+		DataType dt = CassandraSimpleTypeHolder.getDataTypeFor(Timestamp.class);
+		
+		System.out.println(dt + ":" + dt.getClass() + ",name=" + dt.getName());
 	}
 
 	private static DataType getDataTypeFor(Qualify annotation) {

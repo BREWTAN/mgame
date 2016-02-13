@@ -40,12 +40,12 @@ public class SelectStatement extends CQLStatement {
 		return this;
 	}
 	
-	public CQLStatement findByExample(Class<?> clazz,HashMap<String,Object> mb){
-		cachedCQL = generateSelectByExample(clazz,mb).getQueryString();
+	public CQLStatement findByExample(Class<?> clazz,HashMap<String,Object> mb,int limit){
+		cachedCQL = generateSelectByExample(clazz,mb,limit).getQueryString();
 		return this;
 	}
 	
-	public Select generateSelectByExample(Class<?> clazz,HashMap<String,Object> mb) {
+	public Select generateSelectByExample(Class<?> clazz,HashMap<String,Object> mb,int limit) {
 		Table tb = (Table) clazz.getAnnotation(Table.class);
 		Selection selection = QueryBuilder.select();
 		Select select = selection.from(tb.name());
@@ -60,6 +60,10 @@ public class SelectStatement extends CQLStatement {
 				select.where().and(QueryBuilder.eq(field.getName(), "?"));
 				postFieldnames.add(field.getName());
 			}
+		}
+		if(limit>0)
+		{
+			select.limit(limit);
 		}
 		return select;
 	}
