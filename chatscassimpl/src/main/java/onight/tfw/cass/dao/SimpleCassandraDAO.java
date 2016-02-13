@@ -11,7 +11,6 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.SimpleStatement;
 import com.datastax.driver.core.Statement;
-import com.datastax.driver.core.querybuilder.Select;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +36,7 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 	private Session session;
 	private Class<?> clazz;
 	private StatementSet statements;
-	private String tablename;
+	private String tablename; 
 //	private OJpaDAO dao;
 	private TableType tableType;
 	
@@ -263,15 +262,28 @@ public class SimpleCassandraDAO<T> implements DomainDaoSupport<T> {
 	public int insertSelective(Object record) {
 		return insert(record);
 	}
+	
+	HashMap<String,SelectStatement > cachedSelect=new HashMap<>();
 
 	@Override
 	public List<Object> selectByExample(Object oe) {
 		KVExample kv=ex(oe);
+		
 		SelectStatement selectst=new SelectStatement();
 		HashMap<String,Object> beanmap=mb(kv.getCriterias().get(0));
 		selectst.findByExample(clazz, mb(beanmap),kv.getLimit());
-		selectst.prepare(session, statements.consistency);
-		return getAllList(session.execute(selectst.bind(beanmap)));
+		SelectStatement selectstc=cachedSelect.get(selectst.getCachedCQL());
+		if(selectstc==null){
+			synchronized(cachedSelect){
+				selectstc=cachedSelect.get(selectst.getCachedCQL());
+				if(selectstc==null){
+					selectstc = selectst;
+					selectst.prepare(session, statements.consistency);
+					cachedSelect.put(selectst.getCachedCQL(), selectst);
+				}
+			}
+		}
+		return getAllList(session.execute(selectstc.bind(beanmap)));
 		
 	}
 

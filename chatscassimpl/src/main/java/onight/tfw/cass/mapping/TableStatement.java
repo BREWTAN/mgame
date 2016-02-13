@@ -2,11 +2,9 @@ package onight.tfw.cass.mapping;
 
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 
-import lombok.extern.slf4j.Slf4j;
-
-import org.apache.felix.ipojo.util.Log;
 import org.springframework.cassandra.core.cql.generator.CreateTableCqlGenerator;
 import org.springframework.cassandra.core.keyspace.CreateTableSpecification;
 import org.springframework.cassandra.core.keyspace.Option;
@@ -15,14 +13,13 @@ import org.springframework.cassandra.core.keyspace.TableOption.CachingOption;
 import org.springframework.cassandra.core.keyspace.TableOption.CompressionOption;
 import org.springframework.data.cassandra.mapping.CassandraSimpleTypeHolder;
 
-import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.DataType;
-import com.datastax.driver.core.Session;
 import com.datastax.driver.core.SimpleStatement;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Truncate;
 
+import lombok.extern.slf4j.Slf4j;
 import onight.tfw.cass.enums.Counter;
 import onight.tfw.cass.enums.Id;
 import onight.tfw.cass.enums.KeyColumn;
@@ -92,7 +89,7 @@ public class TableStatement {
 		}
 		DataType dt = CassandraSimpleTypeHolder.getDataTypeFor(field.getType());
 		if(dt==null){
-			if(field.getType()==Timestamp.class){
+			if(field.getType()==Date.class){
 				return DataType.timestamp();
 			}
 		}

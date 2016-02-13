@@ -68,11 +68,4 @@ public class ScanResolver {
 //		return classNames;
 	}
 
-	public static void main(String[] args) {
-		try {
-			System.out.println(ScanResolver.scan2Local("com.joyveb.jpa.dao"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 }

@@ -1,6 +1,6 @@
 package onight.mgame.chats.cass.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +23,8 @@ public class RoomMessage {
 
 	private String msg;
 
-	Timestamp insert_timems = new Timestamp(System.currentTimeMillis());// 创建时间
+	private long insert_timems=System.currentTimeMillis();
+
 
 	private boolean readed = false;
 	

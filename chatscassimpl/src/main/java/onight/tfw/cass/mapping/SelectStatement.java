@@ -3,7 +3,9 @@ package onight.tfw.cass.mapping;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.annotation.Transient;
@@ -44,6 +46,7 @@ public class SelectStatement extends CQLStatement {
 		cachedCQL = generateSelectByExample(clazz,mb,limit).getQueryString();
 		return this;
 	}
+	
 	
 	public Select generateSelectByExample(Class<?> clazz,HashMap<String,Object> mb,int limit) {
 		Table tb = (Table) clazz.getAnnotation(Table.class);

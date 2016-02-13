@@ -62,7 +62,7 @@ message PBIRoomMessage
 	string from_u = 2;//发送者
 	string to_u = 3;//接收者，如果为空则全部人
 	int32  readed=4;//标识是否已读
-	int64  create_timems = 6 ;//创建时间
+	string  insert_time = 6 ;//创建时间
 	string msg  = 10;//消息体本身
 };
 

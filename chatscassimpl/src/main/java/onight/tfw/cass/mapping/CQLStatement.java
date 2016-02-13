@@ -9,6 +9,7 @@ import com.datastax.driver.core.ConsistencyLevel;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 
+import lombok.Getter;
 import onight.tfw.cass.exception.CQLGenException;
 import onight.tfw.cass.util.BeanPropertyMapper;
 
@@ -18,9 +19,10 @@ public abstract class CQLStatement {
 	protected List<String> postFieldnames = new ArrayList<>();
 
 	protected PreparedStatement prestmt;
+	@Getter
 	protected String cachedCQL;
 
-	protected Object[] getFieldValues(HashMap<String,Object> hb) {
+	protected Object[] getFieldValues(HashMap<String, Object> hb) {
 		Object[] ret = new Object[fieldnames.size() + postFieldnames.size()];
 		int i = 0;
 		for (String name : fieldnames) {
@@ -36,13 +38,13 @@ public abstract class CQLStatement {
 		super();
 	}
 
-	public BoundStatement bind(HashMap<String,Object> hb){
+	public BoundStatement bind(HashMap<String, Object> hb) {
 		BoundStatement ret = new BoundStatement(prestmt);
 		ret.bind(getFieldValues(hb));
 		return ret;
 	}
 
-	public BoundStatement bind(){
+	public BoundStatement bind() {
 		BoundStatement ret = new BoundStatement(prestmt);
 		return ret;
 	}
@@ -51,15 +53,14 @@ public abstract class CQLStatement {
 		return bind(BeanPropertyMapper.hashbeanFrom(obj));
 	}
 
-	public CQLStatement prepare(Session session,ConsistencyLevel consistency){
-		prestmt=session.prepare(cachedCQL);
+	public CQLStatement prepare(Session session, ConsistencyLevel consistency) {
+		prestmt = session.prepare(cachedCQL);
 		prestmt.setConsistencyLevel(consistency);
 		return this;
 	}
-	
-	public String toString(){
-		return "CQLStatement["+cachedCQL+"]@"+this.hashCode();
-	}
 
+	public String toString() {
+		return "CQLStatement[" + cachedCQL + "]@" + this.hashCode();
+	}
 
 }
