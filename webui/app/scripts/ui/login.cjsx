@@ -33,7 +33,7 @@ Login = React.createClass(
         #router.push("comment")
         if res.body!=null and res.body.body.code=="0000"
             console.log("login Success")
-            @context.history.pushState(null,"/ug")
+            @context.history.pushState(null,"/ug/qcssc")
         else if res.body == null
             @setState
                 open:true

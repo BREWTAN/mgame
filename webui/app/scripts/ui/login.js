@@ -45,7 +45,7 @@ Login = React.createClass({
     console.log("LoginCB:" + JSON.stringify(res.body));
     if (res.body !== null && res.body.body.code === "0000") {
       console.log("login Success");
-      this.context.history.pushState(null, "/ug");
+      this.context.history.pushState(null, "/ug/qcssc");
     } else if (res.body === null) {
       this.setState({
         open: true,

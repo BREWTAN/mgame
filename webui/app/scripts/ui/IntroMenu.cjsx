@@ -21,6 +21,7 @@ IntroMenu = React.createClass(
         styles = {
           slide: {
             fontSize: "18px",
+            backgroundColor:"black"
           },
           slide1: {
             background: '#FEA900',
