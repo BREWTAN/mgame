@@ -18,13 +18,13 @@ sourcemaps = require('gulp-sourcemaps')
 babel = require('gulp-babel');
 gutil = require('gulp-util');
 babelify = require('babelify');
-sourceFile = "./app/scripts/app.coffee"
+sourceFile = "./app/scripts/capp.coffee"
 destFolder = "./dist/scripts"
 destFileName = "app.js"
 browserSync = require("browser-sync")
 reload = browserSync.reload
 cjsx = require('gulp-cjsx');
-
+flatten = require('gulp-flatten');
 # Styles
 
 gulp.task "styles", [
@@ -93,8 +93,11 @@ gulp.task "images", ->
 
 gulp.task "fonts", ->
     gulp.src(require("main-bower-files")(
-        filter: "**/*.{eot,svg,ttf,woff,woff2}").concat("app/fonts/**/*")).pipe gulp.dest("dist/fonts")
-
+        filter: "**/*.{eot,svg,ttf,woff,woff2}").concat("app/fonts/**/*")).pipe(flatten()).pipe gulp.dest("dist/fonts")
+    gulp.src(require("main-bower-files")(
+        filter: "**/*.{eot,svg,ttf,woff,woff2}").concat("app/bower_components/**/fonts/*")).pipe(flatten()).pipe gulp.dest("dist/fonts")
+    gulp.src(require("main-bower-files")(
+        filter: "**/*.{eot,svg,ttf,woff,woff2}").concat("app/bower_components/**/fonts/bootstrap/*")).pipe(flatten()).pipe gulp.dest("dist/fonts")
 
 # Clean
 

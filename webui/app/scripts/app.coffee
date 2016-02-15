@@ -71,7 +71,7 @@ WAPP = React.createClass(
 #                transitionAppear:true,
 #                transitionAppearTimeout:2000,
                 transitionLeaveTimeout:500,
-                React.createElement("div",className:"appdiv container",key:@props.location.pathname,@props.children)
+                React.createElement("div",className:"appdiv container-fluid",key:@props.location.pathname,@props.children)
 #                React.cloneElement(@props.children, {
 #                  key: @props.location.pathname
 #                })

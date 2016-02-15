@@ -1,6 +1,7 @@
 $icon-font-path: "../fonts/";
 
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap";
+@import "font-awesome/scss/font-awesome.scss";
 
 .browsehappy {
     margin: 0.2em 0;
@@ -139,6 +140,131 @@ body {
 }
 
 .appdiv{
-    position: absolute;
+    //position: absolute;
+    padding-left: 0px;
+    .container-fluid{
+        padding-left: 0px;
+    }
 }
 
+@media screen and (min-width:$screen-sm)
+{
+    .container{
+        width:930px;
+        max-width:930px
+    }
+}
+
+
+
+$menubar_bg:black;
+$usermanu_bg:grayscale($menubar_bg);
+$money_color:#D50000;
+$defaultfont_color:#303030;
+
+
+.menubar{
+    background-color: $menubar_bg;
+    .navbar {
+        min-height: 48px;
+        line-height: 48px;
+        border: 0px;
+        .container-fluid {
+            padding: 0;
+        };
+        margin-bottom:0;
+    }
+    ul{
+        width: 100%;
+    }
+    li{
+        width: 16%;
+    }
+    li:first-child{
+        @media (max-width: $screen-sm-min) {
+            width: 188px;
+        }
+        @media (min-width: $screen-md-min) {  width: 20%; }
+
+    }
+
+}
+
+.menubar-tabs{
+    font-size: 20px;
+    background-color: $menubar_bg;
+    line-height: 48px;
+
+}
+.usermenu{
+    background-color: white;
+    box-shadow: 0px 2px rgba(0,0,0,0.12),0px 1px rgba(0,0,0,0.2);
+    div{
+        display: inline-block;
+    }
+}
+
+#usertitle{
+    color: $defaultfont_color;
+    .money{
+        color:$money_color;font-size:20px
+    }
+    .fa-jpy{
+        color: $money_color;
+    }
+}
+
+.login-mm{
+    /***** iPad Smaller than 959px *****/
+    width: 100%;
+    margin:0 auto;
+    height:800px;
+
+    position: fixed;
+    background: url(../images/mm0-l.jpg) repeat;
+    //background-color: #fdd9dd;
+    z-index: -99;
+    img {
+        margin-left: 100px;
+        -webkit-filter: drop-shadow(-5px 5px 10px #d799a1);
+        filter:drop-shadow(-5px 5px 10px #d799a1);
+    }
+}
+
+.login-title {
+    height: 80px;
+    line-height: 100px;
+    font-size: 20px;
+    text-align: center;
+    background: url(../images/dices.png) no-repeat;
+}
+
+.login-diag{
+    width: 320px;
+    float: right;
+    margin-top: 20px;
+}
+.login-bg{
+    padding-right:50px;
+    .row{
+        line-height: 50px;
+    }
+}
+
+
+.wanfaLine{
+    font-size: 16px;
+    color: gray;
+    margin-top: 5px;
+
+}
+.ballLine{
+    font-size: 14px;
+    color: black;
+    margin-top: 5px;
+    .indiv{
+        display: inline-block;
+    }
+
+
+}

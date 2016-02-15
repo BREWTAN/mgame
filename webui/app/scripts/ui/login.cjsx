@@ -8,6 +8,7 @@ TextField = require('material-ui/lib/text-field');
 Paper = require( 'material-ui/lib/paper');
 Loader = require('halogen/RingLoader');
 LoadingDiag = require("./loadingDiag.js")
+FontAwesome = require('react-fontawesome');
 
 { connect, PromiseState } = require( 'react-refetch');
 { Router,History } =require( 'react-router')
@@ -30,9 +31,14 @@ Login = React.createClass(
     handleLoginCB:(err,res) ->
         console.log("LoginCB:"+JSON.stringify(res.body))
         #router.push("comment")
-        if res.body.body.code=="0000"
+        if res.body!=null and res.body.body.code=="0000"
             console.log("login Success")
-            @context.history.pushState(null,"/comment")
+            @context.history.pushState(null,"/ug")
+        else if res.body == null
+            @setState
+                open:true
+                message:"登录失败:网络请求异常"
+
         else
             @setState
                 open:true
@@ -77,43 +83,54 @@ Login = React.createClass(
             margin: 12,
         };
         pstyle={
-            height: '100%',
-            width: '100%',
             margin: 0,
             textAlign: 'center',
-            display: 'inline-block',
         }
 
         return (
-            <div>
-                <Paper style={pstyle} zDepth={1}>
-                    <form className="form-horizontal">
-                        <div className="row">
-                            <TextField
-                                hintText="Email/UserID"
-                                floatingLabelText="请输入邮箱或者用户名" valueLink={linkState(this,'login_id')}
-                            />
-                        </div>
-                        <div className="row">
-                            <TextField
-                                type="password"
-                                hintText="Password"
-                                floatingLabelText="请输入密码"  valueLink={linkState(this,'password')}
-                            />
-                        </div>
-                        <div className="clearfix">
-                        </div>
-                        <div className="row">
-                            <div className="col-lg-6"  >
-                                <RaisedButton label="登录" secondary={true} style={style} onTouchTap={this.handleOpen}/>
-                            </div >
-                            <div className="col-lg-6">
-                                <RaisedButton label="注册" style={style} />
-                            </div>
-                        </div>
-                    </form>
-                </Paper>
-                <LoadingDiag open={@state.open} message={@state.message} handleDiagClose={@handleClose}/>
+            <div className="container-fluid">
+                <div className="login-mm ">
+                    <div className="container pull-left">
+                         <img src='images/mm0.png'></img>
+                    </div>
+                </div>
+                <div className="container login-bg pull-right">
+                    <div className="container-fluid login-diag">
+                        <Paper style={pstyle} zDepth={1}>
+                            <div className="login-msg"></div>
+                            <div className="login-title">请登录</div>
+                            <form className="form-horizontal">
+                                <div className="row">
+                                    <TextField
+                                        hintText="Email/UserID"
+                                        floatingLabelText="请输入邮箱或者用户名" valueLink={linkState(this,'login_id')}
+                                    />
+                                </div>
+                                <div className="row">
+                                    <TextField
+                                        type="password"
+                                        hintText="Password"
+                                        floatingLabelText="请输入密码"  valueLink={linkState(this,'password')}
+                                    />
+                                </div>
+                                <div className="clearfix">
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-4 ">忘记密码?</div>
+                                    <div className="col-md-4"></div>
+                                    <div className="col-md-4">重置</div>
+                                </div>
+                                <div className="">
+                                   <RaisedButton label="立即登录"  icon={<FontAwesome name='sign-in' className='fa-lg fa-inverse' />}
+                                    primary={true} style={style} onTouchTap={this.handleOpen}/>
+                                </div>
+                            </form>
+                        </Paper>
+
+                        <LoadingDiag open={@state.open} message={@state.message} handleDiagClose={@handleClose}/>
+                    </div>
+                </div>
+
             </div>
         )
 

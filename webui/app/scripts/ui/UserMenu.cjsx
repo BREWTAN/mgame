@@ -8,27 +8,32 @@ Tab  = require("material-ui/lib/tabs/tab");
 DropDownMenu  = require( 'material-ui/lib/DropDownMenu');
 MenuItem  = require( 'material-ui/lib/menus/menu-item');
 FlatButton = require('material-ui/lib/flat-button');
+RaisedButton = require('material-ui/lib/raised-button');
+
 FontAwesome = require('react-fontawesome');
 IconMenu = require('material-ui/lib/menus/icon-menu');
+AppBar = require('material-ui/lib/app-bar');
+IconButton =require('material-ui/lib/icon-button');
 
 
 GameTexts = ["重庆时时彩","日本时时彩","双色球","大乐透"]
 
 
-GameMenu = React.createClass(
+UserMenu = React.createClass(
 
     getInitialState:() ->
         slideIndex: 0,
-        gameIndex: 0
+        gameIndex: 0,
+        username:'张三'
 
     handleChangeTab:(vv) ->
         console.log("changetab:"+vv)
         @setState
             slideIndex: vv
-    handleChangeGame:(event, index, value) ->
+
+    handleRefreshUserTitle:(event, index, value) ->
         console.log("handleChangeGame:index="+index+",value="+value)
-        @setState
-            gameIndex: value
+
 
     handleClickDropDown:(e,item) ->
         console.log("downlistgame"+item.props.value)
@@ -38,54 +43,68 @@ GameMenu = React.createClass(
 
     render:() ->
         styles = {
-          slide: {
-            fontSize: "18px",
-            color:"white",
-            paddingLeft:"0px",
-            paddingRight:"3px"
+          bar: {
+            backgroundColor:"white",
+            boxShadow:"0",
+            minHeight:"48px",
+
           },
-          slide1: {
-            background: '#FEA900',
+          iconButtonStyle:{
+             padding:"0px",
+             marginTop:"0px",
+             verticalAlign:"0px"
+             minHeight:"48px",
+             fontSize:"16px",
+             width:"16px"
+
           },
-          slide2: {
-            background: '#B3DC4A',
+          btn:{
+             width:"60px",
+             minWidth:"60px",
+          }
+          title: {
+            fontSize: "16px",
+            lineHeight:"36px",
+            height:"36px"
           },
-          slide3: {
-            background: '#6AC0FF',
-          },
+          div2:{
+            height:"48px",
+            color:"#FF6D00"
+          }
         };
-        gamelistmenu=<IconMenu　onItemTouchTap={@handleClickDropDown}
-                           iconButtonElement={<FontAwesome name='caret-down' className='fa-lg fa-inverse' />}
-                           anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                           targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                         >
-                        {@genitem(text,index) for text, index in GameTexts}
-                    </IconMenu>
+        titlenode=(
+                <div id="usertitle" className="row col-md-12">
+                    <div className="col-md-4"><span>您好,</span> <span>{@state.username}</span>&nbsp;&nbsp;&nbsp;<FontAwesome name='jpy' className='fa-lg ' /><span className="money">  121,213,139元</span>
+                    <IconButton iconStyle={styles.iconButtonStyle} onTouchTap={@handleRefreshUserTitle} iconClassName='fa fa-refresh fa-fw' />
+                    </div>
+                    <div className="col-md-5">|<FlatButton style={styles.btn} labelStyle={styles.title} label="充值"/>|<FlatButton style={styles.btn} labelStyle={styles.title} label="提现" />
+                            |<FlatButton  style={styles.btn} labelStyle={styles.title} label="转账" />　
+                            |<IconButton iconStyle={styles.iconButtonStyle} onTouchTap={@handleRefreshUserTitle} iconClassName='fa fa-envelope-o' />
+                            |<FlatButton labelPosition="after" labelStyle={styles.title} label="退出" icon={<i className="fa fa-sign-out fa-lg"></i>}/>　
+                    </div>
+                    <div className="col-md-3 " >
+                        <FlatButton labelPosition="after" style={styles.div2} labelStyle={styles.title} label="最新公告：今天上线了" icon={<i className="fa fa-bullhorn fa-lg"></i>}/>　
+                    </div>
+                </div>
+        )
+
         return (
 
-         <div className ="menubar">
-               <Tabs
-                 style={styles.slide}
-                 className="container"
-                 onChange={@handleChangeTab}
-                 value={@state.slideIndex}
-               >
-                    <Tab label={<div><FlatButton label={GameTexts[@state.gameIndex]} labelStyle={styles.slide} className="menubar-tabs" />{gamelistmenu} </div>} value={0} className = "menubar-tabs" style={styles.slide}>
-
-                    </Tab>
-
-                    <Tab label="账户管理" value={1} className = "menubar-tabs" style={styles.slide}/>
-                    <Tab label="投注查询" value={2} className = "menubar-tabs" style={styles.slide}/>
-                    <Tab label="报表查询" value={3} className = "menubar-tabs" style={styles.slide}/>
-                    <Tab label="网站公告" value={4} className = "menubar-tabs" style={styles.slide}/>
-                    <Tab label="新手帮助" value={5} className = "menubar-tabs" style={styles.slide}/>
-
-               </Tabs>
+         <div className="usermenu container-fluid ">
+               <AppBar
+                   title={titlenode}
+                   className = "container"
+                   style = {styles.bar}
+                   showMenuIconButton={false}
+                   titleStyle = {styles.title}
+                   iconStyleRight = {styles.iconButtonStyle}
+                   iconClassNameRight="muidocs-icon-navigation-expand-more"
+                 />
 
 
          </div>
         );
 )
 
-module.exports = GameMenu
+module.exports = UserMenu
 
