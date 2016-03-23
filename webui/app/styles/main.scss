@@ -161,7 +161,7 @@ $menubar_bg:black;
 $usermanu_bg:grayscale($menubar_bg);
 $money_color:#D50000;
 $defaultfont_color:#303030;
-
+$wager_bkcolor: #424242;
 
 .menubar{
     background-color: $menubar_bg;
@@ -253,18 +253,112 @@ $defaultfont_color:#303030;
 
 
 .wanfaLine{
-    font-size: 16px;
+    font-size: 14px;
     color: gray;
     margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 10px;
 
 }
 .ballLine{
-    font-size: 14px;
+    font-size: 12px;
     color: black;
     margin-top: 5px;
-    .indiv{
+    padding: 0px;
+    padding-left: 3px;
+    div{
         display: inline-block;
+    }
+    .col-sm-8{
+        padding: 0px;
+    }
+    .divctl{
+        padding-top: 8px;
+    }
+}
+
+.vdivider {
+    border-left: 1px solid lightgray;
+    width: 1px;
+    height: 10px;
+}
+
+.gamearea{
+    outline: 1px solid lightgray;
+    .row{
+        margin-left:0px;
+        margin-right:0px;
+        div{
+            display: inline-block;
+        }
+    }
+
+}
+
+.wagerarea{
+    background-color: lightgray;
+    margin-top: 20px;
+    padding-left: 0px;
+    margin-bottom: 20px;
+    margin: 10px 10px 10px 10px !important;
+    margin-right: 10px !important;
+
+
+
+    .wagertotal{
+        margin-top: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-right:0px;
+        color: whitesmoke;
+        line-height: 30px;
+        background-color: $wager_bkcolor;
+        b{
+            color: $money_color;
+        }
+        .col-sm-3{
+            padding-right: 10px;
+        }
+    }
+
+}
+
+.wagersum{
+    border: 1px solid red;
+    width: 100%;
+    padding: 10px;
+    b{
+        color: $money_color;
+    }
+    .col-sm-12
+    {
+        padding: 0px;
+    }
+    .col-sm-3{
+        height: 30px;
+        line-height: 30px;
+        padding-right: 0px;
+    }
+
+    .selectbg{
+        position: absolute;
+        background-color: white;
+        z-index: 0;
+        width: 58px;
+        height: 30px;
+        line-height: 30px;
+        margin-left: -53px;
+    }
+    input{
+        height:30px;
+    }
+    .sel{
+        marginLeft:5px;
     }
 
 
+    #multi{
+
+    }
 }
+

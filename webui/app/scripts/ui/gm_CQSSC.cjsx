@@ -1,12 +1,11 @@
 React = require("react")
 injectTapEventPlugin = require("react-tap-event-plugin");
 
-Tabs  = require("material-ui/lib/tabs/tabs");
-Tab  = require("material-ui/lib/tabs/tab");
+
 # From https://github.com/oliviertassinari/react-swipeable-views
+Divider = require( 'material-ui/lib/divider');
 
 DropDownMenu  = require( 'material-ui/lib/DropDownMenu');
-MenuItem  = require( 'material-ui/lib/menus/menu-item');
 FlatButton = require('material-ui/lib/flat-button');
 RaisedButton = require('material-ui/lib/raised-button');
 
@@ -15,8 +14,14 @@ IconMenu = require('material-ui/lib/menus/icon-menu');
 AppBar = require('material-ui/lib/app-bar');
 IconButton =require('material-ui/lib/icon-button');
 
+List =require( 'material-ui/lib/lists/list');
+ListItem =require( 'material-ui/lib/lists/list-item');
+Divider =require( 'material-ui/lib/divider');
+
 InkBar  = require("material-ui/lib/ink-bar");
 
+WagerOverviews  = require("./WagerOverviews.js");
+TotalWagers = require("./TotalWagers.js")
 
 wanfaList = ['五星 ','四星 ','后三码','前三码','中三码','二码 ','定位胆','不定胆','大小单双','趣味 '];
 
@@ -58,6 +63,9 @@ gm_CQSSC = React.createClass(
             wanfaLine2:0
             wanfaLine3: -1
 
+    handleMoneyTypeChange:(e) ->
+        console.log("change money:"+e)
+
     handleChangeWanfaLine2:(e,item,v) ->
         console.log("handleChangeWanfaLine2:"+e.currentTarget.dataset.id)
         @setState
@@ -82,10 +90,10 @@ gm_CQSSC = React.createClass(
     render:() ->
         styles = {
           wanfa: {
-              fontSize: "16px",
+              fontSize: "14px",
               paddingLeft:"10px",
               paddingRight:"10px",
-              lineHeight:"48px",
+              lineHeight:"36px",
             },
           bar: {
             backgroundColor:"white",
@@ -97,15 +105,15 @@ gm_CQSSC = React.createClass(
            minWidth:"40px"
           }
           title: {
-            fontSize: "16px",
-            lineHeight:"48px",
-            height:"48px"
+            fontSize: "14px",
+            lineHeight:"32px",
+            height:"36px"
           },
           wanfaLine2: {
-              fontSize: "16px",
+              fontSize: "14px",
               paddingLeft:"10px",
               paddingRight:"10px",
-              lineHeight:"36px",
+              lineHeight:"32px",
             },
           btnLine:{
              minWidth:"50px"
@@ -113,27 +121,57 @@ gm_CQSSC = React.createClass(
           wfbtnselected:{
              backgroundColor: "#FF5722"
              color: "white"
-             minWidth:"40px"
-          }
+             minWidth:"36px"
+          },
           balltitle:{
-             backgroundColor: "#9E9E9E"
+             backgroundColor: "#424242"
              marginLeft:"5px",
-             marginRight:"10px",
-             minWidth:"40px"
-          }
+             marginRight:"0px",
+             minWidth:"32px",
+             lineHeight:"32px",
+             fontSize: "14px",
+             color:"white"
+          },
+          balltext: {
+            fontSize: "18px",
+            paddingLeft:"10px",
+            paddingRight:"10px",
+            lineHeight:"32px",
+          },
           ball:{
             backgroundColor: "#E0E0E0"
-            minWidth:"40px"
+            minWidth:"24px"
             marginLeft:"5px",
-            marginRight:"5px",
+            marginRight:"0px",
+            lineHeight:"32px",
+            },
+          ballfunctitle:{
+             backgroundColor: "#E0E0E0"
+             marginLeft:"5px",
+             marginRight:"5px",
+             minWidth:"24px",
+             fontSize: "12px",
+             paddingLeft:"2px",
+             paddingRight:"2px",
 
+          }
+          ballfunc:{
+            backgroundColor: "#E0E0E0"
+            marginLeft:"2px",
+            marginRight:"2px",
+            lineHeight:"24px",
+            minWidth:"24px"
             }
+
+
         };
         inkBarStyle={
 
         }
 
-        wanfaListElement=( <FlatButton ref={"wf_"+index} label={text} primary= { if index+"" == @state.wanfa+"" then true else false } key={index} data-id={index} onTouchTap={@handleChangeWanfa} labelStyle={styles.wanfa} style={styles.btn} /> for text,index in wanfaList )
+
+
+        wanfaListElement=( <div><FlatButton ref={"wf_"+index} label={text} primary= { if index+"" == @state.wanfa+"" then true else false } key={index} data-id={index} onTouchTap={@handleChangeWanfa} labelStyle={styles.wanfa} style={styles.btn} /><div className="vdivider"></div></div> for text,index in wanfaList )
 
         wanfaLine2Element = ( <FlatButton ref={"wf_1_"+index} label={text} style= { if index+"" == @state.wanfaLine2+"" then styles.wfbtnselected else styles.btn } key={index} data-id={index} onTouchTap={@handleChangeWanfaLine2} labelStyle={styles.wanfaLine2} /> for text,index in wanfaLine2EleText[@state.wanfa] )
 
@@ -144,29 +182,65 @@ gm_CQSSC = React.createClass(
                           <div className="clearfix"></div>
                      )
 
-        ballOneLine = (<FlatButton ref={"wf_"+index} label={""+index} key={index} data-id={index} onTouchTap={@handleClickBall} labelStyle={styles.wanfaLine2} style={styles.ball} /> for index in [0..9] )
+        ballOneLine = (<FlatButton ref={"wf_"+index} label={""+index} key={index} data-id={index} onTouchTap={@handleClickBall} labelStyle={styles.balltext} style={styles.ball} /> for index in [0..9] )
+        ballFuncOneLine = (<FlatButton ref={"wf_f_"+index} label={text} key={index} data-id={index} onTouchTap={@handleClickBall} labelStyle={styles.ballfunctitle} style={styles.ballfunc} /> for text,index in ['全','大','小','奇','偶','清'] )
         ballLines = (<div>
-            <div className="row ballLine" ><FlatButton label="万位" style={styles.balltitle} key={index} labelStyle={styles.wanfaLine2} /> {ballOneLine}</div>
-            <div className="row ballLine" ><FlatButton label="千位" style={styles.balltitle} key={index} labelStyle={styles.wanfaLine2} /> {ballOneLine}</div>
-            <div className="row ballLine" ><FlatButton label="百位" style={styles.balltitle} key={index} labelStyle={styles.wanfaLine2} /> {ballOneLine}</div>
-            <div className="row ballLine" ><FlatButton label="十位" style={styles.balltitle} key={index} labelStyle={styles.wanfaLine2} /> {ballOneLine}</div>
-            <div className="row ballLine" ><FlatButton label="个位" style={styles.balltitle} key={index} labelStyle={styles.wanfaLine2} /> {ballOneLine}</div>
+            <div className="row ballLine  col-sm-12" >
+                  <div className="col-sm-8"> <FlatButton label="万位" style={styles.balltitle} key={index} labelStyle={styles.wanfaLine2} />{ballOneLine} </div>
+                  <div className="col-sm-4 divctl">{ballFuncOneLine}</div>
+            </div>
+            <div className="row ballLine  col-sm-12" >
+                  <div className="col-sm-8"> <FlatButton label="千位" style={styles.balltitle} key={index} labelStyle={styles.wanfaLine2} />{ballOneLine} </div>
+                  <div className="col-sm-4 divctl">{ballFuncOneLine}</div>
+            </div>
+            <div className="row ballLine  col-sm-12" >
+                  <div className="col-sm-8"> <FlatButton label="百位" style={styles.balltitle} key={index} labelStyle={styles.wanfaLine2} />{ballOneLine} </div>
+                  <div className="col-sm-4 divctl">{ballFuncOneLine}</div>
+            </div>
+            <div className="row ballLine  col-sm-12" >
+                  <div className="col-sm-8"> <FlatButton label="十位" style={styles.balltitle} key={index} labelStyle={styles.wanfaLine2} />{ballOneLine} </div>
+                  <div className="col-sm-4 divctl">{ballFuncOneLine}</div>
+            </div>
+            <div className="row ballLine  col-sm-12" >
+                  <div className="col-sm-8"> <FlatButton label="个位" style={styles.balltitle} key={index} labelStyle={styles.wanfaLine2} />{ballOneLine} </div>
+                  <div className="col-sm-4 divctl">{ballFuncOneLine}</div>
+            </div>
             </div>
         )
         return (
             <div className="container">
+            <div className="row">
+            <div className="col-md-9">
+                <div className="gamearea">
+                    <div className="row">
+                        {wanfaListElement}
+                    </div>
+                    <Divider />
+                    <div className="row wanfaLine " >
+                       <span>{wanfaLine2Text[@state.wanfa]}:</span> {wanfaLine2Element}
+                    </div>
+                     {wanfaLine3}
+                    <Divider />
+                    <div className="row ballLine" >
+                          {ballLines}
+                    </div>
+                    <div className="row wagerarea">
+                        <WagerOverviews />
+                        <TotalWagers />
+
+                    </div>
+
+                    <Divider />
+
+
+                </div>
+            </div>
+            <div className="col-md-3">
                 <div className="row">
-                    {wanfaListElement}
+                    游戏状态
                 </div>
-                <div className="row wanfaLine" >
-                   <span>{wanfaLine2Text[@state.wanfa]}:</span> {wanfaLine2Element}
-                </div>
-                 {wanfaLine3}
-                <div className="row ballLine" >
-                      {ballLines}
-                </div>
-
-
+            </div>
+            </div>
             </div>
         );
 )

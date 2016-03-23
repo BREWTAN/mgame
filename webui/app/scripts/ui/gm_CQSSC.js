@@ -1,16 +1,12 @@
-var AppBar, DropDownMenu, FlatButton, FontAwesome, IconButton, IconMenu, InkBar, MenuItem, RaisedButton, React, Tab, Tabs, gm_CQSSC, injectTapEventPlugin, wanfaLine2EleText, wanfaLine2Text, wanfaLine3EleText, wanfaLine3Text, wanfaList;
+var AppBar, Divider, DropDownMenu, FlatButton, FontAwesome, IconButton, IconMenu, InkBar, List, ListItem, RaisedButton, React, TotalWagers, WagerOverviews, gm_CQSSC, injectTapEventPlugin, wanfaLine2EleText, wanfaLine2Text, wanfaLine3EleText, wanfaLine3Text, wanfaList;
 
 React = require("react");
 
 injectTapEventPlugin = require("react-tap-event-plugin");
 
-Tabs = require("material-ui/lib/tabs/tabs");
-
-Tab = require("material-ui/lib/tabs/tab");
+Divider = require('material-ui/lib/divider');
 
 DropDownMenu = require('material-ui/lib/DropDownMenu');
-
-MenuItem = require('material-ui/lib/menus/menu-item');
 
 FlatButton = require('material-ui/lib/flat-button');
 
@@ -24,7 +20,17 @@ AppBar = require('material-ui/lib/app-bar');
 
 IconButton = require('material-ui/lib/icon-button');
 
+List = require('material-ui/lib/lists/list');
+
+ListItem = require('material-ui/lib/lists/list-item');
+
+Divider = require('material-ui/lib/divider');
+
 InkBar = require("material-ui/lib/ink-bar");
+
+WagerOverviews = require("./WagerOverviews.js");
+
+TotalWagers = require("./TotalWagers.js");
 
 wanfaList = ['五星 ', '四星 ', '后三码', '前三码', '中三码', '二码 ', '定位胆', '不定胆', '大小单双', '趣味 '];
 
@@ -54,6 +60,9 @@ gm_CQSSC = React.createClass({
       wanfaLine3: -1
     });
   },
+  handleMoneyTypeChange: function(e) {
+    return console.log("change money:" + e);
+  },
   handleChangeWanfaLine2: function(e, item, v) {
     console.log("handleChangeWanfaLine2:" + e.currentTarget.dataset.id);
     return this.setState({
@@ -81,13 +90,13 @@ gm_CQSSC = React.createClass({
     });
   },
   render: function() {
-    var ballLines, ballOneLine, index, inkBarStyle, styles, text, wanfaLine2Element, wanfaLine3, wanfaLine3Element, wanfaListElement;
+    var ballFuncOneLine, ballLines, ballOneLine, index, inkBarStyle, styles, text, wanfaLine2Element, wanfaLine3, wanfaLine3Element, wanfaListElement;
     styles = {
       wanfa: {
-        fontSize: "16px",
+        fontSize: "14px",
         paddingLeft: "10px",
         paddingRight: "10px",
-        lineHeight: "48px"
+        lineHeight: "36px"
       },
       bar: {
         backgroundColor: "white",
@@ -98,15 +107,15 @@ gm_CQSSC = React.createClass({
         minWidth: "40px"
       },
       title: {
-        fontSize: "16px",
-        lineHeight: "48px",
-        height: "48px"
+        fontSize: "14px",
+        lineHeight: "32px",
+        height: "36px"
       },
       wanfaLine2: {
-        fontSize: "16px",
+        fontSize: "14px",
         paddingLeft: "10px",
         paddingRight: "10px",
-        lineHeight: "36px"
+        lineHeight: "32px"
       },
       btnLine: {
         minWidth: "50px"
@@ -114,19 +123,45 @@ gm_CQSSC = React.createClass({
       wfbtnselected: {
         backgroundColor: "#FF5722",
         color: "white",
-        minWidth: "40px"
+        minWidth: "36px"
       },
       balltitle: {
-        backgroundColor: "#9E9E9E",
+        backgroundColor: "#424242",
         marginLeft: "5px",
-        marginRight: "10px",
-        minWidth: "40px"
+        marginRight: "0px",
+        minWidth: "32px",
+        lineHeight: "32px",
+        fontSize: "14px",
+        color: "white"
+      },
+      balltext: {
+        fontSize: "18px",
+        paddingLeft: "10px",
+        paddingRight: "10px",
+        lineHeight: "32px"
       },
       ball: {
         backgroundColor: "#E0E0E0",
-        minWidth: "40px",
+        minWidth: "24px",
         marginLeft: "5px",
-        marginRight: "5px"
+        marginRight: "0px",
+        lineHeight: "32px"
+      },
+      ballfunctitle: {
+        backgroundColor: "#E0E0E0",
+        marginLeft: "5px",
+        marginRight: "5px",
+        minWidth: "24px",
+        fontSize: "12px",
+        paddingLeft: "2px",
+        paddingRight: "2px"
+      },
+      ballfunc: {
+        backgroundColor: "#E0E0E0",
+        marginLeft: "2px",
+        marginRight: "2px",
+        lineHeight: "24px",
+        minWidth: "24px"
       }
     };
     inkBarStyle = {};
@@ -135,7 +170,7 @@ gm_CQSSC = React.createClass({
       results = [];
       for (index = i = 0, len = wanfaList.length; i < len; index = ++i) {
         text = wanfaList[index];
-        results.push(React.createElement(FlatButton, {
+        results.push(React.createElement("div", null, React.createElement(FlatButton, {
           "ref": "wf_" + index,
           "label": text,
           "primary": (index + "" === this.state.wanfa + "" ? true : false),
@@ -144,7 +179,9 @@ gm_CQSSC = React.createClass({
           "onTouchTap": this.handleChangeWanfa,
           "labelStyle": styles.wanfa,
           "style": styles.btn
-        }));
+        }), React.createElement("div", {
+          "className": "vdivider"
+        })));
       }
       return results;
     }).call(this);
@@ -198,57 +235,107 @@ gm_CQSSC = React.createClass({
           "key": index,
           "data-id": index,
           "onTouchTap": this.handleClickBall,
-          "labelStyle": styles.wanfaLine2,
+          "labelStyle": styles.balltext,
           "style": styles.ball
         }));
       }
       return results;
     }).call(this);
+    ballFuncOneLine = (function() {
+      var i, len, ref, results;
+      ref = ['全', '大', '小', '奇', '偶', '清'];
+      results = [];
+      for (index = i = 0, len = ref.length; i < len; index = ++i) {
+        text = ref[index];
+        results.push(React.createElement(FlatButton, {
+          "ref": "wf_f_" + index,
+          "label": text,
+          "key": index,
+          "data-id": index,
+          "onTouchTap": this.handleClickBall,
+          "labelStyle": styles.ballfunctitle,
+          "style": styles.ballfunc
+        }));
+      }
+      return results;
+    }).call(this);
     ballLines = React.createElement("div", null, React.createElement("div", {
-      "className": "row ballLine"
-    }, React.createElement(FlatButton, {
+      "className": "row ballLine  col-sm-12"
+    }, React.createElement("div", {
+      "className": "col-sm-8"
+    }, " ", React.createElement(FlatButton, {
       "label": "万位",
       "style": styles.balltitle,
       "key": index,
       "labelStyle": styles.wanfaLine2
-    }), " ", ballOneLine), React.createElement("div", {
-      "className": "row ballLine"
-    }, React.createElement(FlatButton, {
+    }), ballOneLine, " "), React.createElement("div", {
+      "className": "col-sm-4 divctl"
+    }, ballFuncOneLine)), React.createElement("div", {
+      "className": "row ballLine  col-sm-12"
+    }, React.createElement("div", {
+      "className": "col-sm-8"
+    }, " ", React.createElement(FlatButton, {
       "label": "千位",
       "style": styles.balltitle,
       "key": index,
       "labelStyle": styles.wanfaLine2
-    }), " ", ballOneLine), React.createElement("div", {
-      "className": "row ballLine"
-    }, React.createElement(FlatButton, {
+    }), ballOneLine, " "), React.createElement("div", {
+      "className": "col-sm-4 divctl"
+    }, ballFuncOneLine)), React.createElement("div", {
+      "className": "row ballLine  col-sm-12"
+    }, React.createElement("div", {
+      "className": "col-sm-8"
+    }, " ", React.createElement(FlatButton, {
       "label": "百位",
       "style": styles.balltitle,
       "key": index,
       "labelStyle": styles.wanfaLine2
-    }), " ", ballOneLine), React.createElement("div", {
-      "className": "row ballLine"
-    }, React.createElement(FlatButton, {
+    }), ballOneLine, " "), React.createElement("div", {
+      "className": "col-sm-4 divctl"
+    }, ballFuncOneLine)), React.createElement("div", {
+      "className": "row ballLine  col-sm-12"
+    }, React.createElement("div", {
+      "className": "col-sm-8"
+    }, " ", React.createElement(FlatButton, {
       "label": "十位",
       "style": styles.balltitle,
       "key": index,
       "labelStyle": styles.wanfaLine2
-    }), " ", ballOneLine), React.createElement("div", {
-      "className": "row ballLine"
-    }, React.createElement(FlatButton, {
+    }), ballOneLine, " "), React.createElement("div", {
+      "className": "col-sm-4 divctl"
+    }, ballFuncOneLine)), React.createElement("div", {
+      "className": "row ballLine  col-sm-12"
+    }, React.createElement("div", {
+      "className": "col-sm-8"
+    }, " ", React.createElement(FlatButton, {
       "label": "个位",
       "style": styles.balltitle,
       "key": index,
       "labelStyle": styles.wanfaLine2
-    }), " ", ballOneLine));
+    }), ballOneLine, " "), React.createElement("div", {
+      "className": "col-sm-4 divctl"
+    }, ballFuncOneLine)));
     return React.createElement("div", {
       "className": "container"
     }, React.createElement("div", {
       "className": "row"
-    }, wanfaListElement), React.createElement("div", {
-      "className": "row wanfaLine"
-    }, React.createElement("span", null, wanfaLine2Text[this.state.wanfa], ":"), " ", wanfaLine2Element), wanfaLine3, React.createElement("div", {
+    }, React.createElement("div", {
+      "className": "col-md-9"
+    }, React.createElement("div", {
+      "className": "gamearea"
+    }, React.createElement("div", {
+      "className": "row"
+    }, wanfaListElement), React.createElement(Divider, null), React.createElement("div", {
+      "className": "row wanfaLine "
+    }, React.createElement("span", null, wanfaLine2Text[this.state.wanfa], ":"), " ", wanfaLine2Element), wanfaLine3, React.createElement(Divider, null), React.createElement("div", {
       "className": "row ballLine"
-    }, ballLines));
+    }, ballLines), React.createElement("div", {
+      "className": "row wagerarea"
+    }, React.createElement(WagerOverviews, null), React.createElement(TotalWagers, null)), React.createElement(Divider, null))), React.createElement("div", {
+      "className": "col-md-3"
+    }, React.createElement("div", {
+      "className": "row"
+    }, "游戏状态"))));
   }
 });
 
