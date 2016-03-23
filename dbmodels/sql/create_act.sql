@@ -164,15 +164,6 @@ create table T_ACT_TRANS_LOGS_HIS
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8 COMMENT = "账务明细表历史";
 
 
-create index T_ACT_LOGS_HIS_ACT_NO on T_ACT_TRANS_LOGS_HIS
-(
-   ACT_NO
-);
-create index T_ACT_LOGS_HIS_FUND_NO on T_ACT_TRANS_LOGS_HIS
-(
-   FUND_NO
-);
-
 create index T_ACT_LOGS_HIS_SETT_DATE on T_ACT_TRANS_LOGS_HIS
 (
    SETT_DATE

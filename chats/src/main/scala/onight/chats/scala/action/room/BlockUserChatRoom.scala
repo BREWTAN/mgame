@@ -28,7 +28,7 @@ object MuteUserChatRoomService extends OLog with PBUtils with LService[PBIRoomOp
 
   override def cmd: String = PBRoomCommand.MUT.name();
 
-  //  http://localhost:18080/rom/pbblk.do?fh=VBLKROM000000J00&bd={"room_id":"rm001","user_role":"A","user_id":"u001","op_user":"admin"}
+  //  http://localhost:18080/rom/pbblk.do?fh=VMUTROM000000J00&bd={"room_id":"rm001","user_role":"A","user_id":"u001","op_user":"admin"}
   def onPBPacket(pack: FramePacket, pbo: PBIRoomOp, handler: CompleteHandler) = {
     //    log.debug("guava==" + VMDaos.guCache.getIfPresent(pbo.getLogid()));      val ret = PBActRet.newBuilder();
     val ret = PBIRoomRet.newBuilder();
