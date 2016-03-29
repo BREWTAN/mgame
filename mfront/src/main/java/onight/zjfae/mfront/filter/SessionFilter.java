@@ -1,8 +1,7 @@
-package onight.mgame.front.filter;
+package onight.zjfae.mfront.filter;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import onight.mgame.front.action.ModuleStarter;
 import onight.osgi.annotation.iPojoBean;
 import onight.sm.Ssm.PBModule;
 import onight.sm.Ssm.PBSSORet;
@@ -17,6 +16,8 @@ import onight.tfw.otransio.api.PacketFilter;
 import onight.tfw.otransio.api.PacketHelper;
 import onight.tfw.otransio.api.beans.ExceptionBody;
 import onight.tfw.otransio.api.beans.FramePacket;
+import onight.zjfae.afront.Amobilezj.PEAModule;
+import onight.zjfae.mfront.action.MobileModuleStarter;
 
 import org.apache.felix.ipojo.annotations.Provides;
 
@@ -29,9 +30,9 @@ public class SessionFilter implements PacketFilter,PSenderService {
 	@Override
 	public boolean postRoute(ActWrapper actor, FramePacket pack, CompleteHandler handler) {
 		// log.debug("postRoute:"+module+":" + pack);
-		if ("SINSSM".equals(pack.getGlobalCMD())) {
-			// pack.getBody()
-		}
+//		if ("SINSSM".equals(pack.getGlobalCMD())) {
+//			// pack.getBody()
+//		}
 		return false;
 	}
 
@@ -44,7 +45,7 @@ public class SessionFilter implements PacketFilter,PSenderService {
 	@Override
 	public boolean preRoute(final ActWrapper actor, final FramePacket pack, final CompleteHandler handler) {
 		// log.debug("preRoute:"+module+":" + pack);
-		if (!PBModule.SSM.name().equals(pack.getModule())) {//
+		if (PEAModule.AZJ.name().equals(pack.getModule())) {//
 			log.debug("I Should Check this:cmd=" + pack.getGlobalCMD());
 			if (SSOPacketHelper.getSSOGetPacket(pack) == null) {
 				handler.onFinished(PacketHelper.toPBReturn(pack, new ExceptionBody("NOT_AUTHORIED", null)));
@@ -79,12 +80,12 @@ public class SessionFilter implements PacketFilter,PSenderService {
 
 	@Override
 	public String[] modules() {
-		return new String[] { ModuleStarter.MODULE_NAME };
+		return new String[] { MobileModuleStarter.MODULE_NAME };
 	}
 
 	@Override
 	public String getModule() {
-		return ModuleStarter.MODULE_NAME;
+		return MobileModuleStarter.MODULE_NAME;
 	}
 
 }

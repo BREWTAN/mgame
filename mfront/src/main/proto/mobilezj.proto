@@ -1,0 +1,34 @@
+
+
+syntax = "proto3";
+
+package onight.zjfae.mfront;
+
+
+enum PEModule{
+	MZJ = 0;
+};
+
+
+
+enum PECommand{
+	REG = 0 ;//注册
+};
+
+message PEReg
+{
+	string mobile = 1;//手机号
+	string image_code = 2;//图片验证码
+	string check_code = 3;//手机验证码
+	string login_password = 4;//登录密码
+	string login_password_sure = 5;//登陆密码第二次输入
+	string channel_no = 6;//渠道编号
+	string recommend_mobile = 7;//推荐人手机号
+};
+
+
+message PERetReg
+{
+	string mobile = 1;//手机号
+};
+

@@ -6,7 +6,7 @@ buildscript {
 	dependencies {
 		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.7.0'
 		classpath 'com.google.protobuf:protobuf-java:3.0.0-alpha-3.1'
-		classpath 'com.googlecode.protobuf-java-format:protobuf-java-format:1.2'
+		classpath 'com.googlecode.protobuf-java-format:protobuf-java-format:1.4'
 		
 	}
 }
@@ -21,9 +21,12 @@ protobuf {
 
 dependencies {
 	includeInJar 'org.projectlombok:lombok:1.16.4'
+	includeInJar 'org.apache.httpcomponents:httpclient:4.5.2'
+	includeInJar 'org.apache.httpcomponents:httpmime:4.5.2'
+
 	compile 'com.google.protobuf:protobuf-java:3.0.0-alpha-3.1'
 	includeInJar 'org.glassfish.grizzly:grizzly-core:2.3.21'
-	includeInJar 'com.googlecode.protobuf-java-format:protobuf-java-format:1.2'
+	includeInJar 'com.googlecode.protobuf-java-format:protobuf-java-format:1.4'
 	compile 'org.apache.commons:commons-lang3:3.3.2'
 	testCompile 'junit:junit:4.8.2'
 }
@@ -36,7 +39,7 @@ sourceSets.main.java {
 
 jar {
 	manifest{
-		attributes( 'Import-Ignore':'com.googlecode.protobuf,com.google.protobuf,com.esotericsoftware.kryo')
+		attributes( 'Import-Ignore':'com.googlecode.protobuf,com.google.protobuf,com.esotericsoftware.kryo,org.apache.http')
 		attributes( 'DynamicImport-Package': '*')
 		attributes( 'Import-Lib': 'lib')
 	}
@@ -45,15 +48,3 @@ jar {
 dependencies { testCompile 'junit:junit:4.12' }
 
 
-version='1.0.0'
-
-dependencies { testCompile 'junit:junit:4.12' }
-
-jar {
-	manifest{
-		//		attributes( 'Spring-Context': 'applicationContext-common.xml, applicationContext-beans.xml')
-		//		attributes( 'Import-Ignore':'com.googlecode.protobuf,com.google.protobuf,com.esotericsoftware.kryo')
-		attributes( 'DynamicImport-Package': '*')
-		attributes( 'Import-Lib': 'lib')
-	}
-}

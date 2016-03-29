@@ -1,9 +1,8 @@
-package onight.mgame.front.action;
+package onight.zjfae.mfront.action;
 
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import onight.mgame.front.filter.SSOPacketHelper;
 import onight.osgi.annotation.NActorProvider;
 import onight.osgi.annotation.iPojoBean;
 import onight.tfw.async.CompleteHandler;
@@ -12,6 +11,7 @@ import onight.tfw.otransio.api.PSender;
 import onight.tfw.otransio.api.PacketHelper;
 import onight.tfw.otransio.api.beans.FramePacket;
 import onight.tfw.otransio.api.beans.SendFailedBody;
+import onight.zjfae.mfront.filter.SSOPacketHelper;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,7 +23,7 @@ import com.google.protobuf.Message;
 // @Provides(specifications = { IActor.class, PSenderService.class })
 @Slf4j
 @Data
-public class FrontAction extends ModuleStarter<Message> {
+public class FrontAction extends MobileModuleStarter<Message> {
 
 	@Getter
 	@PSender
@@ -33,10 +33,10 @@ public class FrontAction extends ModuleStarter<Message> {
 
 	@Override
 	public String[] getCmds() {
-		return new String[] { "PXY" };
+		return new String[] { "FNT" };
 	}
 
-	// http://localhost:8081/fnt/pbpxy.do?fh=VSINSSM000000J00&bd={%22login_id%22:%22abc%22,%22password%22:%22000000%22,%22op%22:0,%22res_id%22:%22android%22}&gcmd=SINSSM
+	// http://localhost:8081/fnt/pbfnt.do?fh=VSINSSM000000J00&bd={%22login_id%22:%22abc%22,%22password%22:%22000000%22,%22op%22:0,%22res_id%22:%22android%22}&gcmd=SINSSM
 
 	@Override
 	public void onPBPacket(final FramePacket pack, Message nubo, final CompleteHandler handler) {

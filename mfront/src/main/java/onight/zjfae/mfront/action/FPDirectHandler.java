@@ -1,4 +1,4 @@
-package onight.mgame.front.action;
+package onight.zjfae.mfront.action;
 
 import onight.tfw.async.CallBack;
 import onight.tfw.async.CompleteHandler;

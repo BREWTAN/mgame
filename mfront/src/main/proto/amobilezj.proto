@@ -1,0 +1,30 @@
+
+
+syntax = "proto3";
+
+package onight.zjfae.afront;
+
+
+enum PEAModule{//必须经过授权登录的
+	AZJ = 0;
+};
+
+
+
+enum PEACommand{
+	A00 = 0 ;//获取用户资产信息
+};
+
+message PERetUserAssetInfo
+{
+	string bank_code = 1;//用户绑定银行卡所在行
+	double balance_y = 2;//可用金额
+	double balance_q = 3;//可取金额
+	double freeze_total = 4;//冻结金额
+	double amount = 5;//总余额
+	double allUnit = 6;//总持仓
+	double yesterday_profit = 7;//昨日收益
+	double all_profit = 8;//累计收益
+};
+
+
