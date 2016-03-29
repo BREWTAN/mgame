@@ -2,6 +2,7 @@ package mfront.test;
 
 import onight.tfw.outils.bean.JsonPBUtil;
 import onight.zjfae.mfront.Mobilezj.PEReg;
+import onight.zjfae.mfront.action.FJsonPBFormat;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.Message.Builder;
@@ -16,6 +17,9 @@ public class TestMSG {
 			
 			Message msg = builder.build();// 获取到的是一个PBmessage
 			System.out.println(msg);
+			
+			String str = new FJsonPBFormat().printToString(msg);
+			System.out.println("str="+str);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

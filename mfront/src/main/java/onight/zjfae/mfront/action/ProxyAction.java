@@ -11,7 +11,6 @@ import onight.tfw.otransio.api.PacketHelper;
 import onight.tfw.otransio.api.beans.FramePacket;
 import onight.tfw.otransio.api.beans.SendFailedBody;
 import onight.tfw.otransio.api.beans.UnknowCMDBody;
-import onight.tfw.outils.bean.JsonPBFormat;
 import onight.tfw.outils.bean.JsonPBUtil;
 import onight.tfw.outils.serialize.ISerializer;
 import onight.tfw.outils.serialize.SerializerFactory;
@@ -55,10 +54,8 @@ public class ProxyAction extends MobileModuleStarter<Message> {
 	}
 
 	// http://localhost:8081/mzj/pbpxy.do?fh=VREGMZJ000000J00&bd={"mobile":"13800138000","image_code":"12334554"}
-//	&gcmd=SINSSM
 	protected ISerializer jsons = SerializerFactory.getSerializer(SerializerFactory.SERIALIZER_JSON);
 
-	
 	ThreadLocal<Builder> currentBuilder=new ThreadLocal<Builder>();
 	
 	@Override
@@ -77,13 +74,15 @@ public class ProxyAction extends MobileModuleStarter<Message> {
 					currentBuilder.set(builder);
 //					JsonPBUtil.json2PB(pack.getBody(), builder);
 					//builder.build();// 获取到的是一个PBmessage
+					
 					Message msg = getPBBody(pack);//
 					log.debug("msg=={}",msg);
-					String str = new JsonPBFormat().printToString(msg);
+					String str = new FJsonPBFormat().printToString(msg);
 					log.debug("proxy:{}", str);
+					
 //					handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息转换成功", pack)));
 					
-					// TODO: 1. 把他转换成json,并且发到客户端
+					// TODO: 1. 把他封装成json,并且发到客户端E/工程里面去
 					// String body = requestor.post(jsons.serialize(pack.getBody()),
 					// proxyBaseUrl);
 					

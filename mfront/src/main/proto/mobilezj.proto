@@ -13,6 +13,7 @@ enum PEModule{
 
 enum PECommand{
 	REG = 0 ;//注册
+	
 };
 
 message PEReg
