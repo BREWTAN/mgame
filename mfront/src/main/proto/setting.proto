@@ -1,0 +1,20 @@
+
+
+syntax = "proto3";
+
+package onight.zjfae.sfront;
+
+enum PBModule{
+	FNT = 0;
+}
+enum PBCommand{
+	SET  = 0;
+}
+
+
+message PBSetting	//token操作
+{
+	string gcmd = 1;
+	string jsondata = 2;
+};
+
