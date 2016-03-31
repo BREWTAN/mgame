@@ -90,6 +90,7 @@ public class ProxyAction extends MobileModuleStarter<Message> {
 					// String body = requestor.post(jsons.serialize(pack.getBody()),
 					// proxyBaseUrl);
 					Builder retbuilder = (Builder) cmd2PBRetBean.get(cmd).newBuilderForType();
+					str = FakeMapping.gcmd2Json.get(cmd+"MZJ");
 					JsonPBUtil.json2PB(str.getBytes(), retbuilder);
 					
 					handler.onFinished(PacketHelper.toPBReturn(pack, retbuilder.build()));
@@ -97,7 +98,7 @@ public class ProxyAction extends MobileModuleStarter<Message> {
 					
 				} catch (Exception e) {
 					// TODO： 转换失败时
-					handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息转换失败："+e.getMessage(), pack)));
+					handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息转换失败："+e.getMessage(), null)));
 				}finally{
 					currentBuilder.set(null);
 				}
