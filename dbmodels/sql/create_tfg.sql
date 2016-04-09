@@ -109,3 +109,16 @@ CREATE TABLE TFG_USER_ROLE (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户与角色';
 
 
+create table `tgc_user_type_cfg` (
+  `id` bigint(20) not null default 0 comment '用户类型id：0会员，1总代,2一级代理，3代理',
+  `parent_id` bigint(20) default null comment '类型从属关系,即上级id',
+  `cn_name` varchar(32) default '' comment '组中文名称',
+  `en_name` varchar(32) default '' comment '组英文名称',
+  `enable` tinyint(1) not null default '0' comment '是否有效 1有效 0无效',
+  `user_id` bigint(20) not null comment '更新人的数字id',
+  `update_time` datetime default null comment '更新时间',
+  `remark` varchar(255) default null comment '备注',
+  primary key (`id`)
+)  engine=innodb default charset=utf8 comment='用户类型配置表';
+
+

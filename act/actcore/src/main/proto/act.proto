@@ -124,7 +124,7 @@ message PBIActRet
 	string  fund_no=50;				//资金子账户号
 	string  act_no=60;				//账户号
 	
-	PBTActFund	pbfund = 70;//资金子账户信息
-	PBTActInfo	pbact = 80;//主账户信息
+	repeated PBTActFund	pbfund = 70;//资金子账户信息
+	repeated PBTActInfo	pbact = 80;//主账户信息
 }
 

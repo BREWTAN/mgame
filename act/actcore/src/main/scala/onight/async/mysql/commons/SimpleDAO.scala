@@ -90,16 +90,17 @@ trait SimpleDAO[T] extends AsyncDB {
     constructor.newInstance(map.toArray[AnyRef]: _*).asInstanceOf[T]
   }
 
-  def resultRowTOPB(builder: Message.Builder, qr: Try[QueryResult]): Boolean = {
+  def resultRowTOPB(rootbuilder: Message.Builder, rowfd:FieldDescriptor, qr: Try[QueryResult]): Boolean = {
     val ret = qr.map {
       case qr: QueryResult => {
         if (qr.rowsAffected > 0) {
           for (row <- qr.rows.head) {
-            for (fd <- builder.getDescriptorForType().getFields()) {
+            val rowbuilder = rootbuilder.newBuilderForField(rowfd)
+            for (fd <- rowbuilder.getDescriptorForType().getFields()) {
               val v = fieldValue(row, fd.getName.toUpperCase())
               if (v != null) {
                 try {
-                  builder.setField(fd, v)
+                  rowbuilder.setField(fd, v)
                 } catch {
                   case a: Throwable => {
                     log.error("cannot set v:" + fd.getName + ",v=" + v)
@@ -107,6 +108,8 @@ trait SimpleDAO[T] extends AsyncDB {
                 }
               }
             }
+//            log.debug("get row:"+rowbuilder.build())
+            rootbuilder.addRepeatedField(rowfd,rowbuilder.build());
           }
           true
         } else {
@@ -118,7 +121,7 @@ trait SimpleDAO[T] extends AsyncDB {
     ret.get
   }
   def fieldValue(row: RowData, name: String): Any = {
-    row(name) match {
+   return  row(name) match {
       case v: String => v
       case n @ null => {
         return null;
@@ -127,7 +130,10 @@ trait SimpleDAO[T] extends AsyncDB {
         v.toDateTime().getMillis
       }
       case Some(v) => return v
-      case v: scala.math.BigDecimal => v.doubleValue()
+      case v: scala.math.BigDecimal => {
+//        log.debug("change bigDe{}",v.doubleValue());
+         return Double.box(v.doubleValue()); 
+      }
       case v @ _ => {
         log.warn("unknow type:" + v.getClass() + ":" + row(name))
         return v
@@ -379,7 +385,7 @@ trait SimpleDAO[T] extends AsyncDB {
   private lazy val SubtractString: String = {
     ("UPDATE " + tablename + " SET ") + fields.filter(_.getName() != keyname).map({ _.getName() }).mkString("=(?) , ") + " =(?) WHERE " + keyname + " = (?)"
   }
-  private def SelectString: String = {
+  def SelectString: String = {
     ("SELECT ") + fields.map({ _.getName() }).mkString(",") + " from " + tablename;
   }
   private def CountString: String = {
