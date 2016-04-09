@@ -61,6 +61,10 @@ abstract class FundQueryRunner extends BatcherCallback[(String, CompleteHandler,
     };
 
     val batchv = vs.map(_._1);
+    
+    if(batchv.size!=vs.size){
+      log.error("not same size::"+batchv.size+",size="+vs.size);
+    }
 
     TActFundDAO.exec(selectsql, batchv.toSeq).onSuccess {
       case qr @ _ => {
