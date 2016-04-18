@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 手机号验证,客户信息,RegController,POST,JSON,/ife/reg/checkIfMobileUseful.html@onight.mgame.utils.PBInfo(name = "PBIFE_reg_checkIfMobileUseful", path = "/ife/reg/checkIfMobileUseful.html") 

@@ -63,6 +63,7 @@ public class CSVGenerator {
 				l++;
 				continue;
 			}
+			
 			reqLines.append("\t\tString ").append(lines[l].substring(0, idx)).append(";//  ").append(lines[l].substring(idx)).append("\n");
 			l++;
 		}
@@ -117,28 +118,36 @@ public class CSVGenerator {
 			}
 			if (className != null) {
 				if (pars[0].startsWith(className)) {
+					reslines.append("\t\t @PBFields(name = \""+lines[l].substring(idx).trim().replaceAll("\"", "'")+"\")\n");
 					reslines.append("\t\t\t\tString ").append(pars[0].replaceAll(className + "\\.", "")).append(";//  ").append(lines[l].substring(idx))
 							.append("\n");
 				} else if ( pars[0].startsWith(StringUtils.capitalize(className))) {
+					reslines.append("\t\t @PBFields(name = \""+lines[l].substring(idx).trim().replaceAll("\"", "'")+"\")\n");
 					reslines.append("\t\t\t\tString ").append(pars[0].replaceAll(StringUtils.capitalize(className) + "\\.", "")).append(";//  ").append(lines[l].substring(idx))
 							.append("\n");
 				} else {// 重来
 					if (classType.compareToIgnoreCase("List") == 0) {
-						reslines.append("}\n\n\t\t List<" + StringUtils.capitalize(className) + ">" + className + ";// \n \n");
+						reslines.append("}\n\n");
+						reslines.append("\t\t @PBFields(name = \""+lines[l].substring(idx).trim().replaceAll("\"", "'")+"\")\n");
+						reslines.append("\t\tList<" + StringUtils.capitalize(className) + ">" + className + ";// \n \n");
 					} else {
-						reslines.append("}\n\n\t\t " + StringUtils.capitalize(classType) + " " + className + ";// \n \n");
+						reslines.append("}\n\n");
+						reslines.append("\t\t @PBFields(name = \""+lines[l].substring(idx).trim().replaceAll("\"", "'")+"\")\n");
+						reslines.append(StringUtils.capitalize(classType) + " " + className + ";// \n \n");
 					}
 					className = null;
 					continue;
 				}
 			} else {
+				reslines.append("\t\t @PBFields(name = \""+lines[l].substring(idx).trim().replaceAll("\"", "'")+"\")\n");
 				reslines.append("\t\t" + pars[2].trim() + " ").append(pars[0]).append(";//  ").append(lines[l].substring(idx)).append("\n");
 			}
 			l++;
 		}
 		if (className != null) {
 			if (classType.compareToIgnoreCase("List") == 0) {
-				reslines.append("}\n\n\t\t List<" + StringUtils.capitalize(className) + ">" + className + ";// \n \n");
+				reslines.append("}\n\n");
+				reslines.append("\t\t List<" + StringUtils.capitalize(className) + ">" + className + ";// \n \n");
 			} else {
 				reslines.append("}\n\n\t\t " + StringUtils.capitalize(classType) + " " + className + ";// \n \n");
 			}
@@ -156,6 +165,7 @@ public class CSVGenerator {
 			fout.write("import lombok.Data;\n".getBytes());
 			fout.write("import java.util.List;\n".getBytes());
 			fout.write("import java.math.BigDecimal;\n".getBytes());
+			fout.write("import onight.mgame.utils.PBFields;\n".getBytes());
 
 			fout.write("import lombok.NoArgsConstructor;\n\n".getBytes());
 			fout.write(("// " + lines[1] + "").getBytes());

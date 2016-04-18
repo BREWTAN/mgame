@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 忘记密码第二步（校验手机验证码）,客户信息,ForgetPasswordManageController,POST,JSON,/ife/forgetpasswordmanage/checkSmsCode.html@onight.mgame.utils.PBInfo(name = "PBIFE_forgetpasswordmanage_checkSmsCode", path = "/ife/forgetpasswordmanage/checkSmsCode.html") 

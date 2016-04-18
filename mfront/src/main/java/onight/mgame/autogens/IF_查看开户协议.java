@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 查看开户协议,客户信息,RegController,GET,文件流,/ife/reg/viewRegisterAgreement.html@onight.mgame.utils.PBInfo(name = "PBIFE_reg_viewRegisterAgreement", path = "/ife/reg/viewRegisterAgreement.html") 

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 校验身份证是否可用,客户信息,UserInfoManageController,POST,JSON,/ife/userinfomanage/checkIdCard.html@onight.mgame.utils.PBInfo(name = "PBIFE_userinfomanage_checkIdCard", path = "/ife/userinfomanage/checkIdCard.html") 

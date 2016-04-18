@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 更新个人用户基本信息,客户信息,UserInfoManageController,POST,JSON,/ife/userinfomanage/modifyUserBaseInfo.html@onight.mgame.utils.PBInfo(name = "PBIFE_userinfomanage_modifyUserBaseInfo", path = "/ife/userinfomanage/modifyUserBaseInfo.html") 

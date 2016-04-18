@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 用户头像读取,客户信息,UserHeaderController,POST,文件流,/ife/userheader/viewUserHeader.html@onight.mgame.utils.PBInfo(name = "PBIFE_userheader_viewUserHeader", path = "/ife/userheader/viewUserHeader.html") 

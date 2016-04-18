@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 加载安保问题,公共,SecurityQuestionManageController,POST,JSON,/ife/securityquestionmanage/loadSecurityQuestion.html@onight.mgame.utils.PBInfo(name = "PBIFE_securityquestionmanage_loadSecurityQuestion", path = "/ife/securityquestionmanage/loadSecurityQuestion.html") 
@@ -30,11 +31,17 @@ public class IF_加载安保问题 {
 	@NoArgsConstructor
 	public static class TcSecurityQuestionTemplateList {
 
+		 @PBFields(name = ",安保问题PK,String,不校验,否,")
 				String id;//  ,安保问题PK,String,不校验,否,
+		 @PBFields(name = ",安保问题内容,String,不校验,否,")
 				String question;//  ,安保问题内容,String,不校验,否,
+		 @PBFields(name = ",状态,String,不校验,否,00-正常，01-失效")
 				String status;//  ,状态,String,不校验,否,00-正常，01-失效
+		 @PBFields(name = ",操作者,String,不校验,否,")
 				String operator;//  ,操作者,String,不校验,否,
+		 @PBFields(name = ",创建时间,String,不校验,否,")
 				String gmtCreate;//  ,创建时间,String,不校验,否,
+		 @PBFields(name = ",修改时间,String,不校验,否,")
 				String gmtModify;//  ,修改时间,String,不校验,否,
 }
 

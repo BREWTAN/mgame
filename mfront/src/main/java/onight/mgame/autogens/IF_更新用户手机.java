@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 更新用户手机,客户信息,MobileManageController,POST,JSON,/ife/mobilemanage/modifyUserMobile.html@onight.mgame.utils.PBInfo(name = "PBIFE_mobilemanage_modifyUserMobile", path = "/ife/mobilemanage/modifyUserMobile.html") 

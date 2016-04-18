@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 批量删除,客户信息,MessageManageController,POST,JSON,/ife/messagemanage/deleteMessageBatch.html@onight.mgame.utils.PBInfo(name = "PBIFE_messagemanage_deleteMessageBatch", path = "/ife/messagemanage/deleteMessageBatch.html") 

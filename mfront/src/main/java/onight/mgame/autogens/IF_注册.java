@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 注册,客户信息,RegController,POST,JSON,/ife/reg/register.html@onight.mgame.utils.PBInfo(name = "PBIFE_reg_register", path = "/ife/reg/register.html") 
@@ -32,6 +33,7 @@ public class IF_注册 {
 	@AllArgsConstructor
 	@NoArgsConstructor
 	public static class Response {
+		 @PBFields(name = ",图片验证码,String,4,否,,")
 		String authCode;//  ,图片验证码,String,4,否,,
 		 String tfw__reserved;//保留字段 
 

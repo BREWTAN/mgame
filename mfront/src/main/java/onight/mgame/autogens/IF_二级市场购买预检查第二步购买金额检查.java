@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 二级市场购买预检查第二步购买金额检查,产品相关,TradeController,POST,JSON,/ife/trade/transferOrderSec.html@onight.mgame.utils.PBInfo(name = "PBIFE_trade_transferOrderSec", path = "/ife/trade/transferOrderSec.html") 

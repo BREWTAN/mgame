@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 查询城市,公共,ChinaCityController,POST,JSON,/ife/chinaCity/loadCity.html@onight.mgame.utils.PBInfo(name = "PBIFE_chinaCity_loadCity", path = "/ife/chinaCity/loadCity.html") 
@@ -31,9 +32,13 @@ public class IF_查询城市 {
 	@NoArgsConstructor
 	public static class TmbcityList {
 
+		 @PBFields(name = ",城市编号,String,不校验,是,")
 				String cno;//  ,城市编号,String,不校验,是,
+		 @PBFields(name = ",城市名称,String,不校验,是,")
 				String cname;//  ,城市名称,String,不校验,是,
+		 @PBFields(name = ",所属省编号,String,不校验,是,")
 				String pno;//  ,所属省编号,String,不校验,是,
+		 @PBFields(name = ",城市区号,String,不校验,是,")
 				String ctelno;//  ,城市区号,String,不校验,是,
 }
 

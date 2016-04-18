@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 查看入金代扣协议,客户信息,BankCardManageController,POST,文件流,/ife/bankcardmanage/viewWithhoidingAgreement.html@onight.mgame.utils.PBInfo(name = "PBIFE_bankcardmanage_viewWithhoidingAgreement", path = "/ife/bankcardmanage/viewWithhoidingAgreement.html") 

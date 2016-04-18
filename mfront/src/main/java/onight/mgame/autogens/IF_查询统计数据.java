@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 查询统计数据,公共,StatisticController,POST,JSON,/ife/statistic/queryStatisticData.html@onight.mgame.utils.PBInfo(name = "PBIFE_statistic_queryStatisticData", path = "/ife/statistic/queryStatisticData.html") 

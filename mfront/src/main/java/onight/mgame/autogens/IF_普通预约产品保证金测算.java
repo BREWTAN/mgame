@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 普通预约产品保证金测算,产品相关,TradeController,POST,JSON,/ife/trade/queryProductOrderDeposit.html@onight.mgame.utils.PBInfo(name = "PBIFE_trade_queryProductOrderDeposit", path = "/ife/trade/queryProductOrderDeposit.html") 
@@ -32,7 +33,9 @@ public class IF_普通预约产品保证金测算 {
 	@NoArgsConstructor
 	public static class DepositWrap {
 
+		 @PBFields(name = ",保证金比例,String,不校验,否,")
 				String depositRate;//  ,保证金比例,String,不校验,否,
+		 @PBFields(name = ",保证金金额,String,不校验,否,")
 				String depositAmount;//  ,保证金金额,String,不校验,否,
 }
 

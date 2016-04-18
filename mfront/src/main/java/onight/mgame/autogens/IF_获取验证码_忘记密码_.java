@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 获取验证码（忘记密码）,公共,SmsValidateCodeController,POST,JSON,/ife/smsvalidatecode/sendForgetPasswordSmsCode.html@onight.mgame.utils.PBInfo(name = "PBIFE_smsvalidatecode_sendForgetPasswordSmsCode", path = "/ife/smsvalidatecode/sendForgetPasswordSmsCode.html") 

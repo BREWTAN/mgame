@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 查询转让成交记录,产品相关,PrdTransferQueryController,POST,JSON,/ife/prdtransferquery/queryDeliveryOrderForReport.html@onight.mgame.utils.PBInfo(name = "PBIFE_prdtransferquery_queryDeliveryOrderForReport", path = "/ife/prdtransferquery/queryDeliveryOrderForReport.html") 
@@ -31,22 +32,36 @@ public class IF_查询转让成交记录 {
 	@NoArgsConstructor
 	public static class TcDeliveryOrder {
 
+		 @PBFields(name = ",卖方姓名,String,不校验,是,")
 				String saleName;//  ,卖方姓名,String,不校验,是,
+		 @PBFields(name = ",买方姓名,String,不校验,是,")
 				String buyerName;//  ,买方姓名,String,不校验,是,
+		 @PBFields(name = ",产品名称,String,不校验,是,")
 				String productName;//  ,产品名称,String,不校验,是,
+		 @PBFields(name = ",产品编号,String,不校验,是,")
 				String productCode;//  ,产品编号,String,不校验,是,
+		 @PBFields(name = ",公司名称,String,不校验,是,")
 				String companyName;//  ,公司名称,String,不校验,是,
+		 @PBFields(name = ",委托数量,String,不校验,是,")
 				String deliveryNum;//  ,委托数量,String,不校验,是,
+		 @PBFields(name = ",委托数量大写,String,不校验,是,")
 				String deliveryNumZh;//  ,委托数量大写,String,不校验,是,
+		 @PBFields(name = ",委托金额,String,不校验,是,")
 				String amountStr;//  ,委托金额,String,不校验,是,
+		 @PBFields(name = ",委托金额大写,String,不校验,是,")
 				String amountZh;//  ,委托金额大写,String,不校验,是,
+		 @PBFields(name = ",手续费,String,不校验,是,")
 				String extraCost;//  ,手续费,String,不校验,是,
+		 @PBFields(name = ",手续费大写,String,不校验,是,")
 				String extraCostStr;//  ,手续费大写,String,不校验,是,
+		 @PBFields(name = ",成交时间,String,不校验,是,格式yyyy-MM-dd hh:mm:ss")
 				String fixtureDateFmt;//  ,成交时间,String,不校验,是,格式yyyy-MM-dd hh:mm:ss
 }
 
-		 TcDeliveryOrder tcDeliveryOrder;// 
+		 @PBFields(name = ",查询人账户名,String,不校验,是,")
+TcDeliveryOrder tcDeliveryOrder;// 
  
+		 @PBFields(name = ",查询人账户名,String,不校验,是,")
 		String name;//  ,查询人账户名,String,不校验,是,
 		 String tfw__reserved;//保留字段 
 

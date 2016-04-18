@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 查询省会,公共,ChinaCityController,POST,JSON,/ife/chinaCity/loadProvince.html@onight.mgame.utils.PBInfo(name = "PBIFE_chinaCity_loadProvince", path = "/ife/chinaCity/loadProvince.html") 
@@ -30,7 +31,9 @@ public class IF_查询省会 {
 	@NoArgsConstructor
 	public static class TmbprovList {
 
+		 @PBFields(name = ",省编号,String,不校验,是,")
 				String pno;//  ,省编号,String,不校验,是,
+		 @PBFields(name = ",省名称,String,不校验,是,")
 				String pname;//  ,省名称,String,不校验,是,
 }
 

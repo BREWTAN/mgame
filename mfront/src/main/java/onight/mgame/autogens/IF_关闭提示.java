@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 关闭提示,客户信息,UserFrontTipsSetController,POST,JSON,/ife/userfronttipsset/closeTips.html@onight.mgame.utils.PBInfo(name = "PBIFE_userfronttipsset_closeTips", path = "/ife/userfronttipsset/closeTips.html") 

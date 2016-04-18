@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 邀请好友短信发送,公共,SmsValidateCodeController,POST,JSON,/ife/smsvalidatecode/sendRecommendMessage.html@onight.mgame.utils.PBInfo(name = "PBIFE_smsvalidatecode_sendRecommendMessage", path = "/ife/smsvalidatecode/sendRecommendMessage.html") 

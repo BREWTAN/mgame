@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 批量已读,客户信息,MessageManageController,POST,JSON,/ife/messagemanage/readMessageBatch.html@onight.mgame.utils.PBInfo(name = "PBIFE_messagemanage_readMessageBatch", path = "/ife/messagemanage/readMessageBatch.html") 

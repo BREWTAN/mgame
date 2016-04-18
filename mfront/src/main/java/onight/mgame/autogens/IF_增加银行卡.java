@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 增加银行卡,客户信息,BankCardManageController,POST,JSON,/ife/bankcardmanage/addBankCard.html@onight.mgame.utils.PBInfo(name = "PBIFE_bankcardmanage_addBankCard", path = "/ife/bankcardmanage/addBankCard.html") 

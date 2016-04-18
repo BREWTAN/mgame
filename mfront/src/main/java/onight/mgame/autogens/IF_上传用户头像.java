@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 上传用户头像,客户信息,UserHeaderController,POST,JSON,/ife/userheader/uploadExec.html@onight.mgame.utils.PBInfo(name = "PBIFE_userheader_uploadExec", path = "/ife/userheader/uploadExec.html") 

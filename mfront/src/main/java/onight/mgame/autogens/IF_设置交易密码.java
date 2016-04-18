@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 设置交易密码,客户信息,MobileManageController,POST,JSON,/ife/passwordmanage/setTradePassword.html@onight.mgame.utils.PBInfo(name = "PBIFE_passwordmanage_setTradePassword", path = "/ife/passwordmanage/setTradePassword.html") 

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 发送邮件验证码(内置),公共,EmailValidateCodeController,POST,JSON,/ife/emailValidateCode/sendEmailWithInnerAddress.html@onight.mgame.utils.PBInfo(name = "PBIFE_emailValidateCode_sendEmailWithInnerAddress", path = "/ife/emailValidateCode/sendEmailWithInnerAddress.html") 

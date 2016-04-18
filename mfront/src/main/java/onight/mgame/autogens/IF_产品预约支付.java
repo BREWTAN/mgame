@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 产品预约支付,产品相关,TradeController,POST,JSON,/ife/trade/productOrderPay.html@onight.mgame.utils.PBInfo(name = "PBIFE_trade_productOrderPay", path = "/ife/trade/productOrderPay.html") 

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 图片校验码校验,公共,ImageValidateCodeController,POST,JSON,/ife/imagevalidatecode/checkImageValidateCode.html@onight.mgame.utils.PBInfo(name = "PBIFE_imagevalidatecode_checkImageValidateCode", path = "/ife/imagevalidatecode/checkImageValidateCode.html") 

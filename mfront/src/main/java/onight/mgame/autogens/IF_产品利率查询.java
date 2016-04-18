@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 产品利率查询,产品相关,TradeController,POST,JSON,/ife/trade/queryProductRate.html@onight.mgame.utils.PBInfo(name = "PBIFE_trade_queryProductRate", path = "/ife/trade/queryProductRate.html") 
@@ -33,10 +34,15 @@ public class IF_产品利率查询 {
 	@NoArgsConstructor
 	public static class RateList {
 
+		 @PBFields(name = ",区间起,String,不校验,是,")
 				String deadlineBegin;//  ,区间起,String,不校验,是,
+		 @PBFields(name = ",区间止,String,不校验,是,")
 				String deadlineEnd;//  ,区间止,String,不校验,是,
+		 @PBFields(name = ",利率起,String,不校验,是,")
 				String rateBegin;//  ,利率起,String,不校验,是,
+		 @PBFields(name = ",利率止,String,不校验,是,")
 				String rateEnd;//  ,利率止,String,不校验,是,
+		 @PBFields(name = ",期限,String,不校验,是,")
 				String deadline;//  ,期限,String,不校验,是,
 }
 

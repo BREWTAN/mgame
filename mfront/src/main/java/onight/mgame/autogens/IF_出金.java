@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 出金,电子账户,FundController,POST,JSON,/ife/fund/withDraw.html@onight.mgame.utils.PBInfo(name = "PBIFE_fund_withDraw", path = "/ife/fund/withDraw.html") 

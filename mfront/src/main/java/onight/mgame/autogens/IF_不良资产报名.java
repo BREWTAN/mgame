@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 不良资产报名,产品相关,BadAssetController,POST,JSON,/ife/badasset/projectApply.html@onight.mgame.utils.PBInfo(name = "PBIFE_badasset_projectApply", path = "/ife/badasset/projectApply.html") 

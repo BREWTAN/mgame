@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 认购,产品相关,TradeController,POST,JSON,/ife/trade/rengou.html@onight.mgame.utils.PBInfo(name = "PBIFE_trade_rengou", path = "/ife/trade/rengou.html") 
@@ -30,6 +31,7 @@ public class IF_认购 {
 	@AllArgsConstructor
 	@NoArgsConstructor
 	public static class Response {
+		 @PBFields(name = ",成交编号,String,不校验,否,")
 		String delegationCode;//  ,成交编号,String,不校验,否,
 		 String tfw__reserved;//保留字段 
 

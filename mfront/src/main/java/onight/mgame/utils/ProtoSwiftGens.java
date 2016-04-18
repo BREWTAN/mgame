@@ -53,17 +53,24 @@ public class ProtoSwiftGens {
 		for (Field ff : clazz.getDeclaredFields()) {
 			if (ff.getName().equals("tfw__reserved"))
 				continue;
+			PBFields fa = ff.getAnnotation(PBFields.class);
+
 			if (ff.getGenericType() instanceof ParameterizedType) {
 				Type type = ((ParameterizedType) ff.getGenericType()).getActualTypeArguments()[0];
 				// this is a list
 				printClass((Class) type, relClassName(type), sb, tab + "\t");
+
 				sb.append( tab + "\trepeated ").append(java2PBType((Class) type) + " " + ff.getName())
 				.append(" = "+(i++))
-				.append(";\n");
+				.append(";");
+				if(fa!=null)sb.append(tab+" //"+fa.name());
+				sb.append("\n");
 				// System.out.println("ff.name.param=" + ff.getName() + "::" +
 				// type);
 			} else {
-				sb.append( tab + "\t").append(java2PBType(ff.getType()) + " " + ff.getName()).append(" = "+(i++)).append(";\n");
+				sb.append( tab + "\t").append(java2PBType(ff.getType()) + " " + ff.getName()).append(" = "+(i++)).append(";");
+				if(fa!=null)sb.append(tab+" //"+fa.name());
+				sb.append("\n");
 				// System.out.println("ff.name=" + ff.getName() + "::" +
 				// ff.getType());
 			}
@@ -137,19 +144,24 @@ public class ProtoSwiftGens {
 						for (Field ff : subclazz.getDeclaredFields()) {
 							if (ff.getName().equals("tfw__reserved"))
 								continue;
+							PBFields fa = ff.getAnnotation(PBFields.class);
 							if (ff.getGenericType() instanceof ParameterizedType) {
 								Type type = ((ParameterizedType) ff.getGenericType()).getActualTypeArguments()[0];
 								// System.out.println("ff.name.param=" +
 								// ff.getName() + "::" + type);
 								// printClass((Class) type, sb);
-
-								sb.append("\n\trepeated ").append(java2PBType((Class) type) + " " + ff.getName()).append(" = "+(i++)).append(";\n");
+								
+								sb.append("\n\trepeated ").append(java2PBType((Class) type) + " " + ff.getName()).append(" = "+(i++)).append(";");
+								if(fa!=null)sb.append(" //"+fa.name());
+								sb.append("\n");
 
 							} else {
 								// System.out.println("ff.name=" + ff.getName()
 								// +
 								// "::" + ff.getType());
-								sb.append("\n\t").append(java2PBType(ff.getType()) + " " + ff.getName()).append(" = "+(i++)).append(";\n");
+								sb.append("\n\t").append(java2PBType(ff.getType()) + " " + ff.getName()).append(" = "+(i++)).append(";");
+								if(fa!=null)sb.append(" //"+fa.name());
+								sb.append("\n");
 
 							}
 						}

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 委托撤单,产品相关,TradeController,POST,JSON,/ife/trade/delegateCancel.html@onight.mgame.utils.PBInfo(name = "PBIFE_trade_delegateCancel", path = "/ife/trade/delegateCancel.html") 

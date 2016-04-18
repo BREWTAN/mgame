@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 删除消息,客户信息,MessageManageController,POST,JSON,/ife/messagemanage/deleteMessage.html@onight.mgame.utils.PBInfo(name = "PBIFE_messagemanage_deleteMessage", path = "/ife/messagemanage/deleteMessage.html") 

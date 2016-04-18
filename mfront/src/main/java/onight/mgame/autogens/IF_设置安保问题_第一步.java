@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 设置安保问题-第一步,公共,SecurityQuestionManageController,POST,JSON,/ife/securityquestionmanage/checkUserInfo.html@onight.mgame.utils.PBInfo(name = "PBIFE_securityquestionmanage_checkUserInfo", path = "/ife/securityquestionmanage/checkUserInfo.html") 

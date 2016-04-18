@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 import java.math.BigDecimal;
+import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
 // 获取来源渠道信息,客户信息,RegController,GET,JSON,/ife/reg/getChannelInfoList.html@onight.mgame.utils.PBInfo(name = "PBIFE_reg_getChannelInfoList", path = "/ife/reg/getChannelInfoList.html") 
@@ -30,7 +31,9 @@ public class IF_获取来源渠道信息 {
 	@NoArgsConstructor
 	public static class ChannelInfoList {
 
+		 @PBFields(name = ",渠道编号,String,不校验,是,")
 				String channelNo;//  ,渠道编号,String,不校验,是,
+		 @PBFields(name = ",渠道名,String,不校验,是,")
 				String channelName;//  ,渠道名,String,不校验,是,
 }
 
