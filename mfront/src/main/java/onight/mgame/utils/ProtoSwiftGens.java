@@ -1,25 +1,168 @@
 package onight.mgame.utils;
 
-import java.util.HashMap;
-
-import onight.sm.Ssm.PBSSO;
-
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.Message;
-import com.google.protobuf.WireFormat.FieldType;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
 
 public class ProtoSwiftGens {
 
+	public static boolean isBaseType(Class<?> clazz) {
+		if (clazz == String.class || clazz == Integer.class || clazz == Double.class || clazz == Short.class || clazz == Byte.class || clazz == Float.class
+				|| clazz == Boolean.class || clazz == Character.class || clazz == Long.class || clazz.isPrimitive() || clazz == BigDecimal.class
+				|| clazz == java.util.Date.class || clazz == java.sql.Date.class || clazz == java.sql.Timestamp.class) {
+			return true;
+		}
+		return false;
+	}
+
+	public static String relClassName(Object type) {
+		int idx = ((Class) type).getName().lastIndexOf("$");
+		// if(idx<0)idx = -1;
+		return ((Class) type).getName().substring(idx + 1);
+
+	}
+
+	public static String java2PBType(Class type) {
+		if (type.equals(String.class)) {
+			return "string";
+		}
+		if (type.equals(BigDecimal.class)) {
+			return "double";
+		}
+		if (type.equals(Integer.class)) {
+			return "int32";
+		}
+		if (type.equals(Boolean.class)) {
+			return "bool";
+		}
+		return relClassName(type);
+	}
+
+	public static void printClass(Class clazz, String name, StringBuffer sb, String tab) {
+		sb.append(tab + "message " + name + "{\n");
+		int i = 1;
+		for (Field ff : clazz.getDeclaredFields()) {
+			if (ff.getName().equals("tfw__reserved"))
+				continue;
+			if (ff.getGenericType() instanceof ParameterizedType) {
+				Type type = ((ParameterizedType) ff.getGenericType()).getActualTypeArguments()[0];
+				// this is a list
+				printClass((Class) type, relClassName(type), sb, tab + "\t");
+				sb.append( tab + "\trepeated ").append(java2PBType((Class) type) + " " + ff.getName())
+				.append(" = "+(i++))
+				.append(";\n");
+				// System.out.println("ff.name.param=" + ff.getName() + "::" +
+				// type);
+			} else {
+				sb.append( tab + "\t").append(java2PBType(ff.getType()) + " " + ff.getName()).append(" = "+(i++)).append(";\n");
+				// System.out.println("ff.name=" + ff.getName() + "::" +
+				// ff.getType());
+			}
+		}
+
+		sb.append(tab + "}\n\n");
+
+	}
+
+	private static List<Class> findClasses(File directory, String packageName) throws ClassNotFoundException {
+		List<Class> classes = new ArrayList<Class>();
+		if (!directory.exists()) {
+			return classes;
+		}
+		File[] files = directory.listFiles();
+		for (File file : files) {
+			if (file.isDirectory()) {
+				assert !file.getName().contains(".");
+				classes.addAll(findClasses(file, packageName + "." + file.getName()));
+			} else if (file.getName().endsWith(".class")) {
+				classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
+			}
+		}
+		return classes;
+	}
+
+	private static Class[] getClasses(String packageName) throws ClassNotFoundException, IOException {
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		assert classLoader != null;
+		String path = packageName.replace('.', '/');
+		Enumeration<URL> resources = classLoader.getResources(path);
+		List<File> dirs = new ArrayList<File>();
+		while (resources.hasMoreElements()) {
+			URL resource = resources.nextElement();
+			dirs.add(new File(resource.getFile()));
+		}
+		ArrayList<Class> classes = new ArrayList<Class>();
+		for (File directory : dirs) {
+			classes.addAll(findClasses(directory, packageName));
+		}
+		return classes.toArray(new Class[classes.size()]);
+	}
+
 	public static void main(String[] args) {
 		try {
-			Message message = PBSSO.newBuilder().build();
-			System.out.println("builder==" + message.getAllFields());
-			for (FieldDescriptor fd : PBSSO.getDescriptor().getFields()) {
-				System.out.println("name=" + fd.getName() + "," + fd.getType()+",def="+fd.getDefaultValue());
-				if (fd.getLiteType() == FieldType.MESSAGE) {
-					System.out.println("aa=" + fd.getMessageType().getName());
+			File dstDir = new File("/Users/brew/Documents/KJ/MING/git/mgame/mfront/src/main/proto/gens");
+			dstDir.mkdirs();
+			for (Class clazz : getClasses("onight.mgame.autogens")) {
+				// Class clazz = IF_不良资产产品查询_项目揭示_.class;
+				PBInfo ano = (PBInfo) clazz.getAnnotation(PBInfo.class);
+				if (ano == null)
+					continue;
+//				System.out.println(clazz);
+
+				System.out.println("ano==" + ano.name() + ",path=" + ano.path());
+				StringBuffer sb = new StringBuffer();
+				sb.append("syntax = \"proto3\";\n\n");
+
+				sb.append("package onight.zjfae.afront.gens;\n\n");
+				sb.append("//Generated By BrewRobot:"+new Date()+"\n\n");
+
+				sb.append("message " + ano.name() + "{\n\t//" + ano.path()).append("\n");
+
+				for (Class subclazz : clazz.getDeclaredClasses()) {
+					if (subclazz.getName().contains("Response")) {
+						for (Class subsubclazz : subclazz.getDeclaredClasses()) {
+							printClass((Class) subsubclazz, relClassName(subsubclazz), sb, "\t");
+
+						}
+						int i=1;
+						for (Field ff : subclazz.getDeclaredFields()) {
+							if (ff.getName().equals("tfw__reserved"))
+								continue;
+							if (ff.getGenericType() instanceof ParameterizedType) {
+								Type type = ((ParameterizedType) ff.getGenericType()).getActualTypeArguments()[0];
+								// System.out.println("ff.name.param=" +
+								// ff.getName() + "::" + type);
+								// printClass((Class) type, sb);
+
+								sb.append("\n\trepeated ").append(java2PBType((Class) type) + " " + ff.getName()).append(" = "+(i++)).append(";\n");
+
+							} else {
+								// System.out.println("ff.name=" + ff.getName()
+								// +
+								// "::" + ff.getType());
+								sb.append("\n\t").append(java2PBType(ff.getType()) + " " + ff.getName()).append(" = "+(i++)).append(";\n");
+
+							}
+						}
+					}
 				}
+
+				sb.append("\n\n}");
+//				System.out.println(sb.toString());
+				FileOutputStream fout=new FileOutputStream(new File(dstDir,ano.name()+".proto"));
+				fout.write(sb.toString().getBytes("UTF-8"));
+				fout.close();
 			}
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
