@@ -16,9 +16,13 @@ public class IF_邀请好友短信发送 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",图片验证码,String,不校验,否,")
 		String imageCode;//  ,图片验证码,String,不校验,否,
+		 @PBFields(name = ",手机号码列表,String,不校验,否,'格式''[124xxx][123xxx]'''")
 		String mobileList;//  ,手机号码列表,String,不校验,否,"格式""[124xxx][123xxx]"""
+		 @PBFields(name = ",验证码类型,String,不校验,否,")
 		String smsValidateCodeType;//  ,验证码类型,String,不校验,否,
+		 @PBFields(name = ",邀请链接,String,不校验,否,")
 		String inviteUrl;//  ,邀请链接,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

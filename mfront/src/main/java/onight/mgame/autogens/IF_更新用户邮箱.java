@@ -16,7 +16,9 @@ public class IF_更新用户邮箱 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",,String,,否,")
 		String email;//  ,,String,,否,
+		 @PBFields(name = ",,String,,否,")
 		String emailValidateCode;//  ,,String,,否,
 		 String tfw__reserved;//保留字段
 

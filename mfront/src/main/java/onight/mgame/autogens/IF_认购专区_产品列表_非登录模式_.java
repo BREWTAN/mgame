@@ -16,13 +16,21 @@ public class IF_认购专区_产品列表_非登录模式_ {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",当前页,String,不校验,是,默认1")
 		String pageIndex;//  ,当前页,String,不校验,是,默认1
+		 @PBFields(name = ",页大小,String,不校验,是,默认10")
 		String pageSize;//  ,页大小,String,不校验,是,默认10
+		 @PBFields(name = ",排序,String,不校验,是,")
 		String orderBy;//  ,排序,String,不校验,是,
+		 @PBFields(name = ",升降序,String,不校验,是,")
 		String orderAsc;//  ,升降序,String,不校验,是,
+		 @PBFields(name = ",产品编号,String,不校验,是,")
 		String productCode;//  ,产品编号,String,不校验,是,
+		 @PBFields(name = ",产品名称,String,不校验,是,")
 		String productName;//  ,产品名称,String,不校验,是,
+		 @PBFields(name = ",销售对象,String,不校验,是,")
 		String marketingChannel;//  ,销售对象,String,不校验,是,
+		 @PBFields(name = ",终端编号,String,不校验,是,11-网站，12-移动终端，13-微信，14-柜台，15-其他，16-接口")
 		String terminalNo;//  ,终端编号,String,不校验,是,11-网站，12-移动终端，13-微信，14-柜台，15-其他，16-接口
 		 String tfw__reserved;//保留字段
 

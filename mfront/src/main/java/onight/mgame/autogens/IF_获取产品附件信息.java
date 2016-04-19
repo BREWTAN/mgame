@@ -16,7 +16,9 @@ public class IF_获取产品附件信息 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",产品编号,String,不校验,否,")
 		String productCode;//  ,产品编号,String,不校验,否,
+		 @PBFields(name = ",可见标志,String,不校验,否,1 详情  2认购 3 挂单  4 买卖 5 生成支付宝合同文件")
 		String visibleFlag;//  ,可见标志,String,不校验,否,1 详情  2认购 3 挂单  4 买卖 5 生成支付宝合同文件
 		 String tfw__reserved;//保留字段
 

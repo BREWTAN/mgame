@@ -16,7 +16,9 @@ public class IF_竞拍结果查询 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",当前页,String,不校验,是,默认1")
 		String pageIndex;//  ,当前页,String,不校验,是,默认1
+		 @PBFields(name = ",页大小,String,不校验,是,默认10")
 		String pageSize;//  ,页大小,String,不校验,是,默认10
 		 String tfw__reserved;//保留字段
 

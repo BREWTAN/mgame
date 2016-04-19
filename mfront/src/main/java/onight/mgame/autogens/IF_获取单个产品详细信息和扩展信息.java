@@ -16,6 +16,7 @@ public class IF_获取单个产品详细信息和扩展信息 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",产品编号,String,不校验,否,")
 		String productCode;//  ,产品编号,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

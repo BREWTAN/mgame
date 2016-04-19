@@ -16,6 +16,7 @@ public class IF_查询城市 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",省会编号,String,不校验,否,")
 		String pno;//  ,省会编号,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

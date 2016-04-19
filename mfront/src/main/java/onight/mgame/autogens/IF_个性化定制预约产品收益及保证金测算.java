@@ -16,8 +16,11 @@ public class IF_个性化定制预约产品收益及保证金测算 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",期望认购日期,String,不校验,否,")
 		String orderDate;//  ,期望认购日期,String,不校验,否,
+		 @PBFields(name = ",期限,String,不校验,否,")
 		String deadline;//  ,期限,String,不校验,否,
+		 @PBFields(name = ",预约认购金额,String,不校验,否,")
 		String orderBuyAmount;//  ,预约认购金额,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

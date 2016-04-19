@@ -16,7 +16,9 @@ public class IF_重置交易密码 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",密码,String,不校验,否,")
 		String password;//  ,密码,String,不校验,否,
+		 @PBFields(name = ",确认密码,String,不校验,否,")
 		String passwordSure;//  ,确认密码,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

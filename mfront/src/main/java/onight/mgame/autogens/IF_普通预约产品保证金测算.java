@@ -16,7 +16,9 @@ public class IF_普通预约产品保证金测算 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",产品编号,String,不校验,否,")
 		String productCode;//  ,产品编号,String,不校验,否,
+		 @PBFields(name = ",预约金额,String,不校验,否,")
 		String orderBuyAmount;//  ,预约金额,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

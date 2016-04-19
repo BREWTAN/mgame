@@ -16,6 +16,7 @@ public class IF_手机号验证 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",手机号,String,11,否,")
 		String mobile;//  ,手机号,String,11,否,
 		 String tfw__reserved;//保留字段
 

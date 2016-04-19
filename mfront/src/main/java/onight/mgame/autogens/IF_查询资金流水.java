@@ -16,9 +16,13 @@ public class IF_查询资金流水 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",当前页,String,不校验,是,")
 		String pageIndex;//  ,当前页,String,不校验,是,
+		 @PBFields(name = ",页大小,String,不校验,是,")
 		String pageSize;//  ,页大小,String,不校验,是,
+		 @PBFields(name = ",开始日期,String,不校验,是,格式:yyyy-MM-dd")
 		String startDate;//  ,开始日期,String,不校验,是,格式:yyyy-MM-dd
+		 @PBFields(name = ",结束日期,String,不校验,是,格式:yyyy-MM-dd")
 		String endDate;//  ,结束日期,String,不校验,是,格式:yyyy-MM-dd
 		 String tfw__reserved;//保留字段
 

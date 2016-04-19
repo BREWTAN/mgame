@@ -16,11 +16,17 @@ public class IF_持仓信息查询 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",当前页,String,不校验,是,默认1")
 		String pageIndex;//  ,当前页,String,不校验,是,默认1
+		 @PBFields(name = ",页大小,String,不校验,是,默认10")
 		String pageSize;//  ,页大小,String,不校验,是,默认10
+		 @PBFields(name = ",开始日期,String,不校验,是,")
 		String startDate;//  ,开始日期,String,不校验,是,
+		 @PBFields(name = ",结束七日,String,不校验,是,")
 		String endDate;//  ,结束七日,String,不校验,是,
+		 @PBFields(name = ",排序列名,String,不校验,是,")
 		String orderBy;//  ,排序列名,String,不校验,是,
+		 @PBFields(name = ",排序顺序,String,不校验,是,")
 		String orderAsc;//  ,排序顺序,String,不校验,是,
 		 String tfw__reserved;//保留字段
 

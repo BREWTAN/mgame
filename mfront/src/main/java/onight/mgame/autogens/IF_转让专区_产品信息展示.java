@@ -16,6 +16,7 @@ public class IF_转让专区_产品信息展示 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",委托编号,String,不校验,否,")
 		String id;//  ,委托编号,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

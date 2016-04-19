@@ -16,6 +16,7 @@ public class IF_产品凭证查询 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",持仓编号,String,不校验,否,")
 		String id;//  ,持仓编号,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

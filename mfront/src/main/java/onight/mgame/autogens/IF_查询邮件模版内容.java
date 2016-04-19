@@ -16,6 +16,7 @@ public class IF_查询邮件模版内容 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",邀请链接,String,不校验,否,")
 		String inviteUrl;//  ,邀请链接,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

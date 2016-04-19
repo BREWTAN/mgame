@@ -16,11 +16,17 @@ public class IF_入金 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",金额,String,不校验,否,")
 		String amount;//  ,金额,String,不校验,否,
+		 @PBFields(name = ",交易密码,String,不校验,否,")
 		String password;//  ,交易密码,String,不校验,否,
+		 @PBFields(name = ",重复校验码,String,不校验,否,")
 		String repeatCommitCheckCode;//  ,重复校验码,String,不校验,否,
+		 @PBFields(name = ",渠道,String,不校验,否,")
 		String payChannelNo;//  ,渠道,String,不校验,否,
+		 @PBFields(name = ",验证码,String,不校验,是,")
 		String checkCode;//  ,验证码,String,不校验,是,
+		 @PBFields(name = ",验证码序号,String,不校验,是,")
 		String checkCodeSerialNo;//  ,验证码序号,String,不校验,是,
 		 String tfw__reserved;//保留字段
 

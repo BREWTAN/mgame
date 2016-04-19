@@ -16,7 +16,9 @@ public class IF_预约认购产品详情查询 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",预约产品编号,String,不校验,否,")
 		String orderProductCode;//  ,预约产品编号,String,不校验,否,
+		 @PBFields(name = ",预约类型,String,不校验,否,")
 		String orderType;//  ,预约类型,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

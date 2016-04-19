@@ -16,6 +16,7 @@ public class IF_图片校验码校验 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",验证码,String,5,否,")
 		String imageCode;//  ,验证码,String,5,否,
 		 String tfw__reserved;//保留字段
 

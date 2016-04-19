@@ -16,7 +16,9 @@ public class IF_根据银行编号查询银行渠道绑卡渠道 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",银行编号,String,,否,")
 		String bankCode;//  ,银行编号,String,,否,
+		 @PBFields(name = ",交易类型,String,,否,0-绑卡，1-入金")
 		String transType;//  ,交易类型,String,,否,0-绑卡，1-入金
 		 String tfw__reserved;//保留字段
 

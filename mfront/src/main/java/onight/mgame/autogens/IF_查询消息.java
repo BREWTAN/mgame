@@ -16,10 +16,15 @@ public class IF_查询消息 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",开始日期,String,不校验,否,")
 		String startDate;//  ,开始日期,String,不校验,否,
+		 @PBFields(name = ",结束日期,String,不校验,否,")
 		String endDate;//  ,结束日期,String,不校验,否,
+		 @PBFields(name = ",消息内容,String,不校验,否,")
 		String content;//  ,消息内容,String,不校验,否,
+		 @PBFields(name = ",当前页,String,不校验,否,")
 		String pageIndex;//  ,当前页,String,不校验,否,
+		 @PBFields(name = ",页大小,String,不校验,否,")
 		String pageSize;//  ,页大小,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

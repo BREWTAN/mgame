@@ -16,8 +16,11 @@ public class IF_产品利率查询 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",有限利率日期,String,不校验,否,")
 		String rateDate;//  ,有限利率日期,String,不校验,否,
+		 @PBFields(name = ",利率类型,String,不校验,否,")
 		String rateType;//  ,利率类型,String,不校验,否,
+		 @PBFields(name = ",起购金额,String,不校验,否,")
 		String buyerSmallestAmount;//  ,起购金额,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

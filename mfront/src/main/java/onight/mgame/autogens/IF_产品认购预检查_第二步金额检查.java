@@ -16,7 +16,9 @@ public class IF_产品认购预检查_第二步金额检查 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",产品编号,String,不校验,否,")
 		String productCode;//  ,产品编号,String,不校验,否,
+		 @PBFields(name = ",购买金额,String,不校验,否,")
 		String delegateNum;//  ,购买金额,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

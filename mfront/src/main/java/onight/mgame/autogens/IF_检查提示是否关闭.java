@@ -16,6 +16,7 @@ public class IF_检查提示是否关闭 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",请求地址,String,不校验,否,")
 		String requestAddress;//  ,请求地址,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

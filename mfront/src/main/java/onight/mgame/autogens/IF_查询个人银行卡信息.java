@@ -16,6 +16,7 @@ public class IF_查询个人银行卡信息 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",银行卡,String,,否,")
 		String bankcard;//  ,银行卡,String,,否,
 		 String tfw__reserved;//保留字段
 

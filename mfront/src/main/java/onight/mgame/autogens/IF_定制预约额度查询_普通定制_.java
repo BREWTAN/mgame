@@ -16,7 +16,9 @@ public class IF_定制预约额度查询_普通定制_ {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",期望认购日期,String,不校验,否,")
 		String orderDate;//  ,期望认购日期,String,不校验,否,
+		 @PBFields(name = ",期限,String,不校验,否,")
 		String deadline;//  ,期限,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

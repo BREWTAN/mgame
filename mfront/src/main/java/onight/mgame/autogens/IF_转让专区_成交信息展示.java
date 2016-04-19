@@ -16,6 +16,7 @@ public class IF_转让专区_成交信息展示 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",页大小,String,不校验,否,")
 		String lineNum;//  ,页大小,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

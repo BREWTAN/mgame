@@ -16,6 +16,7 @@ public class IF_发送邮件验证码_内置_ {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",邮件验证码类型,String,不校验,否,")
 		String validateCodeType;//  ,邮件验证码类型,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

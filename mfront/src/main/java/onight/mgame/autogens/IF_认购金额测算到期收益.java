@@ -16,7 +16,9 @@ public class IF_认购金额测算到期收益 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",产品编号,String,不校验,否,")
 		String productCode;//  ,产品编号,String,不校验,否,
+		 @PBFields(name = ",购买金额,String,不校验,否,")
 		String buyAmt;//  ,购买金额,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

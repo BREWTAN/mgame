@@ -16,7 +16,9 @@ public class IF_忘记密码第一步_校验手机号_ {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",手机号,String,不校验,否,")
 		String mobile;//  ,手机号,String,不校验,否,
+		 @PBFields(name = ",图片验证码,String,不校验,否,")
 		String imageCode;//  ,图片验证码,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

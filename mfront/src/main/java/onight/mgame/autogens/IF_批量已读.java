@@ -16,6 +16,7 @@ public class IF_批量已读 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",编号,String,不校验,否,格式：[123][1245]")
 		String totalId;//  ,编号,String,不校验,否,格式：[123][1245]
 		 String tfw__reserved;//保留字段
 

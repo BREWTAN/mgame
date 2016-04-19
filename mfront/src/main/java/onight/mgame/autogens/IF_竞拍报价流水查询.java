@@ -16,7 +16,9 @@ public class IF_竞拍报价流水查询 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",项目编号,String,不校验,否,")
 		String projectCode;//  ,项目编号,String,不校验,否,
+		 @PBFields(name = ",轮次,String,不校验,是,")
 		String roundIndex;//  ,轮次,String,不校验,是,
 		 String tfw__reserved;//保留字段
 

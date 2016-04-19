@@ -16,6 +16,7 @@ public class IF_二级市场购买预检查第一步买方合法性校验 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",委托编号,String,不校验,否,")
 		String delegationCode;//  ,委托编号,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

@@ -16,9 +16,13 @@ public class IF_删除银行卡 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",交易密码,String,不校验,否,")
 		String password;//  ,交易密码,String,不校验,否,
+		 @PBFields(name = ",支付渠道,String,不校验,否,")
 		String payChannelNo;//  ,支付渠道,String,不校验,否,
+		 @PBFields(name = ",短信验证码,String,不校验,是,")
 		String checkCode;//  ,短信验证码,String,不校验,是,
+		 @PBFields(name = ",短信验证码流水,String,不校验,是,")
 		String checkCodeSerialNo;//  ,短信验证码流水,String,不校验,是,
 		 String tfw__reserved;//保留字段
 

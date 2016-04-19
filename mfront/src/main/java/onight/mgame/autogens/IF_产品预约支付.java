@@ -16,13 +16,21 @@ public class IF_产品预约支付 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",预约类型,String,不校验,否,")
 		String orderType;//  ,预约类型,String,不校验,否,
+		 @PBFields(name = ",是否使用余额支付,String,不校验,否,")
 		String payType;//  ,是否使用余额支付,String,不校验,否,
+		 @PBFields(name = ",交易密码,String,不校验,否,")
 		String password;//  ,交易密码,String,不校验,否,
+		 @PBFields(name = ",产品编号,String,不校验,否,")
 		String orderProductCode;//  ,产品编号,String,不校验,否,
+		 @PBFields(name = ",期望认购日期,String,不校验,否,")
 		String orderDate;//  ,期望认购日期,String,不校验,否,
+		 @PBFields(name = ",期限,String,不校验,否,")
 		String deadline;//  ,期限,String,不校验,否,
+		 @PBFields(name = ",预约金额,String,不校验,否,")
 		String orderBuyAmount;//  ,预约金额,String,不校验,否,
+		 @PBFields(name = ",重复校验码,String,不校验,否,")
 		String repeatCommitCheckCode;//  ,重复校验码,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

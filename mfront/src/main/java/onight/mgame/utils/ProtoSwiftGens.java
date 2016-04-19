@@ -134,11 +134,41 @@ public class ProtoSwiftGens {
 
 				sb.append("message " + ano.name() + "{\n\t//" + ano.path()).append("\n");
 
+
+				StringBuffer sbreq = new StringBuffer();
+				sbreq.append("message REQ_" + ano.name() + "{\n\t//" + ano.path()).append("\n");
+
 				for (Class subclazz : clazz.getDeclaredClasses()) {
+					
+					if (subclazz.getName().contains("Request")) {
+						int i=1;
+						for (Field ff : subclazz.getDeclaredFields()) {
+							if (ff.getName().equals("tfw__reserved"))
+								continue;
+							PBFields fa = ff.getAnnotation(PBFields.class);
+							if (ff.getGenericType() instanceof ParameterizedType) {
+								Type type = ((ParameterizedType) ff.getGenericType()).getActualTypeArguments()[0];
+								sbreq.append("\n\trepeated ").append(java2PBType((Class) type) + " " + ff.getName()).append(" = "+(i++)).append(";");
+								if(fa!=null)sb.append(" //"+fa.name());
+								sbreq.append("\n");
+
+							} else {
+								// System.out.println("ff.name=" + ff.getName()
+								// +
+								// "::" + ff.getType());
+								sbreq.append("\n\t").append(java2PBType(ff.getType()) + " " + ff.getName()).append(" = "+(i++)).append(";");
+								if(fa!=null)sbreq.append(" //"+fa.name());
+								sbreq.append("\n");
+
+							}
+						}
+						sbreq.append("\n\n}");
+
+					}
+					
 					if (subclazz.getName().contains("Response")) {
 						for (Class subsubclazz : subclazz.getDeclaredClasses()) {
 							printClass((Class) subsubclazz, relClassName(subsubclazz), sb, "\t");
-
 						}
 						int i=1;
 						for (Field ff : subclazz.getDeclaredFields()) {
@@ -168,10 +198,11 @@ public class ProtoSwiftGens {
 					}
 				}
 
-				sb.append("\n\n}");
+				sb.append("\n\n}\n\n");
 //				System.out.println(sb.toString());
 				FileOutputStream fout=new FileOutputStream(new File(dstDir,ano.name()+".proto"));
 				fout.write(sb.toString().getBytes("UTF-8"));
+				fout.write(sbreq.toString().getBytes("UTF-8"));
 				fout.close();
 			}
 

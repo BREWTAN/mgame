@@ -16,13 +16,21 @@ public class IF_获取短信验证码_签约_ {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",真实姓名,String,不校验,否,")
 		String realName;//  ,真实姓名,String,不校验,否,
+		 @PBFields(name = ",证件号,String,18,是,若未曾签约，需上传")
 		String certificateCode;//  ,证件号,String,18,是,若未曾签约，需上传
+		 @PBFields(name = ",证据类型,String,不校验,是,若未曾签约，需上传")
 		String certificateType;//  ,证据类型,String,不校验,是,若未曾签约，需上传
+		 @PBFields(name = ",支付渠道,String,不校验,否,")
 		String payChannelNo;//  ,支付渠道,String,不校验,否,
+		 @PBFields(name = ",银行卡号,String,不校验,否,")
 		String bankCardNo;//  ,银行卡号,String,不校验,否,
+		 @PBFields(name = ",银行编号,String,不校验,否,")
 		String bankCode;//  ,银行编号,String,不校验,否,
+		 @PBFields(name = ",银行名称,String,不校验,否,")
 		String bankName;//  ,银行名称,String,不校验,否,
+		 @PBFields(name = ",校验类型,String,不校验,否,")
 		String validateType;//  ,校验类型,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

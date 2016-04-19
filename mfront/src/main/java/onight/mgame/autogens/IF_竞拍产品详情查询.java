@@ -16,6 +16,7 @@ public class IF_竞拍产品详情查询 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",,String,,否,")
 		String projectCode;//  ,,String,,否,
 		 String tfw__reserved;//保留字段
 

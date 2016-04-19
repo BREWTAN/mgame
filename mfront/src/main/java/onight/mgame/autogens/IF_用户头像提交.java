@@ -16,10 +16,15 @@ public class IF_用户头像提交 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",图片x坐标点,String,不校验,否,")
 		String x;//  ,图片x坐标点,String,不校验,否,
+		 @PBFields(name = ",图片y坐标点,String,不校验,否,")
 		String y;//  ,图片y坐标点,String,不校验,否,
+		 @PBFields(name = ",图片宽,String,不校验,否,")
 		String w;//  ,图片宽,String,不校验,否,
+		 @PBFields(name = ",图片长,String,不校验,否,")
 		String h;//  ,图片长,String,不校验,否,
+		 @PBFields(name = ",原图像宽度,String,不校验,否,")
 		String width;//  ,原图像宽度,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

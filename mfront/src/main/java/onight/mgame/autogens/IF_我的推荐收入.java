@@ -16,7 +16,9 @@ public class IF_我的推荐收入 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",开始日期,String,不校验,否,")
 		String startDate;//  ,开始日期,String,不校验,否,
+		 @PBFields(name = ",结束日期,String,不校验,否,")
 		String endDate;//  ,结束日期,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

@@ -16,6 +16,7 @@ public class IF_标记消息已读 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",消息编号,String,不校验,否,")
 		String messageIds;//  ,消息编号,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

@@ -16,8 +16,11 @@ public class IF_确认出价 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",项目编号,String,不校验,否,")
 		String projectCode;//  ,项目编号,String,不校验,否,
+		 @PBFields(name = ",报价金额,String,不校验,否,")
 		String myPay;//  ,报价金额,String,不校验,否,
+		 @PBFields(name = ",竞价方式,String,不校验,否,")
 		String bayWay;//  ,竞价方式,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

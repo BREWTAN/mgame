@@ -16,7 +16,9 @@ public class IF_文件下载 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",,String,,否,")
 		String filePath;//  ,,String,,否,
+		 @PBFields(name = ",,String,,否,")
 		String fileName;//  ,,String,,否,
 		 String tfw__reserved;//保留字段
 

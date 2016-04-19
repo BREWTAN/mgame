@@ -16,7 +16,9 @@ public class IF_忘记密码第三步_设置新密码_ {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",确认密码,String,不校验,否,")
 		String passwordSure;//  ,确认密码,String,不校验,否,
+		 @PBFields(name = ",密码,String,不校验,否,")
 		String password;//  ,密码,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

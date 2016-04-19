@@ -63,7 +63,7 @@ public class CSVGenerator {
 				l++;
 				continue;
 			}
-			
+			reqLines.append("\t\t @PBFields(name = \""+lines[l].substring(idx).trim().replaceAll("\"", "'")+"\")\n");
 			reqLines.append("\t\tString ").append(lines[l].substring(0, idx)).append(";//  ").append(lines[l].substring(idx)).append("\n");
 			l++;
 		}

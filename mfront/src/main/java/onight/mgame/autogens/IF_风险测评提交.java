@@ -16,6 +16,7 @@ public class IF_风险测评提交 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",分数,String,不校验,否,")
 		String point;//  ,分数,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

@@ -16,10 +16,15 @@ public class IF_成交记录查询 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",当前页,String,不校验,否,")
 		String pageIndex;//  ,当前页,String,不校验,否,
+		 @PBFields(name = ",页大小,String,不校验,否,")
 		String pageSize;//  ,页大小,String,不校验,否,
+		 @PBFields(name = ",开始日,String,不校验,是,")
 		String startDate;//  ,开始日,String,不校验,是,
+		 @PBFields(name = ",结束日,String,不校验,是,")
 		String endDate;//  ,结束日,String,不校验,是,
+		 @PBFields(name = ",产品编号/产品名称,String,不校验,是,")
 		String productCodeOrName;//  ,产品编号/产品名称,String,不校验,是,
 		 String tfw__reserved;//保留字段
 

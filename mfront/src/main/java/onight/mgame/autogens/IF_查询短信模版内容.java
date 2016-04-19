@@ -16,6 +16,7 @@ public class IF_查询短信模版内容 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",,String,,否,")
 		String inviteUrl;//  ,,String,,否,
 		 String tfw__reserved;//保留字段
 

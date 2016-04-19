@@ -16,6 +16,7 @@ public class IF_产品认购预检查 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",产品编号,String,不校验,否,")
 		String productCode;//  ,产品编号,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

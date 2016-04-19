@@ -16,7 +16,9 @@ public class IF_二级市场购买预检查第二步购买金额检查 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",委托编号,String,不校验,否,")
 		String delegationCode;//  ,委托编号,String,不校验,否,
+		 @PBFields(name = ",购买份额,String,不校验,否,")
 		String buyNum;//  ,购买份额,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

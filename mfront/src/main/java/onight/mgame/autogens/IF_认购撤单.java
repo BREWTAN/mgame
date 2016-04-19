@@ -16,6 +16,7 @@ public class IF_认购撤单 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",成交编号,String,不校验,否,")
 		String delegationCode;//  ,成交编号,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

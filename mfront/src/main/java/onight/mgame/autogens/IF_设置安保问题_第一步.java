@@ -16,8 +16,11 @@ public class IF_设置安保问题_第一步 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",身份证号,String,不校验,否,")
 		String certificateCode;//  ,身份证号,String,不校验,否,
+		 @PBFields(name = ",交易密码,String,不校验,否,")
 		String password;//  ,交易密码,String,不校验,否,
+		 @PBFields(name = ",短信验证码,String,不校验,否,")
 		String smsValidateCode;//  ,短信验证码,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

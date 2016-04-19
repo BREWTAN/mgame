@@ -16,6 +16,7 @@ public class IF_最高价查询 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",项目编号,String,不校验,否,")
 		String projectCode;//  ,项目编号,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

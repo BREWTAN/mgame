@@ -16,12 +16,19 @@ public class IF_转让专区_产品列表信息展示 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",当前页,String,不校验,是,默认1")
 		String pageIndex;//  ,当前页,String,不校验,是,默认1
+		 @PBFields(name = ",页大小,String,不校验,是,默认10")
 		String pageSize;//  ,页大小,String,不校验,是,默认10
+		 @PBFields(name = ",委托类型,String,不校验,是,")
 		String delegateType;//  ,委托类型,String,不校验,是,
+		 @PBFields(name = ",产品编号,String,不校验,是,")
 		String productCode;//  ,产品编号,String,不校验,是,
+		 @PBFields(name = ",产品名,String,不校验,是,")
 		String productName;//  ,产品名,String,不校验,是,
+		 @PBFields(name = ",排序列名,String,不校验,是,")
 		String orderBy;//  ,排序列名,String,不校验,是,
+		 @PBFields(name = ",排序顺序,String,不校验,是,")
 		String orderAsc;//  ,排序顺序,String,不校验,是,
 		 String tfw__reserved;//保留字段
 

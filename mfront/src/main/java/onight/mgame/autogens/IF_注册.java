@@ -16,12 +16,19 @@ public class IF_注册 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",手机号,String,11,否,,")
 		String mobile;//  ,手机号,String,11,否,,
+		 @PBFields(name = ",图片验证码,String,5,否,,")
 		String imageCode;//  ,图片验证码,String,5,否,,
+		 @PBFields(name = ",手机验证码,String,5,否,,")
 		String checkCode;//  ,手机验证码,String,5,否,,
+		 @PBFields(name = ",登录密码,String,不校验,否,,")
 		String loginPassword;//  ,登录密码,String,不校验,否,,
+		 @PBFields(name = ",登陆密码第二次输入,String,不校验,否,,")
 		String loginPasswordSure;//  ,登陆密码第二次输入,String,不校验,否,,
+		 @PBFields(name = ",渠道编号,String,不校验,否,,")
 		String channelNo;//  ,渠道编号,String,不校验,否,,
+		 @PBFields(name = ",推荐人手机号,String,11,是,,")
 		String recommendMobile;//  ,推荐人手机号,String,11,是,,
 		 String tfw__reserved;//保留字段
 

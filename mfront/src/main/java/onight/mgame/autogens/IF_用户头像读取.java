@@ -16,6 +16,7 @@ public class IF_用户头像读取 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",图片类型,String,不校验,是,tem-头像上传预览时非空")
 		String type;//  ,图片类型,String,不校验,是,tem-头像上传预览时非空
 		 String tfw__reserved;//保留字段
 

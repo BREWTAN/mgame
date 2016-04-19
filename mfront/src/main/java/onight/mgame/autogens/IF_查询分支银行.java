@@ -16,11 +16,17 @@ public class IF_查询分支银行 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",分支行名称,String,不校验,是,")
 		String branchName;//  ,分支行名称,String,不校验,是,
+		 @PBFields(name = ",省编号,String,不校验,是,")
 		String pno;//  ,省编号,String,不校验,是,
+		 @PBFields(name = ",城市编号,String,不校验,是,")
 		String cno;//  ,城市编号,String,不校验,是,
+		 @PBFields(name = ",银行编号,String,不校验,否,")
 		String bankCode;//  ,银行编号,String,不校验,否,
+		 @PBFields(name = ",当前页,String,不校验,否,默认1")
 		String pageIndex;//  ,当前页,String,不校验,否,默认1
+		 @PBFields(name = ",页大小,String,不校验,否,默认10")
 		String pageSize;//  ,页大小,String,不校验,否,默认10
 		 String tfw__reserved;//保留字段
 

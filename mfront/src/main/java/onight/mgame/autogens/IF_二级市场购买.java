@@ -16,10 +16,15 @@ public class IF_二级市场购买 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",委托编号,String,不校验,否,")
 		String delegationCode;//  ,委托编号,String,不校验,否,
+		 @PBFields(name = ",购买数量,String,不校验,否,")
 		String buyNum;//  ,购买数量,String,不校验,否,
+		 @PBFields(name = ",渠道,String,不校验,否,")
 		String channelNo;//  ,渠道,String,不校验,否,
+		 @PBFields(name = ",支付类型,String,不校验,否,")
 		String payType;//  ,支付类型,String,不校验,否,
+		 @PBFields(name = ",交易密码,String,不校验,否,")
 		String password;//  ,交易密码,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

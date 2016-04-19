@@ -16,6 +16,7 @@ public class IF_上传用户头像 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",文件名,MultipartFile,,否,")
 		String imageFile;//  ,文件名,MultipartFile,,否,
 		 String tfw__reserved;//保留字段
 

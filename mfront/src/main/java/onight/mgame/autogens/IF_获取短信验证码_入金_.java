@@ -16,7 +16,9 @@ public class IF_获取短信验证码_入金_ {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",支付渠道,String,不校验,否,")
 		String payChannelNo;//  ,支付渠道,String,不校验,否,
+		 @PBFields(name = ",金额,String,不校验,否,")
 		String amount;//  ,金额,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

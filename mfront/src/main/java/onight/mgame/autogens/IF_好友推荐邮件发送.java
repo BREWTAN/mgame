@@ -16,9 +16,13 @@ public class IF_好友推荐邮件发送 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",邮件验证码类型,String,不校验,否,")
 		String smsValidateCodeType;//  ,邮件验证码类型,String,不校验,否,
+		 @PBFields(name = ",图片验证码,String,不校验,否,")
 		String emailImageCode;//  ,图片验证码,String,不校验,否,
+		 @PBFields(name = ",邮箱列表,String,不校验,否,")
 		String emailList;//  ,邮箱列表,String,不校验,否,
+		 @PBFields(name = ",邀请链接,String,不校验,否,")
 		String inviteUrl;//  ,邀请链接,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

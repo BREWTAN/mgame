@@ -16,7 +16,9 @@ public class IF_发送短信校验码 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",验证码类型,String,不校验,否,")
 		String smsValidateCodeType;//  ,验证码类型,String,不校验,否,
+		 @PBFields(name = ",手机号码,String,不校验,否,")
 		String mobile;//  ,手机号码,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

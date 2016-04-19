@@ -16,8 +16,11 @@ public class IF_设置安保问题_第二步 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",安保问题数量,String,不校验,否,")
 		String questionCount;//  ,安保问题数量,String,不校验,否,
+		 @PBFields(name = ",安保问题编号,String,不校验,否,N为编号从1-N累加")
 		String questionId_N;//  ,安保问题编号,String,不校验,否,N为编号从1-N累加
+		 @PBFields(name = ",安保问题答案,String,不校验,否,N为编号从1-N累加")
 		String questionAnswer_N;//  ,安保问题答案,String,不校验,否,N为编号从1-N累加
 		 String tfw__reserved;//保留字段
 

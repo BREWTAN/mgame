@@ -16,6 +16,7 @@ public class IF_密码复杂度计算 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",密码,String,不校验,否,")
 		String password;//  ,密码,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

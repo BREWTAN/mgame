@@ -16,6 +16,7 @@ public class IF_取消预约 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",预约编号,String,不校验,否,")
 		String orderNum;//  ,预约编号,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

@@ -16,10 +16,15 @@ public class IF_我的预约 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",当前页,String,不校验,否,默认1")
 		String pageIndex;//  ,当前页,String,不校验,否,默认1
+		 @PBFields(name = ",页大小,String,不校验,否,默认10")
 		String pageSize;//  ,页大小,String,不校验,否,默认10
+		 @PBFields(name = ",预约提交开始日期,String,不校验,否,")
 		String gmtCreateBegin;//  ,预约提交开始日期,String,不校验,否,
+		 @PBFields(name = ",预约提交结束日期,String,不校验,否,")
 		String gmtCreateEnd;//  ,预约提交结束日期,String,不校验,否,
+		 @PBFields(name = ",履约状态,String,不校验,否,")
 		String appointmentStatus;//  ,履约状态,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

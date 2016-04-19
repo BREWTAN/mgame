@@ -16,10 +16,15 @@ public class IF_更换银行卡 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",交易密码,String,不校验,否,")
 		String password;//  ,交易密码,String,不校验,否,
+		 @PBFields(name = ",银行卡号,String,不校验,否,")
 		String bankCard;//  ,银行卡号,String,不校验,否,
+		 @PBFields(name = ",支付渠道,String,不校验,否,")
 		String payChannelNo;//  ,支付渠道,String,不校验,否,
+		 @PBFields(name = ",短信验证码,String,不校验,否,")
 		String checkCode;//  ,短信验证码,String,不校验,否,
+		 @PBFields(name = ",短信验证码流水,String,不校验,否,")
 		String checkCodeSerialNo;//  ,短信验证码流水,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

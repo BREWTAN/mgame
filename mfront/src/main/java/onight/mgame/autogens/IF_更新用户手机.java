@@ -16,7 +16,9 @@ public class IF_更新用户手机 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",手机号,String,不校验,否,")
 		String mobile;//  ,手机号,String,不校验,否,
+		 @PBFields(name = ",短信验证码,String,不校验,否,")
 		String smsValidateCode;//  ,短信验证码,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

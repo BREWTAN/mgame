@@ -16,7 +16,9 @@ public class IF_获取短信验证码_换卡_ {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",支付渠道,String,不校验,否,")
 		String payChannelNo;//  ,支付渠道,String,不校验,否,
+		 @PBFields(name = ",银行卡,String,不校验,否,")
 		String bankCard;//  ,银行卡,String,不校验,否,
 		 String tfw__reserved;//保留字段
 

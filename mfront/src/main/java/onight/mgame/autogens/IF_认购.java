@@ -16,10 +16,15 @@ public class IF_认购 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",产品编号,String,不校验,否,")
 		String productCode;//  ,产品编号,String,不校验,否,
+		 @PBFields(name = ",购买金额,String,不校验,否,")
 		String delegateNum;//  ,购买金额,String,不校验,否,
+		 @PBFields(name = ",交易密码,String,不校验,否,")
 		String password;//  ,交易密码,String,不校验,否,
+		 @PBFields(name = ",支付类型,String,不校验,否,")
 		String payType;//  ,支付类型,String,不校验,否,
+		 @PBFields(name = ",渠道号,String,不校验,是,")
 		String channelNo;//  ,渠道号,String,不校验,是,
 		 String tfw__reserved;//保留字段
 

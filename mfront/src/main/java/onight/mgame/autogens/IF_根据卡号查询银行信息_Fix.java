@@ -16,7 +16,7 @@ public class IF_根据卡号查询银行信息_fix {
 	@AllArgsConstructor
 	@NoArgsConstructor
 	public static class Request {
-
+		@PBFields(name = ",银行卡号,String,不校验,否,")
 		String bankCardNo;// ,银行卡号,String,不校验,否,
 		String tfw__reserved;// 保留字段
 

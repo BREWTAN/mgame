@@ -16,12 +16,19 @@ public class IF_更新个人用户基本信息 {
 	@NoArgsConstructor
 	public static class Request {
 
+		 @PBFields(name = ",邮编,String,不校验,是,")
 		String zipCode;//  ,邮编,String,不校验,是,
+		 @PBFields(name = ",地址,String,不校验,是,")
 		String address;//  ,地址,String,不校验,是,
+		 @PBFields(name = ",手机号,String,11,是,")
 		String phone;//  ,手机号,String,11,是,
+		 @PBFields(name = ",紧急联系人,String,不校验,是,")
 		String content;//  ,紧急联系人,String,不校验,是,
+		 @PBFields(name = ",紧急联系人手机号,String,11,是,")
 		String contentMobile;//  ,紧急联系人手机号,String,11,是,
+		 @PBFields(name = ",证件类型,String,不校验,是,")
 		String certificateType;//  ,证件类型,String,不校验,是,
+		 @PBFields(name = ",证件号,String,18,是,")
 		String certificateCode;//  ,证件号,String,18,是,
 		 String tfw__reserved;//保留字段
 
