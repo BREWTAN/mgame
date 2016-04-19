@@ -41,8 +41,11 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 		return new String[] { "IFE" };
 	}
 
-	// http://localhost:8081/mzj/pbpxy.do?fh=VREGMZJ000000J00&bd={"mobile":"13800138000","image_code":"12334554"}
+	// http://localhost:8081/mzj/pbife.do?fh=VREGMZJ000000J00&bd={"pageIndex":"13800138000","image_code":"12334554"}&pbname=PBIFE_badasset_queryProjectReveal
+	//	// http://localhost:8081/mzj/pbife.do?fh=VREGMZJ000000P00&pbname=PBIFE_badasset_queryProjectReveal
+
 	protected ISerializer jsons = SerializerFactory.getSerializer(SerializerFactory.SERIALIZER_JSON);
+	
 
 	ThreadLocal<Builder> currentBuilder=new ThreadLocal<Builder>();
 	
@@ -64,11 +67,18 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					//builder.build();// 获取到的是一个PBmessage
 					
 					Message msg = getPBBody(pack);//
+					//1.preprocess.== validate..
+					
 					log.debug("msg=={}",msg);
 					String str = new FJsonPBFormat().printToString(msg);
 					log.debug("proxy:{}", str);
+
+					String path = bmap.getEURL(pbname);
 					
-					handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息转换成功", pack)));
+					log.debug("name:"+pbname+",url="+path);
+
+					
+					
 					
 					// TODO: 1. 把他封装成json,并且发到客户端E/工程里面去
 					// String body = requestor.post(jsons.serialize(pack.getBody()),
@@ -77,8 +87,12 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					// TODO: 2. json,转换成PBMessage再发到客户端
 					// String body = requestor.post(jsons.serialize(pack.getBody()),
 					// proxyBaseUrl);
-					Builder retbuilder = (Builder) bmap.getReqBuilder(pbname);
+					Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
 					JsonPBUtil.json2PB(str.getBytes(), retbuilder);
+					
+					
+					//postprocess
+
 //					
 					handler.onFinished(PacketHelper.toPBReturn(pack, retbuilder.build()));
 

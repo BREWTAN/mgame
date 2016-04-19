@@ -58,6 +58,13 @@ public class IFEBeanMapping {
 	public HashMap<String, Class> name2JsonClass = new HashMap<>();
 	public HashMap<String, Class> name2ReqPBClass = new HashMap<>();
 	public HashMap<String, Class> name2ResPBClass = new HashMap<>();
+	public HashMap<String, String> name2EURL = new HashMap<>();
+	
+	public interface PostProc{
+		public void postDO(Message message,String pbname);
+	}
+	public HashMap<String, PostProc> name2PostProcess = new HashMap<>();
+
 
 	public String getCamelStr(String str) {
 		StringBuffer sb = new StringBuffer();
@@ -87,19 +94,29 @@ public class IFEBeanMapping {
 				PBInfo ano = (PBInfo) clazz.getAnnotation(PBInfo.class);
 				if (ano == null)
 					continue;
+				
+				name2EURL.put(ano.name(), ano.path());
+				
 				name2JsonClass.put(ano.name(), clazz);
 				Class pbclazz = Class.forName("onight.zjfae.afront.gens." + getCamelStr(ano.name()) + "$" + ano.name());
 				name2ResPBClass.put(ano.name(), pbclazz);
 
 				Class pbreqclazz = Class.forName("onight.zjfae.afront.gens." + getCamelStr(ano.name()) + "$REQ_" + ano.name());
 				name2ReqPBClass.put(ano.name(), pbreqclazz);
-
 			}
+			
+			initPostProc();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void initPostProc(){
+		//
+		name2PostProcess.put("PBIFE_passwordmanage_resetTradePassword", new RegPostProc());
+		
 	}
 
 	public <T> T parseREQ(HttpServletRequest req) {
@@ -125,6 +142,9 @@ public class IFEBeanMapping {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	public String getEURL(String pbname) {
+		return name2EURL.get(pbname);
 	}
 
 	public Builder getReqBuilder(String pbname) {

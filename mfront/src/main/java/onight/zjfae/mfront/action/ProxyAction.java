@@ -80,6 +80,7 @@ public class ProxyAction extends MobileModuleStarter<Message> {
 					String str = new FJsonPBFormat().printToString(msg);
 					log.debug("proxy:{}", str);
 					
+					
 //					handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息转换成功", pack)));
 					
 					// TODO: 1. 把他封装成json,并且发到客户端E/工程里面去
