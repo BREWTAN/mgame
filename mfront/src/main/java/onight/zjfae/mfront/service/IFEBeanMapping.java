@@ -15,27 +15,80 @@ import onight.mgame.utils.PBInfo;
 import onight.tfw.outils.bean.JsonPBUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.osgi.framework.BundleReference;
 
 import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.Message;
 
 public class IFEBeanMapping {
 
-	private static List<Class> findClasses(File directory, String packageName) throws ClassNotFoundException {
-		List<Class> classes = new ArrayList<Class>();
-		if (!directory.exists()) {
-			return classes;
+	
+	
+	public static class WrapClassLoader extends ClassLoader {
+
+		public WrapClassLoader(ClassLoader parent) {
+			super(parent);
 		}
-		File[] files = directory.listFiles();
-		for (File file : files) {
-			if (file.isDirectory()) {
-				assert !file.getName().contains(".");
-				classes.addAll(findClasses(file, packageName + "." + file.getName()));
-			} else if (file.getName().endsWith(".class")) {
-				classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
+
+		@Override
+		public Class<?> loadClass(String name) throws ClassNotFoundException {
+			// log.info("LOadClass::" + name);
+			Class<?> clazz = null;
+			try {
+				clazz = super.loadClass(name);
+			} catch (Exception e) {
 			}
+			if (clazz == null) {
+				try {
+					clazz =  BundleReference.class.cast(IFEBeanMapping.class.getClassLoader()).getBundle().loadClass(name);
+				} catch (Exception e) {
+				}
+			}
+			if (clazz == null) {
+				clazz = BundleReference.class.cast(IFEBeanMapping.class.getClassLoader()).getBundle().loadClass(name);
+
+			}
+			return clazz;
+		}
+
+	}
+
+	
+	private static List<Class> findClasses(File directory, String packageName) throws ClassNotFoundException {
+		Enumeration<URL> en = BundleReference.class.cast(IFEBeanMapping.class.getClassLoader()).getBundle().findEntries(packageName, ".class", true);
+		
+		WrapClassLoader loader = new WrapClassLoader(IFEBeanMapping.class.getClassLoader());
+		System.out.println("en=="+en);
+		List<Class> classes = new ArrayList<Class>();
+		while(en.hasMoreElements())
+		{
+			URL url = en.nextElement();
+			try {
+				Class clazz = loader.loadClass(url.toString());
+				classes.add(clazz);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		return classes;
+		
+////		List<Class> classes = new ArrayList<Class>();
+//		if (!directory.exists()) {
+//			return classes;
+//		}
+//		File[] files = directory.listFiles();
+//		
+//		for (File file : files) {
+//			if (file.isDirectory()) {
+//				assert !file.getName().contains(".");
+//				classes.addAll(findClasses(file, packageName + "." + file.getName()));
+//			} else if (file.getName().endsWith(".class")) {
+//				classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
+//			}
+//		}
+//		return classes;
 	}
 
 	private static Class[] getClasses(String packageName) throws ClassNotFoundException, IOException {

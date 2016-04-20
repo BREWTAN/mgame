@@ -19,6 +19,7 @@ public class TradeLocal {
 		SimpleDateFormat sf_yyyyMMddTHHmmss = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		SimpleDateFormat sf_yyyy_MM_dd = new SimpleDateFormat("yyyy-MM-dd");
 		ZBXLogSet zbxlogs;
+		
 		long entrytime = System.currentTimeMillis();
 		Map<String, String> transTypeMap = new HashMap<String, String>();
 	}
