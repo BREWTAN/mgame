@@ -1,6 +1,5 @@
 package onight.zjfae.mfront.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -15,6 +14,7 @@ import onight.mgame.utils.PBInfo;
 import onight.tfw.outils.bean.JsonPBUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 
 import com.google.protobuf.AbstractMessage.Builder;
@@ -22,8 +22,6 @@ import com.google.protobuf.Message;
 
 public class IFEBeanMapping {
 
-	
-	
 	public static class WrapClassLoader extends ClassLoader {
 
 		public WrapClassLoader(ClassLoader parent) {
@@ -40,7 +38,7 @@ public class IFEBeanMapping {
 			}
 			if (clazz == null) {
 				try {
-					clazz =  BundleReference.class.cast(IFEBeanMapping.class.getClassLoader()).getBundle().loadClass(name);
+					clazz = BundleReference.class.cast(IFEBeanMapping.class.getClassLoader()).getBundle().loadClass(name);
 				} catch (Exception e) {
 				}
 			}
@@ -53,58 +51,51 @@ public class IFEBeanMapping {
 
 	}
 
-	
-	private static List<Class> findClasses(File directory, String packageName) throws ClassNotFoundException {
-		Enumeration<URL> en = BundleReference.class.cast(IFEBeanMapping.class.getClassLoader()).getBundle().findEntries(packageName, ".class", true);
-		
+	private static List<Class> findClasses(String packageName) throws ClassNotFoundException {
+		// Enumeration<URL> en =
+		// BundleReference.class.cast(IFEBeanMapping.class.getClassLoader()).getBundle().findEntries(packageName.replaceAll("\\.",
+		// "/"), "*.class", true);
+		Bundle bundle = BundleReference.class.cast(IFEBeanMapping.class.getClassLoader()).getBundle();
+		Enumeration<URL> en = bundle.findEntries(packageName.replaceAll("\\.", "/"), "*.class", true);
 		WrapClassLoader loader = new WrapClassLoader(IFEBeanMapping.class.getClassLoader());
-		System.out.println("en=="+en);
+		System.out.println("en==" + en);
 		List<Class> classes = new ArrayList<Class>();
-		while(en.hasMoreElements())
-		{
+		while (en.hasMoreElements()) {
 			URL url = en.nextElement();
 			try {
-				Class clazz = loader.loadClass(url.toString());
+				Class clazz =  bundle.loadClass(url.getFile().substring(1,url.getFile().lastIndexOf(".")).replaceAll("/", "."));
+//				Class clazz = loader.loadClass(url.toString());
 				classes.add(clazz);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		}
 		return classes;
-		
-////		List<Class> classes = new ArrayList<Class>();
-//		if (!directory.exists()) {
-//			return classes;
-//		}
-//		File[] files = directory.listFiles();
-//		
-//		for (File file : files) {
-//			if (file.isDirectory()) {
-//				assert !file.getName().contains(".");
-//				classes.addAll(findClasses(file, packageName + "." + file.getName()));
-//			} else if (file.getName().endsWith(".class")) {
-//				classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
-//			}
-//		}
-//		return classes;
+
+		// // List<Class> classes = new ArrayList<Class>();
+		// if (!directory.exists()) {
+		// return classes;
+		// }
+		// File[] files = directory.listFiles();
+		//
+		// for (File file : files) {
+		// if (file.isDirectory()) {
+		// assert !file.getName().contains(".");
+		// classes.addAll(findClasses(file, packageName + "." +
+		// file.getName()));
+		// } else if (file.getName().endsWith(".class")) {
+		// classes.add(Class.forName(packageName + '.' +
+		// file.getName().substring(0, file.getName().length() - 6)));
+		// }
+		// }
+		// return classes;
 	}
 
 	private static Class[] getClasses(String packageName) throws ClassNotFoundException, IOException {
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		assert classLoader != null;
-		String path = packageName.replace('.', '/');
-		Enumeration<URL> resources = classLoader.getResources(path);
-		List<File> dirs = new ArrayList<File>();
-		while (resources.hasMoreElements()) {
-			URL resource = resources.nextElement();
-			dirs.add(new File(resource.getFile()));
-		}
 		ArrayList<Class> classes = new ArrayList<Class>();
-		for (File directory : dirs) {
-			classes.addAll(findClasses(directory, packageName));
-		}
+		classes.addAll(findClasses(packageName));
 		return classes.toArray(new Class[classes.size()]);
 	}
 
@@ -112,12 +103,12 @@ public class IFEBeanMapping {
 	public HashMap<String, Class> name2ReqPBClass = new HashMap<>();
 	public HashMap<String, Class> name2ResPBClass = new HashMap<>();
 	public HashMap<String, String> name2EURL = new HashMap<>();
-	
-	public interface PostProc{
-		public void postDO(Message message,String pbname);
-	}
-	public HashMap<String, PostProc> name2PostProcess = new HashMap<>();
 
+	public interface PostProc {
+		public void postDO(Message message, String pbname);
+	}
+
+	public HashMap<String, PostProc> name2PostProcess = new HashMap<>();
 
 	public String getCamelStr(String str) {
 		StringBuffer sb = new StringBuffer();
@@ -147,9 +138,9 @@ public class IFEBeanMapping {
 				PBInfo ano = (PBInfo) clazz.getAnnotation(PBInfo.class);
 				if (ano == null)
 					continue;
-				
+
 				name2EURL.put(ano.name(), ano.path());
-				
+
 				name2JsonClass.put(ano.name(), clazz);
 				Class pbclazz = Class.forName("onight.zjfae.afront.gens." + getCamelStr(ano.name()) + "$" + ano.name());
 				name2ResPBClass.put(ano.name(), pbclazz);
@@ -157,7 +148,7 @@ public class IFEBeanMapping {
 				Class pbreqclazz = Class.forName("onight.zjfae.afront.gens." + getCamelStr(ano.name()) + "$REQ_" + ano.name());
 				name2ReqPBClass.put(ano.name(), pbreqclazz);
 			}
-			
+
 			initPostProc();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -165,11 +156,11 @@ public class IFEBeanMapping {
 			e.printStackTrace();
 		}
 	}
-	
-	public void initPostProc(){
+
+	public void initPostProc() {
 		//
 		name2PostProcess.put("PBIFE_passwordmanage_resetTradePassword", new RegPostProc());
-		
+
 	}
 
 	public <T> T parseREQ(HttpServletRequest req) {
@@ -196,6 +187,7 @@ public class IFEBeanMapping {
 		}
 		return null;
 	}
+
 	public String getEURL(String pbname) {
 		return name2EURL.get(pbname);
 	}
@@ -213,7 +205,7 @@ public class IFEBeanMapping {
 		}
 		return null;
 	}
-	
+
 	public Builder getResBuilder(String pbname) {
 		Class pbclazz = name2ResPBClass.get(pbname);
 		if (pbclazz == null) {
