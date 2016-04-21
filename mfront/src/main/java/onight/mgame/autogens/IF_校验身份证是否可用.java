@@ -2,8 +2,11 @@ package onight.mgame.autogens;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
 import java.util.List;
 import java.math.BigDecimal;
+
+import cn.msec.bval.validator.CertNo.CertNoM;
 import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +20,7 @@ public class IF_校验身份证是否可用 {
 	public static class Request {
 
 		 @PBFields(name = ",身份证,String,18,否,")
+		 @CertNoM
 		String idCard;//  ,身份证,String,18,否,
 		 String tfw__reserved;//保留字段
 
