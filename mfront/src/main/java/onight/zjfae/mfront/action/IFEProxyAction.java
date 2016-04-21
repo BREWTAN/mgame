@@ -67,34 +67,38 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					//builder.build();// 获取到的是一个PBmessage
 					
 					Message msg = getPBBody(pack);//
-					//1.preprocess.== validate..
+					//1.preprocess.== validate..前处理逻辑
+					bmap.preProcess(msg, pbname);
 					
 					log.debug("msg=={}",msg);
 					String str = new FJsonPBFormat().printToString(msg);
 					log.debug("proxy:{}", str);
 
 					String path = bmap.getEURL(pbname);
-					
+				
 					log.debug("name:"+pbname+",url="+path);
-
 					
-					
-					
+					pack.setBody(str.getBytes("UTF-8"));
 					// TODO: 1. 把他封装成json,并且发到客户端E/工程里面去
-					// String body = requestor.post(jsons.serialize(pack.getBody()),
-					// proxyBaseUrl);
+					String requestBody = jsons.serialize(pack.getBody()).toString();
+					String body = requestor.post(requestBody,"http://10.18.13.104"+path);
 					
 					// TODO: 2. json,转换成PBMessage再发到客户端
-					// String body = requestor.post(jsons.serialize(pack.getBody()),
-					// proxyBaseUrl);
 					Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
-					JsonPBUtil.json2PB(str.getBytes(), retbuilder);
+					JsonPBUtil.json2PB(body.getBytes("UTF-8"), retbuilder);
 					
+					PacketHelper.toPBReturn(pack, retbuilder.build());
+					Message msg1 = getPBBody(pack);
 					
-					//postprocess
+					//postprocess 后处理逻辑
+					bmap.postProcess(msg1, pbname);
+					String str1 = new FJsonPBFormat().printToString(msg1);
+				    retbuilder = (Builder) bmap.getResBuilder(pbname);
+					JsonPBUtil.json2PB(str1.getBytes("UTF-8"), retbuilder);
 
 //					
 					handler.onFinished(PacketHelper.toPBReturn(pack, retbuilder.build()));
+					
 
 					
 				} catch (Exception e) {

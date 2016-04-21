@@ -116,7 +116,7 @@ public class ProtoSwiftGens {
 
 	public static void main(String[] args) {
 		try {
-			File dstDir = new File("/Users/brew/Documents/KJ/MING/git/mgame/mfront/src/main/proto/gens");
+			File dstDir = new File("E:/Workspaces/workAb/comp/develop/appmodlue/apptfw/mfront/mfront/src/main/proto/gens");
 			dstDir.mkdirs();
 			for (Class clazz : getClasses("onight.mgame.autogens")) {
 				// Class clazz = IF_不良资产产品查询_项目揭示_.class;
@@ -134,7 +134,14 @@ public class ProtoSwiftGens {
 
 				sb.append("message " + ano.name() + "{\n\t//" + ano.path()).append("\n");
 
-
+				StringBuffer sb2=new StringBuffer();
+				sb2.append("message Ret_" + ano.name() + "{\n\t//" + ano.path()).append("\n");
+				sb2.append("\n\t"+"string returnCode=1;	//报文头"+"\n");
+				sb2.append("\n\t"+"string returnMsg=2;	//报文头"+"\n");
+				sb2.append("\n\t"+"Ret_" + ano.name()+" data=3;"+"\n");
+				
+				sb2.append("\n\n}\n\n");
+				
 				StringBuffer sbreq = new StringBuffer();
 				sbreq.append("message REQ_" + ano.name() + "{\n\t//" + ano.path()).append("\n");
 
@@ -202,6 +209,7 @@ public class ProtoSwiftGens {
 //				System.out.println(sb.toString());
 				FileOutputStream fout=new FileOutputStream(new File(dstDir,ano.name()+".proto"));
 				fout.write(sb.toString().getBytes("UTF-8"));
+				fout.write(sb2.toString().getBytes("UTF-8"));
 				fout.write(sbreq.toString().getBytes("UTF-8"));
 				fout.close();
 			}

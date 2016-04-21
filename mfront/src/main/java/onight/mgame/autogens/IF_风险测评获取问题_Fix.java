@@ -9,7 +9,7 @@ import onight.mgame.utils.PBFields;
 
 // 风险测评获取问题,客户信息,RiskAssessmentController,POST,JSON,/ife/riskassessment/queryRiskAssessmentQuestion.html
 @onight.mgame.utils.PBInfo(name = "PBIFE_riskassessment_queryRiskAssessmentQuestion", path = "/ife/riskassessment/queryRiskAssessmentQuestion.html")
-public class IF_风险测评获取问题_fix {
+public class IF_风险测评获取问题_Fix {
 	// =======REQuest==============
 
 	@Data

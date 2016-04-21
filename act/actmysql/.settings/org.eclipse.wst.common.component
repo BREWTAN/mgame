@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="2.0">
 	<wb-module deploy-name="actmysql">
 		<wb-resource deploy-path="/" source-path="src/main/resources"/>
 		<wb-resource deploy-path="/" source-path="src/gens/resources"/>
 		<wb-resource deploy-path="/" source-path="src/main/java"/>
 		<wb-resource deploy-path="/" source-path="src/gens/java"/>
 		<wb-resource deploy-path="/" source-path="src/gens/proto"/>
-		<wb-resource deploy-path="/" source-path="build/generated/source/proto/main/java"/>
-        <wb-resource deploy-path="/" source-path="/build/generated/source/proto/main/java"/>
 	</wb-module>
 </project-modules>

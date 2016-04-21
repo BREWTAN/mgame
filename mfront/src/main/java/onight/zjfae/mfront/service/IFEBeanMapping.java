@@ -63,7 +63,11 @@ public class IFEBeanMapping {
 	public interface PostProc{
 		public void postDO(Message message,String pbname);
 	}
+	public interface PreProc{
+		public void prepDO(Message message,String pbname);
+	}
 	public HashMap<String, PostProc> name2PostProcess = new HashMap<>();
+	public HashMap<String, PreProc> name2PrepProcess = new HashMap<>();
 
 
 	public String getCamelStr(String str) {
@@ -106,6 +110,7 @@ public class IFEBeanMapping {
 			}
 			
 			initPostProc();
+			initPrepProc();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -116,6 +121,13 @@ public class IFEBeanMapping {
 	public void initPostProc(){
 		//
 		name2PostProcess.put("PBIFE_passwordmanage_resetTradePassword", new RegPostProc());
+		name2PostProcess.put("PBIFE_prdsubscribequery_querySubscribeProductListNoLogon",new QuerySubscribeProductListNoLogon());
+	}
+	public void initPrepProc(){
+		//
+		name2PrepProcess.put("PBIFE_passwordmanage_resetTradePassword", new RegPrepProc());
+		name2PrepProcess.put("PBIFE_trade_queryTransferSellProfits", new BuyOrTradeFee());
+		
 		
 	}
 
@@ -173,6 +185,28 @@ public class IFEBeanMapping {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	public void postProcess(Message message,String pbname) {
+		PostProc pbclazz = name2PostProcess.get(pbname);
+		if (pbclazz == null) {
+			return ;
+		}
+		try {
+		 pbclazz.postDO(message, pbname);;	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void preProcess(Message message,String pbname) {
+		PreProc pbclazz = name2PrepProcess.get(pbname);
+		if (pbclazz == null) {
+			return ;
+		}
+		try {
+		 pbclazz.prepDO(message, pbname);;	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) {
