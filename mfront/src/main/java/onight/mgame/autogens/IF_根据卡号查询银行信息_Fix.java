@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 // 根据卡号查询银行信息，不支持时，返回浙金支持银行列表,客户信息,BankCardManageController,POST,JSON,/ife/bankcardmanage/queryBankInfo.html
 @onight.mgame.utils.PBInfo(name = "PBIFE_bankcardmanage_queryBankInfo", path = "/ife/bankcardmanage/queryBankInfo.html")
-public class IF_根据卡号查询银行信息_fix {
+public class IF_根据卡号查询银行信息_Fix {
 	// =======REQuest==============
 
 	@Data
