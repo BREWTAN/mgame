@@ -11,7 +11,6 @@ public class RegPostProc implements PostProc {
 
 	@Override
 	public void postDO(Message message, String pbname) {
-		
 	
 	}
 

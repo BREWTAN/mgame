@@ -109,7 +109,7 @@ public class IFEBeanMapping {
 	}
 
 	public interface PreProc{
-		public void prepDO(Message message,String pbname);
+		public boolean prepDO(Message message,String pbname);
 	}
 	public HashMap<String, PostProc> name2PostProcess = new HashMap<>();
 	public HashMap<String, PreProc> name2PrepProcess = new HashMap<>();
@@ -239,20 +239,22 @@ public class IFEBeanMapping {
 			return ;
 		}
 		try {
-		 pbclazz.postDO(message, pbname);;	
+		  pbclazz.postDO(message, pbname);
 		} catch (Exception e) {
 			e.printStackTrace();
+	
 		}
 	}
-	public void preProcess(Message message,String pbname) {
+	public boolean preProcess(Message message,String pbname) {
 		PreProc pbclazz = name2PrepProcess.get(pbname);
 		if (pbclazz == null) {
-			return ;
+			return false ;
 		}
 		try {
-		 pbclazz.prepDO(message, pbname);;	
+		 return pbclazz.prepDO(message, pbname);
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 

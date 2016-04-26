@@ -67,13 +67,21 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					//1.preprocess.== validate..前处理逻辑
 					log.debug("msg=="+msg);
 					try{
-						bmap.preProcess(msg, pbname);	
+						if(!bmap.preProcess(msg, pbname)){
+							handler.onFinished(PacketHelper.toPBReturn(pack, msg));
+						};	
 					}catch(Exception e){
 						handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息前置处理："+e.getMessage(), null)));
 					}
 					
 					log.debug("msg=={}",msg);
-					String str = new FJsonPBFormat().printToString(msg);
+					String str;
+					if (pack.getFixHead().getEnctype()=='P'){
+						 str = new FJsonPBFormat().printToString(msg);
+					}
+					else{
+						str = new String(pack.getBody(),"UTF-8");
+					}
 					log.debug("proxy:{}", str);
 					String path = bmap.getEURL(pbname);
 					log.debug("name:"+pbname+",url="+path);

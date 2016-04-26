@@ -8,8 +8,8 @@ import onight.zjfae.mfront.service.IFEBeanMapping.PreProc;
 public class RegPrepProc implements PreProc {
 
 	@Override
-	public void prepDO(Message message, String pbname) {
-
+	public boolean prepDO(Message message, String pbname) {
+		return false;
 
 	}
 

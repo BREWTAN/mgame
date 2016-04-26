@@ -12,7 +12,7 @@ import onight.zjfae.mfront.service.IFEBeanMapping.PreProc;
 public class BuyOrTradeFee implements PreProc {
 
 	@Override
-	public void prepDO(Message message, String pbname) {
+	public boolean prepDO(Message message, String pbname) {
 		
 		Builder buyOrTrade=(Builder)message.toBuilder();
 		String actualRate=buyOrTrade.getActualRate();
@@ -22,16 +22,18 @@ public class BuyOrTradeFee implements PreProc {
 			
 			reqRturn.setReturnCode("9999");	
 			reqRturn.setReturnMsg("您的转让利率["+actualRate.toString()+"]不合规,请您重新输入!");
-			
+			return false;
 		}
 		try{
 			double f = Double.parseDouble(actualRate.toString().trim());
 		}catch(Exception e){
 			reqRturn.setReturnCode("9999");	
 			reqRturn.setReturnMsg("您的转让利率["+actualRate.toString()+"]不合规,请您重新输入!");
+			return false;
 			
 		}
 		message=reqRturn.build();
+		return true;
 		
 	}
 
