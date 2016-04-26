@@ -12,8 +12,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.net.ssl.SSLContext;
 
-import lombok.extern.slf4j.Slf4j;
-
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
@@ -31,6 +30,10 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.message.BasicHeader;
+
+import lombok.extern.slf4j.Slf4j;
+import onight.tfw.otransio.api.beans.FramePacket;
 
 @Slf4j
 public class HttpRequestor {
@@ -121,6 +124,33 @@ public class HttpRequestor {
 			lock.readLock().unlock();
 		}
 	}
+	
+	public String post(final FramePacket pack, String xml, String address) throws ClientProtocolException, IOException {
+		lock.readLock().lock();
+		try {
+			log.debug("httppost:" + address + ",data=" + xml);
+			StringEntity entity = new StringEntity(xml, "UTF-8");
+			HttpPost httppost = new HttpPost(address);
+			
+			StringBuffer stringBuffer = new StringBuffer();
+			if (pack.getExtProp(SSO_SMID) != null) {//get client smid 
+				stringBuffer.append(SSO_SMID).append("=").append(pack.getExtProp(SSO_SMID)).append(";");
+			}
+			if (pack.getExtProp(ZJS_ID) != null) {//get client zjsid
+				stringBuffer.append(ZJS_ID).append("=").append(pack.getExtProp(ZJS_ID)).append(";");
+			}
+			if(StringUtils.isNotBlank(stringBuffer)){// if exists , post it as Cookie to erie
+				httppost.setHeader(new BasicHeader("Cookie",stringBuffer.toString()));
+			}
+			httppost.setEntity(entity);
+			ResponseHandler<String> responseHandler = new BasicResponseHandler();
+			String result = httpclient.execute(httppost, responseHandler);
+			log.debug("httpresult:" + address + ",result=" + result);
+			return result;
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
 
 	public void destroy() {
 		lock.writeLock().lock();
@@ -133,8 +163,9 @@ public class HttpRequestor {
 
 	public int defaultHttpTimeoutMillis = 10000;// http超时时间
 	private int httpKeepAlivesSecs = 60;
+	private String SSO_SMID="SMID";
+	private String ZJS_ID="ZJSID";	
 	private PoolingHttpClientConnectionManager cm;
 	private CloseableHttpClient httpclient;
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();
-
 }

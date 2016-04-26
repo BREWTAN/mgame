@@ -1,6 +1,10 @@
 package onight.zjfae.mfront.action;
 
-import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.protobuf.AbstractMessage.Builder;
+import com.google.protobuf.Message;
+
 import lombok.extern.slf4j.Slf4j;
 import onight.osgi.annotation.NActorProvider;
 import onight.osgi.annotation.iPojoBean;
@@ -14,11 +18,6 @@ import onight.tfw.outils.serialize.ISerializer;
 import onight.tfw.outils.serialize.SerializerFactory;
 import onight.zjfae.mfront.filter.SSOPacketHelper;
 import onight.zjfae.mfront.service.IFEBeanMapping;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.google.protobuf.AbstractMessage.Builder;
-import com.google.protobuf.Message;
 
 @iPojoBean
 @NActorProvider
@@ -47,7 +46,7 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 	protected ISerializer jsons = SerializerFactory.getSerializer(SerializerFactory.SERIALIZER_JSON);
 	
 
-	ThreadLocal<Builder> currentBuilder=new ThreadLocal<Builder>();
+	ThreadLocal<Builder<?>> currentBuilder=new ThreadLocal<Builder<?>>();
 	
 	@Override
 	public void onPBPacket(final FramePacket pack, Message nubo, final CompleteHandler handler) {
@@ -87,7 +86,7 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					log.debug("name:"+pbname+",url="+path);
 					// 1. 把他封装成json,并且发到客户端E/工程里面去
 					String requestBody = str;
-					String jsonStr = requestor.post(requestBody,"http://10.18.13.104"+path);
+					String jsonStr = requestor.post(pack,requestBody,"http://10.18.13.104"+path);
 					//报文格式整理
 					String sub=jsonStr.substring(jsonStr.indexOf(":")+1, jsonStr.lastIndexOf("}"));
 					System.out.println(sub);
@@ -103,10 +102,7 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					}catch(Exception e){
 						handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息后置处理："+e.getMessage(), null)));
 					}
-				
-	
-					
-					
+
 				} catch (Exception e) {
 					//  转换失败时
 					handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息转换失败："+e.getMessage(), null)));
@@ -118,12 +114,8 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 			
 		}
 	}
-
-	
 	@Override
-	public Builder getPBBuilder() {
+	public Builder<?> getPBBuilder() {
 		return currentBuilder.get();
 	}
-	
-	
 }
