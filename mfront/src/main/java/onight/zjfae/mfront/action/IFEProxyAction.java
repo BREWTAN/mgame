@@ -106,7 +106,6 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 			
 		}
 	}
-	
 	@Override
 	public Builder<?> getPBBuilder() {
 		return currentBuilder.get();
