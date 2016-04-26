@@ -24,7 +24,7 @@ import com.google.protobuf.Message;
 @NActorProvider
 // @Provides(specifications = { IActor.class, PSenderService.class })
 @Slf4j
-@Data
+
 public class IFEProxyAction extends MobileModuleStarter<Message> {
 
 	protected HttpRequestor requestor = new HttpRequestor();
@@ -63,63 +63,59 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 			} else {
 				try {
 					currentBuilder.set(builder);
-					JsonPBUtil.json2PB(pack.getBody(), builder);
-					//builder.build();// 获取到的是一个PBmessage
-					
 					Message msg = getPBBody(pack);//
-					//1.preprocess.== validate..
+					//1.preprocess.== validate..前处理逻辑
+					log.debug("msg=="+msg);
+					try{
+						bmap.preProcess(msg, pbname);	
+					}catch(Exception e){
+						handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息前置处理："+e.getMessage(), null)));
+					}
 					
 					log.debug("msg=={}",msg);
 					String str = new FJsonPBFormat().printToString(msg);
 					log.debug("proxy:{}", str);
-
 					String path = bmap.getEURL(pbname);
-					
 					log.debug("name:"+pbname+",url="+path);
-
-					
-					
-					
-					// TODO: 1. 把他封装成json,并且发到客户端E/工程里面去
-					// String body = requestor.post(jsons.serialize(pack.getBody()),
-					// proxyBaseUrl);
-					
-					// TODO: 2. json,转换成PBMessage再发到客户端
-					// String body = requestor.post(jsons.serialize(pack.getBody()),
-					// proxyBaseUrl);
+					// 1. 把他封装成json,并且发到客户端E/工程里面去
+					String requestBody = str;
+					String jsonStr = requestor.post(requestBody,"http://10.18.13.104"+path);
+					//报文格式整理
+					String sub=jsonStr.substring(jsonStr.indexOf(":")+1, jsonStr.lastIndexOf("}"));
+					System.out.println(sub);
+					//  2. json,转换成PBMessage再发到客户端
 					Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
-					JsonPBUtil.json2PB(str.getBytes(), retbuilder);
-					
-					
-					//postprocess
+					JsonPBUtil.json2PB(sub.getBytes("UTF-8"), retbuilder);
+					Message retmsg = retbuilder.build();
+					//postprocess 后处理逻辑
+					try{
+						bmap.postProcess(retmsg, pbname);	
+						handler.onFinished(PacketHelper.toPBReturn(pack, retmsg));
 
-//					
-					handler.onFinished(PacketHelper.toPBReturn(pack, retbuilder.build()));
-
+					}catch(Exception e){
+						handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息后置处理："+e.getMessage(), null)));
+					}
+				
+	
+					
 					
 				} catch (Exception e) {
-					// TODO： 转换失败时
+					//  转换失败时
 					handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息转换失败："+e.getMessage(), null)));
 				}finally{
 					currentBuilder.set(null);
-				}
-				
-				
-				
-				
+				}		
 
 			}
 			
 		}
 	}
 
-
+	
 	@Override
 	public Builder getPBBuilder() {
 		return currentBuilder.get();
 	}
 	
-
 	
-
 }

@@ -15,8 +15,9 @@ public class TestMSG {
 			
 			JsonPBUtil.json2PB(jsonstr.getBytes(), builder);
 			
+			
 			Message msg = builder.build();// 获取到的是一个PBmessage
-			System.out.println(msg);
+			
 			
 			String str = new FJsonPBFormat().printToString(msg);
 			System.out.println("str="+str);

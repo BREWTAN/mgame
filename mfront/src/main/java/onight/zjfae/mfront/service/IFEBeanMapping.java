@@ -108,7 +108,13 @@ public class IFEBeanMapping {
 		public void postDO(Message message, String pbname);
 	}
 
+	public interface PreProc{
+		public void prepDO(Message message,String pbname);
+	}
 	public HashMap<String, PostProc> name2PostProcess = new HashMap<>();
+	public HashMap<String, PreProc> name2PrepProcess = new HashMap<>();
+
+
 
 	public String getCamelStr(String str) {
 		StringBuffer sb = new StringBuffer();
@@ -142,7 +148,7 @@ public class IFEBeanMapping {
 				name2EURL.put(ano.name(), ano.path());
 
 				name2JsonClass.put(ano.name(), clazz);
-				Class pbclazz = Class.forName("onight.zjfae.afront.gens." + getCamelStr(ano.name()) + "$" + ano.name());
+				Class pbclazz = Class.forName("onight.zjfae.afront.gens." + getCamelStr(ano.name()) + "$Ret_" + ano.name());
 				name2ResPBClass.put(ano.name(), pbclazz);
 
 				Class pbreqclazz = Class.forName("onight.zjfae.afront.gens." + getCamelStr(ano.name()) + "$REQ_" + ano.name());
@@ -150,6 +156,7 @@ public class IFEBeanMapping {
 			}
 
 			initPostProc();
+			initPrepProc();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -160,6 +167,13 @@ public class IFEBeanMapping {
 	public void initPostProc() {
 		//
 		name2PostProcess.put("PBIFE_passwordmanage_resetTradePassword", new RegPostProc());
+	}
+	public void initPrepProc(){
+		//
+		name2PrepProcess.put("PBIFE_passwordmanage_resetTradePassword", new RegPrepProc());
+		name2PrepProcess.put("PBIFE_trade_queryTransferSellProfits", new BuyOrTradeFee());
+		
+		
 
 	}
 
@@ -218,6 +232,28 @@ public class IFEBeanMapping {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	public void postProcess(Message message,String pbname) {
+		PostProc pbclazz = name2PostProcess.get(pbname);
+		if (pbclazz == null) {
+			return ;
+		}
+		try {
+		 pbclazz.postDO(message, pbname);;	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void preProcess(Message message,String pbname) {
+		PreProc pbclazz = name2PrepProcess.get(pbname);
+		if (pbclazz == null) {
+			return ;
+		}
+		try {
+		 pbclazz.prepDO(message, pbname);;	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) {

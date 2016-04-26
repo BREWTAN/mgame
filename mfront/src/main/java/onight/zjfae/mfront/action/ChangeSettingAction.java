@@ -1,6 +1,12 @@
 package onight.zjfae.mfront.action;
 
-import java.io.UnsupportedEncodingException;
+import org.apache.commons.codec.binary.Base64;
+import org.codehaus.jackson.map.DeserializationConfig.Feature;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
+
+import com.google.protobuf.AbstractMessage.Builder;
+import com.google.protobuf.Message;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -14,14 +20,6 @@ import onight.tfw.outils.serialize.ISerializer;
 import onight.tfw.outils.serialize.SerializerFactory;
 import onight.zjfae.sfront.Setting.PBModule;
 import onight.zjfae.sfront.Setting.PBSetting;
-
-import org.apache.commons.codec.binary.Base64;
-import org.codehaus.jackson.map.DeserializationConfig.Feature;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
-
-import com.google.protobuf.AbstractMessage.Builder;
-import com.google.protobuf.Message;
 
 @iPojoBean
 @NActorProvider

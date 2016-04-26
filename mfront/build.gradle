@@ -38,6 +38,7 @@ sourceSets.main.java {
 }
 
 jar {
+	encoding = "utf-8"
 	manifest{
 		attributes( 'Import-Ignore':'com.googlecode.protobuf,com.google.protobuf,com.esotericsoftware.kryo,org.apache.http')
 		attributes( 'DynamicImport-Package': '*')
