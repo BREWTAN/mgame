@@ -138,7 +138,7 @@ public class ProtoSwiftGens {
 				sb2.append("message Ret_" + ano.name() + "{\n\t//" + ano.path()).append("\n");
 				sb2.append("\n\t"+"string returnCode=1;	//报文头"+"\n");
 				sb2.append("\n\t"+"string returnMsg=2;	//报文头"+"\n");
-				sb2.append("\n\t"+"Ret_" + ano.name()+" data=3;"+"\n");
+				sb2.append("\n\t"+ ano.name()+" data=3;"+"\n");
 				
 				sb2.append("\n\n}\n\n");
 				

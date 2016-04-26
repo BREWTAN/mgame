@@ -148,7 +148,7 @@ public class IFEBeanMapping {
 				name2EURL.put(ano.name(), ano.path());
 
 				name2JsonClass.put(ano.name(), clazz);
-				Class pbclazz = Class.forName("onight.zjfae.afront.gens." + getCamelStr(ano.name()) + "$" + ano.name());
+				Class pbclazz = Class.forName("onight.zjfae.afront.gens." + getCamelStr(ano.name()) + "$Ret_" + ano.name());
 				name2ResPBClass.put(ano.name(), pbclazz);
 
 				Class pbreqclazz = Class.forName("onight.zjfae.afront.gens." + getCamelStr(ano.name()) + "$REQ_" + ano.name());
@@ -167,7 +167,6 @@ public class IFEBeanMapping {
 	public void initPostProc() {
 		//
 		name2PostProcess.put("PBIFE_passwordmanage_resetTradePassword", new RegPostProc());
-		name2PostProcess.put("PBIFE_prdsubscribequery_querySubscribeProductListNoLogon",new QuerySubscribeProductListNoLogon());
 	}
 	public void initPrepProc(){
 		//

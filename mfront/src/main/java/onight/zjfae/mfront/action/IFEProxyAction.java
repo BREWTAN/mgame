@@ -24,7 +24,7 @@ import com.google.protobuf.Message;
 @NActorProvider
 // @Provides(specifications = { IActor.class, PSenderService.class })
 @Slf4j
-@Data
+
 public class IFEProxyAction extends MobileModuleStarter<Message> {
 
 	protected HttpRequestor requestor = new HttpRequestor();
@@ -68,62 +68,69 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					
 					Message msg = getPBBody(pack);//
 					//1.preprocess.== validate..前处理逻辑
-					bmap.preProcess(msg, pbname);
+					
+					try{
+						bmap.preProcess(msg, pbname);	
+					}catch(Exception e){
+						handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息前置处理："+e.getMessage(), null)));
+					}
 					
 					log.debug("msg=={}",msg);
 					String str = new FJsonPBFormat().printToString(msg);
 					log.debug("proxy:{}", str);
+					if(str.indexOf("returnCode")>=0){
+						Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
+						JsonPBUtil.json2PB(str.getBytes("UTF-8"), retbuilder);
+
+						handler.onFinished(PacketHelper.toPBReturn(pack, retbuilder.build()));
+					}
 
 					String path = bmap.getEURL(pbname);
 				
 					log.debug("name:"+pbname+",url="+path);
 					
 					pack.setBody(str.getBytes("UTF-8"));
-					// TODO: 1. 把他封装成json,并且发到客户端E/工程里面去
+					// 1. 把他封装成json,并且发到客户端E/工程里面去
 					String requestBody = jsons.serialize(pack.getBody()).toString();
-					String body = requestor.post(requestBody,"http://10.18.13.104"+path);
+					String jsonStr = requestor.post(requestBody,"http://10.18.13.104"+path);
 					
-					// TODO: 2. json,转换成PBMessage再发到客户端
+					//报文格式整理
+					String sub=jsonStr.substring(jsonStr.indexOf(":")+1, jsonStr.lastIndexOf("}"));
+					
+					System.out.println(sub);
+					
+					//  2. json,转换成PBMessage再发到客户端
 					Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
-					JsonPBUtil.json2PB(body.getBytes("UTF-8"), retbuilder);
+					JsonPBUtil.json2PB(sub.getBytes("UTF-8"), retbuilder);
 					
-					PacketHelper.toPBReturn(pack, retbuilder.build());
-					Message msg1 = getPBBody(pack);
+					Message retmsg = retbuilder.build();
 					
 					//postprocess 后处理逻辑
-					bmap.postProcess(msg1, pbname);
-					String str1 = new FJsonPBFormat().printToString(msg1);
-				    retbuilder = (Builder) bmap.getResBuilder(pbname);
-					JsonPBUtil.json2PB(str1.getBytes("UTF-8"), retbuilder);
-
-//					
-					handler.onFinished(PacketHelper.toPBReturn(pack, retbuilder.build()));
+					try{
+						bmap.postProcess(retmsg, pbname);	
+					}catch(Exception e){
+						handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息后置处理："+e.getMessage(), null)));
+					}
+				
+	
+					handler.onFinished(PacketHelper.toPBReturn(pack, retmsg));
 					
-
 					
 				} catch (Exception e) {
-					// TODO： 转换失败时
+					//  转换失败时
 					handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息转换失败："+e.getMessage(), null)));
 				}finally{
 					currentBuilder.set(null);
-				}
-				
-				
-				
-				
+				}		
 
 			}
 			
 		}
 	}
 
-
 	@Override
 	public Builder getPBBuilder() {
 		return currentBuilder.get();
 	}
 	
-
-	
-
 }
