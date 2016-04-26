@@ -168,5 +168,4 @@ public class HttpRequestor {
 	private PoolingHttpClientConnectionManager cm;
 	private CloseableHttpClient httpclient;
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();
-
 }
