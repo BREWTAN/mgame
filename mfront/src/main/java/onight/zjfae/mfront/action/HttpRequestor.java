@@ -146,6 +146,7 @@ public class HttpRequestor {
 				httppost.setHeader(new BasicHeader("Cookie",stringBuffer.toString()));
 			}
 			httppost.setEntity(entity);
+			
 			ResponseHandler<String> responseHandler = new BasicResponseHandler(){
 				@Override
 				public String handleResponse(HttpResponse response) throws HttpResponseException, IOException {
