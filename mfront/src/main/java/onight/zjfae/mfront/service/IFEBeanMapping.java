@@ -248,7 +248,7 @@ public class IFEBeanMapping {
 	public boolean preProcess(Message message,String pbname) {
 		PreProc pbclazz = name2PrepProcess.get(pbname);
 		if (pbclazz == null) {
-			return false ;
+			return true ;
 		}
 		try {
 		 return pbclazz.prepDO(message, pbname);

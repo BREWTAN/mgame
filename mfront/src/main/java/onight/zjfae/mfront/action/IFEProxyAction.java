@@ -67,6 +67,7 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					log.debug("msg=="+msg);
 					try{
 						if(!bmap.preProcess(msg, pbname)){
+							
 							handler.onFinished(PacketHelper.toPBReturn(pack, msg));
 						};	
 					}catch(Exception e){
