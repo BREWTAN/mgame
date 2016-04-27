@@ -11,10 +11,13 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.net.ssl.SSLContext;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.config.Registry;
@@ -143,7 +146,17 @@ public class HttpRequestor {
 				httppost.setHeader(new BasicHeader("Cookie",stringBuffer.toString()));
 			}
 			httppost.setEntity(entity);
-			ResponseHandler<String> responseHandler = new BasicResponseHandler();
+			
+			ResponseHandler<String> responseHandler = new BasicResponseHandler(){
+				@Override
+				public String handleResponse(HttpResponse response) throws HttpResponseException, IOException {
+					if(response.getHeaders("Set-Cookie").length > 0){
+						log.debug(response.getHeaders("Set-Cookie")[0].getValue());
+					}
+					pack.getExtHead().buildFor((HttpServletResponse)response);
+					return super.handleResponse(response);
+				}
+			};
 			String result = httpclient.execute(httppost, responseHandler);
 			log.debug("httpresult:" + address + ",result=" + result);
 			return result;
