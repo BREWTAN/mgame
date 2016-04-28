@@ -75,30 +75,40 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					}
 					
 					log.debug("msg=={}",msg);
-					String str;
-					if (pack.getFixHead().getEnctype()=='P'){
-						 str = new FJsonPBFormat().printToString(msg);
-					}
-					else{
-						str = new String(pack.getBody(),"UTF-8");
-					}
-					log.debug("proxy:{}", str);
+					String str=null;
+					String requestBody=null;
 					String path = bmap.getEURL(pbname);
+					if(pack.getBody().length==0){
+						requestBody="1=1";
+					}else{
+						if (pack.getFixHead().getEnctype()=='P'){
+							 str = new FJsonPBFormat().printToString(msg);
+						}
+						else{
+							str = new String(pack.getBody(),"UTF-8");
+						}
+						log.debug("proxy:{}", str);
+						requestBody = str;
+					}
 					log.debug("name:"+pbname+",url="+path);
 					// 1. 把他封装成json,并且发到客户端E/工程里面去
-					String requestBody = str;
 					String jsonStr = requestor.post(pack,requestBody,"http://10.18.13.104"+path);
+					//String jsonStr = requestor.post(pack,requestBody,"http://172.16.28.85:8080"+path);
 					//报文格式整理
-					String sub=jsonStr.substring(jsonStr.indexOf(":")+1, jsonStr.lastIndexOf("}"));
-					System.out.println(sub);
+					if(!pbname.equals("PBIFE_login")){
+						jsonStr=jsonStr.substring(jsonStr.indexOf(":")+1, jsonStr.lastIndexOf("}"));
+						System.out.println(jsonStr);	
+					}
 					//  2. json,转换成PBMessage再发到客户端
 					Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
-					JsonPBUtil.json2PB(sub.getBytes("UTF-8"), retbuilder);
+					JsonPBUtil.json2PB(jsonStr.getBytes("UTF-8"), retbuilder);
 					Message retmsg = retbuilder.build();
 					//postprocess 后处理逻辑
 					try{
 						bmap.postProcess(retmsg, pbname);	
 						handler.onFinished(PacketHelper.toPBReturn(pack, retmsg));
+						int size=pack.getFixHead().getBodysize();
+						log.debug("bodySize:", size);
 
 					}catch(Exception e){
 						handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息后置处理："+e.getMessage(), null)));

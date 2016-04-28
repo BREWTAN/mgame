@@ -7,18 +7,23 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.net.ssl.SSLContext;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -34,6 +39,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicNameValuePair;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 import onight.tfw.otransio.api.beans.FramePacket;
@@ -132,7 +140,6 @@ public class HttpRequestor {
 		lock.readLock().lock();
 		try {
 			log.debug("httppost:" + address + ",data=" + xml);
-			StringEntity entity = new StringEntity(xml, "UTF-8");
 			HttpPost httppost = new HttpPost(address);
 			
 			StringBuffer stringBuffer = new StringBuffer();
@@ -145,15 +152,27 @@ public class HttpRequestor {
 			if(StringUtils.isNotBlank(stringBuffer)){// if exists , post it as Cookie to erie
 				httppost.setHeader(new BasicHeader("Cookie",stringBuffer.toString()));
 			}
-			httppost.setEntity(entity);
-			
+			ObjectMapper mapper = new ObjectMapper();  
+		    JsonNode root = mapper.readTree(xml); 
+		    
+		    List<NameValuePair> formparams = new ArrayList<NameValuePair>();  
+	    
+		    for(Iterator<String>  it =  root.getFieldNames(); it.hasNext();){
+		    		String name =it.next();
+		    		String value = root.get(name).getTextValue();
+		    	    formparams.add(new BasicNameValuePair(name, value));  
+		    }
+	        UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formparams, "UTF-8");
+    		httppost.setEntity(uefEntity);
 			ResponseHandler<String> responseHandler = new BasicResponseHandler(){
 				@Override
 				public String handleResponse(HttpResponse response) throws HttpResponseException, IOException {
 					if(response.getHeaders("Set-Cookie").length > 0){
+						for(Header head:response.getHeaders("Set-Cookie")){
+							pack.putHeader(head.getName(), head.getValue());
+						}
 						log.debug(response.getHeaders("Set-Cookie")[0].getValue());
 					}
-					pack.getExtHead().buildFor((HttpServletResponse)response);
 					return super.handleResponse(response);
 				}
 			};
