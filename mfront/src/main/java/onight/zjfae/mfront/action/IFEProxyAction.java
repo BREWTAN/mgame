@@ -92,7 +92,7 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					}
 					log.debug("name:"+pbname+",url="+path);
 					// 1. 把他封装成json,并且发到客户端E/工程里面去
-					String jsonStr = requestor.post(pack,requestBody,"http://10.18.13.104"+path);
+					String jsonStr = requestor.post(pack,requestBody,"http://10.18.13.142"+path);
 					//String jsonStr = requestor.post(pack,requestBody,"http://172.16.28.85:8080"+path);
 					//报文格式整理
 					if(!pbname.equals("PBIFE_login")){
