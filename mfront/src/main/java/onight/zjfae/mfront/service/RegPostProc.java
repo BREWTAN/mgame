@@ -10,7 +10,7 @@ import onight.zjfae.mfront.service.IFEBeanMapping.PostProc;
 public class RegPostProc implements PostProc {
 
 	@Override
-	public void postDO(Message message, String pbname) {
+	public void postDO(Message.Builder builder, String pbname) {
 	
 	}
 

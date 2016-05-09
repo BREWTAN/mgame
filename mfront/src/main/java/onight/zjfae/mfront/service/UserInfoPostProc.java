@@ -1,23 +1,20 @@
 package onight.zjfae.mfront.service;
 
-import com.google.protobuf.Message;
-
 import onight.tfw.outils.bean.JsonPBUtil;
 import onight.zjfae.afront.gens.PBIFEUserbaseinfoGetBasicInfo.PBIFE_userbaseinfo_getBasicInfo;
 import onight.zjfae.afront.gens.PBIFEUserbaseinfoGetBasicInfo.PBIFE_userbaseinfo_getBasicInfo.Builder;
 import onight.zjfae.mfront.service.IFEBeanMapping.PostProc;
 
+import com.google.protobuf.Message;
+
 public class UserInfoPostProc implements PostProc {
 
 	@Override
-	public void postDO(Message message, String pbname) {
-	
-		Builder userInfo =(Builder)message.toBuilder();
+	public void postDO(Message.Builder builder, String pbname) {
+		Builder userInfo =(Builder)builder;
 		if(userInfo.getCertificateCode()==""){
 			userInfo.setCertificateCode("99");
 		}
-		message=userInfo.build();
-
 	}
 	public static void main(String[] args){
 		UserInfoPostProc userInfo= new UserInfoPostProc();
@@ -27,9 +24,10 @@ public class UserInfoPostProc implements PostProc {
 		JsonPBUtil.json2PB(jsonstr.getBytes(), builder);
 		
 		
-		Message msg = builder.build();// 获取到的是一个PBmessage
+//		Message msg = builder.build();// 获取到的是一个PBmessage
 		
-		userInfo.postDO(msg,jsonstr);
+		userInfo.postDO(builder,jsonstr);
+		System.out.println("message="+builder.build());
 	}
 
 }

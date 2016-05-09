@@ -1,14 +1,12 @@
 package onight.zjfae.mfront.action;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.google.protobuf.AbstractMessage.Builder;
-import com.google.protobuf.Message;
-
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import onight.osgi.annotation.NActorProvider;
 import onight.osgi.annotation.iPojoBean;
 import onight.tfw.async.CompleteHandler;
+import onight.tfw.ntrans.api.annotation.ActorRequire;
 import onight.tfw.otransio.api.PacketHelper;
 import onight.tfw.otransio.api.beans.FramePacket;
 import onight.tfw.otransio.api.beans.SendFailedBody;
@@ -17,7 +15,13 @@ import onight.tfw.outils.bean.JsonPBUtil;
 import onight.tfw.outils.serialize.ISerializer;
 import onight.tfw.outils.serialize.SerializerFactory;
 import onight.zjfae.mfront.filter.SSOPacketHelper;
+import onight.zjfae.mfront.service.HttpRequestor;
 import onight.zjfae.mfront.service.IFEBeanMapping;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.protobuf.AbstractMessage.Builder;
+import com.google.protobuf.Message;
 
 @iPojoBean
 @NActorProvider
@@ -47,6 +51,11 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 	
 
 	ThreadLocal<Builder<?>> currentBuilder=new ThreadLocal<Builder<?>>();
+
+	@ActorRequire
+	@Setter
+	@Getter
+	ConfigPostProc posProc;
 	
 	@Override
 	public void onPBPacket(final FramePacket pack, Message nubo, final CompleteHandler handler) {
@@ -102,14 +111,14 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					//  2. json,转换成PBMessage再发到客户端
 					Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
 					JsonPBUtil.json2PB(jsonStr.getBytes("UTF-8"), retbuilder);
-					Message retmsg = retbuilder.build();
+//					Message retmsg = retbuilder.build();
 					//postprocess 后处理逻辑
 					try{
-						bmap.postProcess(retmsg, pbname);	
-						handler.onFinished(PacketHelper.toPBReturn(pack, retmsg));
+						bmap.postProcess(retbuilder, pbname);
+						posProc.postDO(retbuilder, pbname);
+						handler.onFinished(PacketHelper.toPBReturn(pack, retbuilder.build()));
 						int size=pack.getFixHead().getBodysize();
 						log.debug("bodySize:", size);
-
 					}catch(Exception e){
 						handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息后置处理："+e.getMessage(), null)));
 					}

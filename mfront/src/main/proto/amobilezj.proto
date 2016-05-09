@@ -5,26 +5,82 @@ syntax = "proto3";
 package onight.zjfae.afront;
 
 
-enum PEAModule{//必须经过授权登录的
+enum PEAModule{//app独有的接口
 	AZJ = 0;
 };
 
-
-
 enum PEACommand{
-	A00 = 0 ;//获取用户资产信息
+	ADS = 0 ;//获取广告信息
+	TIP = 1 ;//心灵鸡汤
+	
+	C01 = 10 ;//后处理配置重新加载
 };
 
-message PERetUserAssetInfo
+message PBAPPAds
 {
-	string bank_code = 1;//用户绑定银行卡所在行
-	double balance_y = 2;//可用金额
-	double balance_q = 3;//可取金额
-	double freeze_total = 4;//冻结金额
-	double amount = 5;//总余额
-	double allUnit = 6;//总持仓
-	double yesterday_profit = 7;//昨日收益
-	double all_profit = 8;//累计收益
-};
+	string uuid = 1;
+	string func_icons = 2;
+	string ani_method = 3;
+	string ani_params = 4;
+	string func_url = 5;
+	string platforms = 6;
+	string app_vers = 7;
+	string show_type = 8;
+	int32 interval_min = 9;
+	int32 ctrl_iparam = 10;
+	string ctrl_strparam = 11;
+	int64 inserttime = 12;
+	int32 status = 13;
+}
+
+message PEAGetAds
+{
+	string show_type = 1; //显示类型(0:启动页广告,1:首页显示广告,2:登录时候显示)
+}
+
+message PEARetAds
+{
+	string show_type = 1; //显示类型(0:启动页广告,1:首页显示广告,2:登录时候显示)
+	repeated PBAPPAds ads = 2;//广告列表 
+}
+
+
+message PBAPPShakeTips
+{
+	string uuid = 1;
+	string tips_title = 2;
+	string tips_content = 3;
+	string tips_url = 4;
+	string platforms = 5;
+	string app_vers = 6;
+	int64 inserttime = 7;
+	int32 status = 8;
+}
+
+message PEAGetTips
+{
+	string  user_id  = 1; //用户id，暂时不用
+	int32	count  = 2;//个数
+}
+
+
+message PEARetTips
+{
+	string  user_id  = 1; //用户id，暂时不用
+	repeated PBAPPShakeTips tips = 2;//提示列表
+}
+
+
+message PEAConfigReload
+{
+	string  oper_id  = 1; //操作者id，暂时不用
+}
+
+
+message PEARetConfigReload
+{
+	string ret_code  = 1; //返回码
+	string ret_message  = 2;//提示信息
+}
 
 

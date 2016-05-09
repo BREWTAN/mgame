@@ -18,6 +18,7 @@ import onight.zjfae.mfront.Mobilezj.PECommand;
 import onight.zjfae.mfront.Mobilezj.PEReg;
 import onight.zjfae.mfront.Mobilezj.PERetReg;
 import onight.zjfae.mfront.filter.SSOPacketHelper;
+import onight.zjfae.mfront.service.HttpRequestor;
 
 import org.apache.commons.lang3.StringUtils;
 
