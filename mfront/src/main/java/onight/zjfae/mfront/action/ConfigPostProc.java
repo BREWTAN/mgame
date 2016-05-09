@@ -20,6 +20,7 @@ import onight.zjfae.afront.Amobilezj.PEACommand;
 import onight.zjfae.afront.Amobilezj.PEAConfigReload;
 import onight.zjfae.afront.Amobilezj.PEAModule;
 import onight.zjfae.afront.Amobilezj.PEARetConfigReload;
+import onight.zjfae.mfront.cache.KDictionary;
 import onight.zjfae.mfront.postproc.AbstractPostFieldTracker;
 import onight.zjfae.mfront.postproc.FormatterLoader;
 import onight.zjfae.mfront.postproc.impl.DateTimeFormatter;
@@ -27,6 +28,8 @@ import onight.zjfae.mfront.postproc.impl.FloatFormatter;
 import onight.zjfae.mfront.service.IFEBeanMapping.PostProc;
 import onight.zjfae.mfront.utils.PBMessageFlatten;
 import onight.zjfae.mfront.utils.PBMessageFlatten.FieldTracker;
+import onight.zjfae.ordbgens.app.entity.APPDictionary;
+import onight.zjfae.ordbgens.app.entity.APPDictionaryExample;
 import onight.zjfae.ordbgens.app.entity.APPIfacePostproc;
 import onight.zjfae.ordbgens.app.entity.APPIfacePostprocExample;
 
@@ -38,7 +41,7 @@ import com.google.protobuf.Message;
 @iPojoBean
 public class ConfigPostProc extends MobileModuleStarter<PEAConfigReload> implements PostProc {
 
-	List<APPIfacePostproc> procs = new ArrayList<APPIfacePostproc>();
+	// List<APPIfacePostproc> procs = new ArrayList<APPIfacePostproc>();
 
 	@AllArgsConstructor
 	public class PostProcessor {
@@ -66,7 +69,7 @@ public class ConfigPostProc extends MobileModuleStarter<PEAConfigReload> impleme
 			init();
 			PEARetConfigReload.Builder ret = PEARetConfigReload.newBuilder();
 			ret.setRetCode("0000");
-			ret.setRetMessage("共加载策略个数：" + procs.size());
+			ret.setRetMessage("共加载策略个数：" + pbPostProcs.size() + ":" + pbPostProcs);
 			handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
 		} else {
 			PEARetConfigReload.Builder ret = PEARetConfigReload.newBuilder();
@@ -93,18 +96,52 @@ public class ConfigPostProc extends MobileModuleStarter<PEAConfigReload> impleme
 	}
 
 	@StoreDAO(domain = APPIfacePostproc.class, target = "appmysql")
-	@Getter @Setter
+	@Getter
+	@Setter
 	OJpaDAO<APPIfacePostproc> appFaceDao;
+
+	@StoreDAO(domain = APPDictionary.class, target = "appmysql")
+	@Getter
+	@Setter
+	OJpaDAO<APPDictionary> appDictionaryDao;
 
 	public void init() {
 		if (appFaceDao != null && appFaceDao.getDaosupport() != null) {
 			synchronized (appFaceDao) {
+				loadDictionary();
 				List<APPIfacePostproc> tmpprocs = new ArrayList<APPIfacePostproc>();
 				loadProcFromDB(tmpprocs);
 				HashMap<String, List<PostProcessor>> mapper = loadClassInfo(tmpprocs);
 				log.debug("load Procs.size=" + mapper.size());
+
 				pbPostProcs = mapper;
+
 			}
+		}
+	}
+
+	public void loadDictionary() {
+		if (appDictionaryDao != null && appDictionaryDao.getDaosupport() != null) {
+			APPDictionaryExample example = new APPDictionaryExample();
+			example.createCriteria().andStatusEqualTo(1);
+
+			List<Object> lst = appDictionaryDao.selectByExample(example);
+			HashMap<String, HashMap<String, APPDictionary>> ldictsByKeyNO = new HashMap<>();
+			HashMap<String, HashMap<String, APPDictionary>> lcaseIgnoreDictsByKeyNO = new HashMap<>();
+			if (lst != null) {
+				for (Object obj : lst) {
+					APPDictionary dict = (APPDictionary) obj;
+					HashMap<String, APPDictionary> keypairs = ldictsByKeyNO.get(dict.getKeyNo());
+					if (keypairs == null) {
+						keypairs = new HashMap<String, APPDictionary>();
+						ldictsByKeyNO.put(dict.getKeyNo(), keypairs);
+						lcaseIgnoreDictsByKeyNO.put(dict.getKeyNo().toLowerCase(), keypairs);
+					}
+					keypairs.put(dict.getKeyCode(), dict);
+				}
+			}
+			KDictionary.dictsByKeyNO = ldictsByKeyNO;
+			KDictionary.caseIgnoreDictsByKeyNO = lcaseIgnoreDictsByKeyNO;
 		}
 	}
 
@@ -162,8 +199,8 @@ public class ConfigPostProc extends MobileModuleStarter<PEAConfigReload> impleme
 
 	/**
 	 * 获取格式化的函数
-	 * '格式化函数(DateFormat:时间格式化,FloatFormat:浮点格式化,StringFormat:字符串格式化,TrimSize:大小格式,JavaScript:通过js脚本自己控制/暂时不支持,ScriptFile:脚本文件/不推荐/暂时不支持
-	 * ) ' ,
+	 * '格式化函数(DateFormat:时间格式化,FloatFormat:浮点格式化,StringFormat:字符串格式化,TrimSize:大小格式,JavaScript:通过js脚本自己控制/暂时不支持,ScriptFile:脚本文件/不推荐/
+	 * 暂 时 不 支 持 ) ' ,
 	 * 
 	 * @param proc
 	 * @return
