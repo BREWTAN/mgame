@@ -3,6 +3,7 @@ package onight.zjfae.mfront.postproc.impl;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import lombok.extern.slf4j.Slf4j;
 import onight.zjfae.mfront.postproc.AbstractPostFieldTracker;
@@ -51,5 +52,18 @@ public class DateTimeFormatter extends AbstractPostFieldTracker {
 		}
 		return null;
 
+	}
+	public static void main(String[] args) {
+		try {
+			SimpleDateFormat srcsdf = new SimpleDateFormat("E MMM d HH:mm:ss z YYYY");
+
+			System.out.println("date=="+srcsdf.format(new Date()));
+			Date date = srcsdf.parse("Tue May 10 10:36:46 GMT+08:00 2016");
+			System.out.println("date="+date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

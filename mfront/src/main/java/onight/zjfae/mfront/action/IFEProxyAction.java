@@ -106,7 +106,6 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					//报文格式整理
 					if(!pbname.equals("PBIFE_login")){
 						jsonStr=jsonStr.substring(jsonStr.indexOf(":")+1, jsonStr.lastIndexOf("}"));
-						System.out.println(jsonStr);	
 					}
 					//  2. json,转换成PBMessage再发到客户端
 					Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
@@ -116,15 +115,19 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					try{
 						bmap.postProcess(retbuilder, pbname);
 						posProc.postDO(retbuilder, pbname);
-						handler.onFinished(PacketHelper.toPBReturn(pack, retbuilder.build()));
+						
+						Message retmsg = retbuilder.build();
+						log.debug("posProc_result=" + retmsg);
+						handler.onFinished(PacketHelper.toPBReturn(pack, retmsg));
 						int size=pack.getFixHead().getBodysize();
-						log.debug("bodySize:", size);
+						log.debug("bodySize:{}", size);
 					}catch(Exception e){
 						handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息后置处理："+e.getMessage(), null)));
 					}
 
 				} catch (Exception e) {
 					//  转换失败时
+					log.debug("ex=",e);
 					handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息转换失败："+e.getMessage(), null)));
 				}finally{
 					currentBuilder.set(null);
