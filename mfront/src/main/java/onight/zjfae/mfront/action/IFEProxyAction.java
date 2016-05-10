@@ -120,7 +120,7 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 						log.debug("posProc_result=" + retmsg);
 						handler.onFinished(PacketHelper.toPBReturn(pack, retmsg));
 						int size=pack.getFixHead().getBodysize();
-						log.debug("bodySize:{}", size);
+						log.debug("retfh = {},extSize={},bodySize={}", pack.getFixHead().toStrHead(),pack.getFixHead().getExtsize(),size);
 					}catch(Exception e){
 						handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息后置处理："+e.getMessage(), null)));
 					}
