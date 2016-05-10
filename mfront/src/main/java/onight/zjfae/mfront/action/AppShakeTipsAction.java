@@ -67,7 +67,7 @@ public class AppShakeTipsAction extends MobileModuleStarter<PEAGetTips> {
 				List<Object> lst = appShakeTipsDao.selectByExample(example);
 				for (Object ob : lst) {
 					APPShakeTips ads = (APPShakeTips) ob;
-					PBAPPShakeTips pba = pbutils.toPB(PBAPPAds.newBuilder(), ads);
+					PBAPPShakeTips pba = pbutils.toPB(PBAPPShakeTips.newBuilder(), ads);
 					ret.addTips(pba);
 				}
 				handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
@@ -82,6 +82,6 @@ public class AppShakeTipsAction extends MobileModuleStarter<PEAGetTips> {
 
 	@Override
 	public Builder<?> getPBBuilder() {
-		return PEAGetAds.newBuilder();
+		return PEAGetTips.newBuilder(); 
 	}
 }
