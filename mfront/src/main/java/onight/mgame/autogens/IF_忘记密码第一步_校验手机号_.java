@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
-// 忘记密码第一步（校验手机号）,客户信息,ForgetPasswordManageController,POST,JSON,/ife/forgetpasswordmanage/checkUserMobile.html@onight.mgame.utils.PBInfo(name = "PBIFE_forgetpasswordmanage_checkUserMobile", path = "/ife/forgetpasswordmanage/checkUserMobile.html") 
+// 忘记密码第一步（校验手机号）,客户信息,ForgetPasswordManageController,POST,JSON,/ife/forgetpasswordmanage/checkUserMobile.html@onight.mgame.utils.PBInfo(name = "PBIFE_forgetpasswordmanage_checkUserMobile", path = "/ife/forgetpasswordmanage/checkUsername.html") 
 public class IF_忘记密码第一步_校验手机号_ {
 	// =======REQuest==============
 

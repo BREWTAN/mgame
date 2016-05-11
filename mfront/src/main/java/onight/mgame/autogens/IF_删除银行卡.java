@@ -24,6 +24,8 @@ public class IF_删除银行卡 {
 		String checkCode;//  ,短信验证码,String,不校验,是,
 		 @PBFields(name = ",短信验证码流水,String,不校验,是,")
 		String checkCodeSerialNo;//  ,短信验证码流水,String,不校验,是,
+		 @PBFields(name = ",操作终端,String,不校验,否,")
+		String terminal;//  ,操作终端,String,不校验,否,
 		 String tfw__reserved;//保留字段
 
 	}

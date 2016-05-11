@@ -34,6 +34,8 @@ public class IF_增加银行卡 {
 		String checkCode;//  ,验证码,String,不校验,否,
 		 @PBFields(name = ",验证码流水,String,不校验,否,")
 		String checkCodeSerialNo;//  ,验证码流水,String,不校验,否,
+		 @PBFields(name = ",操作终端,String,不校验,否,")
+			String terminal;//  ,操作终端,String,不校验,否,
 		 String tfw__reserved;//保留字段
 
 	}

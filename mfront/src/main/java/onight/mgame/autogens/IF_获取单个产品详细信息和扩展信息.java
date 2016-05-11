@@ -431,6 +431,10 @@ public class IF_获取单个产品详细信息和扩展信息 {
 				String process;//  ,剩余百分比进度条,String,不校验,是,
 		 @PBFields(name = ",预约额度,String,不校验,是,")
 				String orderBuyAmount;//  ,预约额度,String,不校验,是,
+		 @PBFields(name = ",可购人数,String,不校验,是,")
+				String canBuyNum;//  ,可购人数,String,不校验,是,
+		 @PBFields(name = ",统一校验,String,不校验,是,")
+				String comparison;//  ,统一校验,String,不校验,是,
 }
 
 		 TaProudctFinanceDetail taProudctFinanceDetail;// 

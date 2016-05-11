@@ -28,20 +28,6 @@ public class IF_查询个人用户基本信息 {
 	public static class Response {
 		 @PBFields(name = ",默认证件类型-名称,String,不校验,是,")
 		String certificateTypeName;//  ,默认证件类型-名称,String,不校验,是,
-	@Data
-	@AllArgsConstructor
-	@NoArgsConstructor
-	public static class CertificateTypeList {
-
-		 @PBFields(name = ",证件类型,String,不校验,是,")
-				String code;//  ,证件类型,String,不校验,是,
-		 @PBFields(name = ",证件类型-名称,String,不校验,是,")
-				String describe;//  ,证件类型-名称,String,不校验,是,
-}
-
-		 @PBFields(name = ",手机号,String,不校验,是,")
-		List<CertificateTypeList>certificateTypeList;// 
- 
 		 @PBFields(name = ",手机号,String,不校验,是,")
 		String mobile;//  ,手机号,String,不校验,是,
 		 @PBFields(name = ",推荐人姓名,String,不校验,是,")

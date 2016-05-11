@@ -241,6 +241,8 @@ public class IF_预约产品详情查询 {
 				String depositRate;//  ,保证金比例,String,不校验,是,
 		 @PBFields(name = ",保证金比例,String,不校验,是,")
 				String transferFloatBegin;//  ,保证金比例,String,不校验,是,
+		 @PBFields(name = ",限购份额,String,不校验,是,")
+		 String canBuyNum;
 }
 
 		 TaProductOrderInfo taProductOrderInfo;// 

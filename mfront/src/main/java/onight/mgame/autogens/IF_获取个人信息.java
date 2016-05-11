@@ -36,6 +36,8 @@ public class IF_获取个人信息 {
 		String certificateCode;//  ,证件号,String,不校验,是,
 		 @PBFields(name = ",证件类型,String,不校验,是,")
 		String certificateType;//  ,证件类型,String,不校验,是,
+		 @PBFields(name = ",用户类型 ,String,不校验,是,")
+		String userType;//  ,用户类型,String,不校验,是,p-个人 c-机构
 		 String tfw__reserved;//保留字段 
 
 	}

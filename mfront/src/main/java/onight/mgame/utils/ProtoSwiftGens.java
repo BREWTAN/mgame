@@ -35,7 +35,7 @@ public class ProtoSwiftGens {
 		if (type.equals(String.class)) {
 			return "string";
 		}
-		if (type.equals(BigDecimal.class)) {
+		if (type.equals(BigDecimal.class)||type.equals(double.class)||type.equals(Double.class)) {
 			return "double";
 		}
 		if (type.equals(Integer.class)) {
@@ -43,6 +43,15 @@ public class ProtoSwiftGens {
 		}
 		if (type.equals(Boolean.class)) {
 			return "bool";
+		}
+		if (type.equals(boolean.class)) {
+			return "bool";
+		}
+		if (type.equals(long.class)||type.equals(Long.class)) {
+			return "int64";
+		}
+		if (type.equals(int.class)||type.equals(Integer.class)) {
+			return "int32";
 		}
 		return relClassName(type);
 	}
@@ -116,7 +125,7 @@ public class ProtoSwiftGens {
 
 	public static void main(String[] args) {
 		try {
-			File dstDir = new File("E:/Workspaces/workAb/comp/develop/appmodlue/apptfw/mfront/mfront/src/main/proto/gens");
+			File dstDir = new File("/Users/brew/Documents/KJ/MING/git/mgame/mfront/src/main/proto/gens");
 			dstDir.mkdirs();
 			for (Class clazz : getClasses("onight.mgame.autogens")) {
 				// Class clazz = IF_不良资产产品查询_项目揭示_.class;
@@ -124,6 +133,7 @@ public class ProtoSwiftGens {
 				if (ano == null)
 					continue;
 //				System.out.println(clazz);
+				if(!clazz.getSimpleName().equals("IF_个性化定制初始化查询"))continue;
 
 				System.out.println("ano==" + ano.name() + ",path=" + ano.path());
 				StringBuffer sb = new StringBuffer();

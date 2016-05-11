@@ -40,9 +40,9 @@ public class IF_登陆 {
 	public static class Response {
 
 		 @PBFields(name = ",message,")
-				String message;//  ,message,String,不校验,是,
+		String message;//  ,message,String,不校验,是,
 		 @PBFields(name = ",result,")
-				String result;//  ,result,String,不校验,是,
+		String result;//  ,result,String,不校验,是,
 
 		 String tfw__reserved;//保留字段 
 

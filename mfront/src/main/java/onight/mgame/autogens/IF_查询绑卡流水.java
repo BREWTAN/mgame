@@ -20,6 +20,9 @@ public class IF_查询绑卡流水 {
 		String pageIndex;//  ,当前页,String,不校验,否,
 		 @PBFields(name = ",页大小,String,不校验,否,")
 		String pageSize;//  ,页大小,String,不校验,否,
+		 @PBFields(name = ",状态,String,不校验,否,")
+			String status;//  ,页大小,String,不校验,否,
+		 
 		 String tfw__reserved;//保留字段
 
 	}

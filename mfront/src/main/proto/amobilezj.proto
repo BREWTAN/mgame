@@ -12,7 +12,7 @@ enum PEAModule{//app独有的接口
 enum PEACommand{
 	ADS = 0 ;//获取广告信息
 	TIP = 1 ;//心灵鸡汤
-	
+	MER = 2; //聚合接口
 	C01 = 10 ;//后处理配置重新加载
 };
 
@@ -83,4 +83,28 @@ message PEARetConfigReload
 	string ret_message  = 2;//提示信息
 }
 
+
+
+message PBFramePacket{
+	string gcmd = 1 ;//代理的gcmd
+	string exts = 2;//扩展头
+	string jsbody = 3 [  jstype  = JS_NORMAL ];//请求的json数据
+	bytes pbbody = 4;//请求的pb数据
+	string pbname = 5 ;//代理的pbname 
+	string pack_id = 11;//包在多个请求中的的id
+	repeated PBFramePacket nextpacks = 20;//下一个请求
+	repeated string clonefields = 21;//传到给下个节点的属性字段
+}	
+
+message PWMergeProxy
+{
+	repeated PBFramePacket packets = 1 ;//需要合并的请求
+}
+
+message PWRetMerges
+{
+	int32	retcode = 1;//返回状态码
+	string  retmsg  = 2;//返回的消息信息
+	repeated PBFramePacket retpack = 3 ;//需要合并的请求
+}
 

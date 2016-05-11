@@ -42,6 +42,8 @@ public class IF_产品预约支付 {
 	@AllArgsConstructor
 	@NoArgsConstructor
 	public static class Response {
+		@PBFields(name = ",预约成功提示信息,String,不校验,是,")
+		String msg;
 		 String tfw__reserved;//保留字段 
 
 	}

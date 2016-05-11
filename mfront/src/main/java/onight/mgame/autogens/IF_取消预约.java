@@ -28,6 +28,8 @@ public class IF_取消预约 {
 	@AllArgsConstructor
 	@NoArgsConstructor
 	public static class Response {
+		@PBFields(name = ",取消预约提示信息,String,不校验,是,")
+		String msg;
 		 String tfw__reserved;//保留字段 
 
 	}

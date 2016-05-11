@@ -7,8 +7,8 @@ import java.math.BigDecimal;
 import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
-// 更新用户邮箱,客户信息,UserInfoManageController,POST,JSON,/ife/userinfomanage/modifyUserEmail.html@onight.mgame.utils.PBInfo(name = "PBIFE_userinfomanage_modifyUserEmail", path = "/ife/userinfomanage/modifyUserEmail.html") 
-public class IF_更新用户邮箱 {
+// 忘记密码第三步（设置新密码）,客户信息,ForgetPasswordManageController,POST,JSON,/ife/forgetpasswordmanage/checkEmailCode.html@onight.mgame.utils.PBInfo(name = "PBIFE_forgetpasswordmanage_checkEmailCode", path = "/ife/forgetpasswordmanage/checkEmailCode.html") 
+public class IF_忘记密码第三步_email_校验验证码 {
 	// =======REQuest==============
 
 	@Data
@@ -16,10 +16,8 @@ public class IF_更新用户邮箱 {
 	@NoArgsConstructor
 	public static class Request {
 
-		 @PBFields(name = ",,String,,否,")
-		String email;//  ,,String,,否,
-		 @PBFields(name = ",,String,,否,")
-		String emailValidateCode;//  ,,String,,否,
+		 @PBFields(name = ",邮箱验证码,String,不校验,否,")
+		 String emailValidateCode;
 		 String tfw__reserved;//保留字段
 
 	}

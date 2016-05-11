@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
-// 密码复杂度计算,客户信息,MobileManageController,POST,JSON,/ife/passwordmanage/calculatePasswordComplexity.html@onight.mgame.utils.PBInfo(name = "PBIFE_passwordmanage_calculatePasswordComplexity", path = "/ife/passwordmanage/calculatePasswordComplexity.html") 
+// 密码复杂度计算,客户信息,PasswordManageController,POST,JSON,/ife/passwordmanage/calculatePasswordComplexity.html@onight.mgame.utils.PBInfo(name = "PBIFE_passwordmanage_calculatePasswordComplexity", path = "/ife/passwordmanage/calculatePasswordComplexity.html") 
 public class IF_密码复杂度计算 {
 	// =======REQuest==============
 

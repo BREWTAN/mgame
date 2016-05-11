@@ -26,6 +26,8 @@ public class IF_认购 {
 		String payType;//  ,支付类型,String,不校验,否,
 		 @PBFields(name = ",渠道号,String,不校验,是,")
 		String channelNo;//  ,渠道号,String,不校验,是,
+		 @PBFields(name = ",重复提交校验码,String,不校验,否,")
+		 String  repeatCommitCheckCode;
 		 String tfw__reserved;//保留字段
 
 	}

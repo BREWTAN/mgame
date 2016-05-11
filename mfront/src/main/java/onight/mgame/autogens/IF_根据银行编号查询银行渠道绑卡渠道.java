@@ -20,6 +20,8 @@ public class IF_根据银行编号查询银行渠道绑卡渠道 {
 		String bankCode;//  ,银行编号,String,,否,
 		 @PBFields(name = ",交易类型,String,,否,0-绑卡，1-入金")
 		String transType;//  ,交易类型,String,,否,0-绑卡，1-入金
+		 @PBFields(name = ",绑卡渠道,String,,否,")
+		String payChannel;//  ,绑卡渠道,String,
 		 String tfw__reserved;//保留字段
 
 	}

@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
-// 修改登录密码,客户信息,MobileManageController,POST,JSON,/ife/passwordmanage/alterLoginPassword.html@onight.mgame.utils.PBInfo(name = "PBIFE_passwordmanage_alterLoginPassword", path = "/ife/passwordmanage/alterLoginPassword.html") 
+// 修改登录密码,客户信息,PasswordManageController,POST,JSON,/ife/passwordmanage/alterLoginPassword.html@onight.mgame.utils.PBInfo(name = "PBIFE_passwordmanage_alterLoginPassword", path = "/ife/passwordmanage/alterLoginPassword.html") 
 public class IF_修改登录密码 {
 	// =======REQuest==============
 

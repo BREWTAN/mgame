@@ -24,6 +24,8 @@ public class IF_修改手机_第一步 {
 		String securityQuestion;//  ,安保问题,String,不校验,是,已设置安保问题，需提交
 		 @PBFields(name = ",安保问题答案,String,不校验,是,已设置安保问题，需提交")
 		String securityQuestionAnswer;//  ,安保问题答案,String,不校验,是,已设置安保问题，需提交
+		 @PBFields(name = ",手机验证码,String,不校验,是")
+		 String smsValidateCode;
 		 String tfw__reserved;//保留字段
 
 	}

@@ -10,10 +10,13 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.net.ssl.SSLContext;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -44,6 +47,7 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
+import onight.tfw.otransio.api.PackHeader;
 import onight.tfw.otransio.api.beans.FramePacket;
 
 @Slf4j
@@ -122,7 +126,7 @@ public class HttpRequestor {
 		lock.readLock().lock();
 		try {
 			log.debug("httppost:" + address + ",data=" + xml);
-			
+
 			StringEntity entity = new StringEntity(xml, "UTF-8");
 			HttpPost httppost = new HttpPost(address);
 			httppost.setEntity(entity);
@@ -135,43 +139,75 @@ public class HttpRequestor {
 			lock.readLock().unlock();
 		}
 	}
-	
+
 	public String post(final FramePacket pack, String xml, String address) throws ClientProtocolException, IOException {
 		lock.readLock().lock();
 		try {
 			log.debug("httppost:" + address + ",data=" + xml);
 			HttpPost httppost = new HttpPost(address);
-			
+
 			StringBuffer stringBuffer = new StringBuffer();
-			if (pack.getExtProp(SSO_SMID) != null) {//get client smid 
-				stringBuffer.append(SSO_SMID).append("=").append(pack.getExtProp(SSO_SMID)).append(";");
+			for (Entry<String, Object> entry : pack.getExtHead().getVkvs().entrySet()) {
+				stringBuffer.append(entry.getKey()).append("=").append(entry.getValue()).append(";");
 			}
-			if (pack.getExtProp(ZJS_ID) != null) {//get client zjsid
-				stringBuffer.append(ZJS_ID).append("=").append(pack.getExtProp(ZJS_ID)).append(";");
+			for (Entry<String, Object> entry : pack.getExtHead().getHiddenkvs().entrySet()) {
+				stringBuffer.append(entry.getKey()).append("=").append(entry.getValue()).append(";");
 			}
-			if(StringUtils.isNotBlank(stringBuffer)){// if exists , post it as Cookie to erie
-				httppost.setHeader(new BasicHeader("Cookie",stringBuffer.toString()));
+			for (Entry<String, Object> entry : pack.getExtHead().getIgnorekvs().entrySet()) {
+				stringBuffer.append(entry.getKey()).append("=").append(entry.getValue()).append(";");
 			}
-			ObjectMapper mapper = new ObjectMapper();  
-		    JsonNode root = mapper.readTree(xml); 
-		    
-		    List<NameValuePair> formparams = new ArrayList<NameValuePair>();  
-	    
-		    for(Iterator<String>  it =  root.getFieldNames(); it.hasNext();){
-		    		String name =it.next();
-		    		String value = root.get(name).getTextValue();
-		    	    formparams.add(new BasicNameValuePair(name, value));  
-		    }
-	        UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formparams, "UTF-8");
-    		httppost.setEntity(uefEntity);
-			ResponseHandler<String> responseHandler = new BasicResponseHandler(){
+			
+			log.debug("post:cookies=" + stringBuffer.toString());
+			// if (pack.getExtProp(SSO_SMID) != null) {//get client smid
+			// stringBuffer.append(SSO_SMID).append("=").append(pack.getExtProp(SSO_SMID)).append(";");
+			// }
+			// if (pack.getExtProp(ZJS_ID) != null) {//get client zjsid
+			// stringBuffer.append(ZJS_ID).append("=").append(pack.getExtProp(ZJS_ID)).append(";");
+			// }
+			if (StringUtils.isNotBlank(stringBuffer)) {// if exists , post it as
+														// Cookie to erie
+				httppost.setHeader(new BasicHeader("Cookie", stringBuffer.toString()));
+			}
+			if (StringUtils.isNotBlank(xml)) {
+				ObjectMapper mapper = new ObjectMapper();
+				JsonNode root = mapper.readTree(xml);
+				List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+
+				for (Iterator<String> it = root.getFieldNames(); it.hasNext();) {
+					String name = it.next();
+					String value = root.get(name).getTextValue();
+					formparams.add(new BasicNameValuePair(name, value));
+				}
+				UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formparams, "UTF-8");
+				httppost.setEntity(uefEntity);
+			}
+			ResponseHandler<String> responseHandler = new BasicResponseHandler() {
 				@Override
 				public String handleResponse(HttpResponse response) throws HttpResponseException, IOException {
-					if(response.getHeaders("Set-Cookie").length > 0){
-						for(Header head:response.getHeaders("Set-Cookie")){
-							pack.putHeader(head.getName(), head.getValue());
+					if (response.getHeaders("Set-Cookie").length > 0) {
+						List<String> Cookies = (List<String>) pack.getExtHead().getVkvs().get(PackHeader.Set_COOKIE);
+						synchronized (pack) {
+							Cookies = (List<String>) pack.getExtHead().getVkvs().get(PackHeader.Set_COOKIE);
+							if (Cookies == null) {
+								Cookies = new ArrayList<String>();
+								pack.getExtHead().append(PackHeader.Set_COOKIE, Cookies);
+							}
 						}
-						log.debug(response.getHeaders("Set-Cookie")[0].getValue());
+
+						for (Header head : response.getHeaders("Set-Cookie")) {
+							Cookies.add(head.getValue());
+							String cookie[] = head.getValue().split(";");
+							String kvs[] = cookie[0].trim().split("=");
+							if (kvs.length == 2) {
+								// PackHeader.EXT_COOKIES+kvs[0], kvs[1]);
+								pack.putHeader(kvs[0], kvs[1]);
+								log.debug("SetCookies:" + kvs[0] + "=" + kvs[1]);
+							} else {
+								log.debug("error SetCookies:" + head.getValue());
+							}
+
+						}
+						// log.debug(response.getHeaders("Set-Cookie")[0].getValue());
 					}
 					return super.handleResponse(response);
 				}
@@ -195,8 +231,8 @@ public class HttpRequestor {
 
 	public int defaultHttpTimeoutMillis = 10000;// http超时时间
 	private int httpKeepAlivesSecs = 60;
-	private String SSO_SMID="SMID";
-	private String ZJS_ID="ZJSID";	
+	private String SSO_SMID = "SMID";
+	private String ZJS_ID = "ZJSID";
 	private PoolingHttpClientConnectionManager cm;
 	private CloseableHttpClient httpclient;
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();

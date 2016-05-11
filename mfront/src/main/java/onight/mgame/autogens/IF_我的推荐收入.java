@@ -38,6 +38,10 @@ public class IF_我的推荐收入 {
 		String bindCardNum;//  ,绑定奖励,String,不校验,是,
 		 @PBFields(name = ",投资奖励,String,不校验,是,")
 		String investNum;//  ,投资奖励,String,不校验,是,
+		 @PBFields(name = ",帐号,String,不校验,是,")
+		String account;
+		 @PBFields(name = ",资金帐号,String,不校验,是,")
+		String fundAccount;
 		 String tfw__reserved;//保留字段 
 
 	}

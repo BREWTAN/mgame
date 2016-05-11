@@ -20,6 +20,10 @@ public class IF_预约认购产品详情查询 {
 		String orderProductCode;//  ,预约产品编号,String,不校验,否,
 		 @PBFields(name = ",预约类型,String,不校验,否,")
 		String orderType;//  ,预约类型,String,不校验,否,
+		 @PBFields(name = ",预约明细编号,String,不校验,否,")
+		String orderNum;//  ,预约明细编号,String,不校验,否,
+		@PBFields(name = ",预约金额,String,不校验,否,")
+		String orderBuyAmount;//  ,预约金额,String,不校验,否,
 		 String tfw__reserved;//保留字段
 
 	}
@@ -433,7 +437,13 @@ public class IF_预约认购产品详情查询 {
 				String process;//  ,剩余百分比进度条,String,不校验,是,
 		 @PBFields(name = ",预约额度,String,不校验,是,")
 				String orderBuyAmount;//  ,预约额度,String,不校验,是,
-}
+		 @PBFields(name = ",预约金额,String,不校验,是,")
+				String orderBuyAmount1;//  ,预约金额,String,不校验,是,
+		 @PBFields(name = ",可购人数,String,不校验,是,")
+				String canBuyNum;//  ,预约金额,String,不校验,是,
+		 @PBFields(name = ",特约份额,String,不校验,是,")
+				String specialUnit;//  ,特约份额,String,不校验,是,
+	}
 
 		 TaProductFinanceDetail taProductFinanceDetail;// 
  

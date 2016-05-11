@@ -1,11 +1,14 @@
 package onight.zjfae.mfront.action;
 
+import java.io.IOException;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import onight.osgi.annotation.NActorProvider;
 import onight.osgi.annotation.iPojoBean;
 import onight.tfw.async.CompleteHandler;
+import onight.tfw.ntrans.api.ActorService;
 import onight.tfw.ntrans.api.annotation.ActorRequire;
 import onight.tfw.otransio.api.PacketHelper;
 import onight.tfw.otransio.api.beans.FramePacket;
@@ -19,6 +22,10 @@ import onight.zjfae.mfront.service.HttpRequestor;
 import onight.zjfae.mfront.service.IFEBeanMapping;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.StaticServiceProperty;
+import org.apache.http.client.ClientProtocolException;
 
 import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.Message;
@@ -26,9 +33,10 @@ import com.google.protobuf.Message;
 @iPojoBean
 @NActorProvider
 // @Provides(specifications = { IActor.class, PSenderService.class })
+//@Instantiate(name = "iFEProxyAction")
+//@Provides(specifications = ActorService.class, properties = { @StaticServiceProperty(name = "name", value = "iFEProxyAction", type = "java.lang.String") })
 @Slf4j
-
-public class IFEProxyAction extends MobileModuleStarter<Message> {
+public class IFEProxyAction extends MobileModuleStarter<Message> { 
 
 	protected HttpRequestor requestor = new HttpRequestor();
 
@@ -36,33 +44,40 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 
 	IFEBeanMapping bmap = new IFEBeanMapping();
 	
+	public IFEBeanMapping getBmap(){ 
+		return bmap;
+	}
+
+	String backendurl;
 	@Override
 	public String[] getCmds() {
 		requestor.reload();
 		requestor.changeMaxTotal(props.get("pxy.http.conn.max", 10));
 		bmap.init();
+		backendurl=props.get("app.backend.url", "http://10.18.13.142");
+		log.debug("backendurl="+backendurl);
 		return new String[] { "IFE" };
 	}
 
 	// http://localhost:8081/mzj/pbife.do?fh=VREGMZJ000000J00&bd={"pageIndex":"13800138000","image_code":"12334554"}&pbname=PBIFE_badasset_queryProjectReveal
-	//	// http://localhost:8081/mzj/pbife.do?fh=VREGMZJ000000P00&pbname=PBIFE_badasset_queryProjectReveal
+	// //
+	// http://localhost:8081/mzj/pbife.do?fh=VREGMZJ000000P00&pbname=PBIFE_badasset_queryProjectReveal
 
 	protected ISerializer jsons = SerializerFactory.getSerializer(SerializerFactory.SERIALIZER_JSON);
-	
 
-	ThreadLocal<Builder<?>> currentBuilder=new ThreadLocal<Builder<?>>();
+	ThreadLocal<Builder<?>> currentBuilder = new ThreadLocal<Builder<?>>();
 
 	@ActorRequire
 	@Setter
 	@Getter
 	ConfigPostProc posProc;
-	
+
 	@Override
 	public void onPBPacket(final FramePacket pack, Message nubo, final CompleteHandler handler) {
 		// log.debug("pack:" + pack);
-		
+
 		String pbname = pack.getExtStrProp("pbname");
-		if (StringUtils.isBlank(pbname))  {
+		if (StringUtils.isBlank(pbname)) {
 			handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("pbname 不能为空", pack)));
 		} else {
 			Builder builder = bmap.getReqBuilder(pbname);
@@ -72,71 +87,87 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 				try {
 					currentBuilder.set(builder);
 					Message msg = getPBBody(pack);//
-					//1.preprocess.== validate..前处理逻辑
-					log.debug("msg=="+msg);
-					try{
-						if(!bmap.preProcess(msg, pbname)){
-							
+					// 1.preprocess.== validate..前处理逻辑
+					log.debug("msg==" + msg);
+					try {
+						if (!bmap.preProcess(msg, pbname)) {
 							handler.onFinished(PacketHelper.toPBReturn(pack, msg));
-						};	
-					}catch(Exception e){
-						handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息前置处理："+e.getMessage(), null)));
-					}
-					
-					log.debug("msg=={}",msg);
-					String str=null;
-					String requestBody=null;
-					String path = bmap.getEURL(pbname);
-					if(pack.getBody().length==0){
-						requestBody="1=1";
-					}else{
-						if (pack.getFixHead().getEnctype()=='P'){
-							 str = new FJsonPBFormat().printToString(msg);
 						}
-						else{
-							str = new String(pack.getBody(),"UTF-8");
+						;
+					} catch (Exception e) {
+						handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息前置处理：" + e.getMessage(), null)));
+					}
+
+					log.debug("msg=={}", msg);
+					String str = null;
+					String requestBody = null;
+					String path = bmap.getEURL(pbname);
+					if (pack.getBody()==null||pack.getBody().length == 0) {
+						requestBody = "";
+					} else {
+						if (pack.getFixHead().getEnctype() == 'P') {
+							str = new FJsonPBFormat().printToString(msg);
+						} else {
+							str = new String(pack.getBody(), "UTF-8");
 						}
 						log.debug("proxy:{}", str);
 						requestBody = str;
 					}
-					log.debug("name:"+pbname+",url="+path);
-					// 1. 把他封装成json,并且发到客户端E/工程里面去
-					String jsonStr = requestor.post(pack,requestBody,"http://10.18.13.142"+path);
-					//String jsonStr = requestor.post(pack,requestBody,"http://172.16.28.85:8080"+path);
-					//报文格式整理
-					if(!pbname.equals("PBIFE_login")){
-						jsonStr=jsonStr.substring(jsonStr.indexOf(":")+1, jsonStr.lastIndexOf("}"));
-					}
-					//  2. json,转换成PBMessage再发到客户端
-					Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
-					JsonPBUtil.json2PB(jsonStr.getBytes("UTF-8"), retbuilder);
-//					Message retmsg = retbuilder.build();
-					//postprocess 后处理逻辑
-					try{
-						bmap.postProcess(retbuilder, pbname);
-						posProc.postDO(retbuilder, pbname);
-						
-						Message retmsg = retbuilder.build();
+					log.debug("name:" + pbname + ",url=" + path);
+					try {
+						Message retmsg = postJsonMessage(pack,requestBody,pbname);
 						log.debug("posProc_result=" + retmsg);
 						handler.onFinished(PacketHelper.toPBReturn(pack, retmsg));
-						int size=pack.getFixHead().getBodysize();
-						log.debug("retfh = {},extSize={},bodySize={}", pack.getFixHead().toStrHead(),pack.getFixHead().getExtsize(),size);
-					}catch(Exception e){
-						handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息后置处理："+e.getMessage(), null)));
+						int size = pack.getFixHead().getBodysize();
+						log.debug("retfh = {},extSize={},bodySize={}", pack.getFixHead().toStrHead(), pack.getFixHead().getExtsize(), size);
+					} catch (Exception e) {
+						handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息后置处理：" + e.getMessage(), null)));
 					}
 
 				} catch (Exception e) {
-					//  转换失败时
-					log.debug("ex=",e);
-					handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息转换失败："+e.getMessage(), null)));
-				}finally{
+					// 转换失败时
+					log.debug("ex=", e);
+					handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("消息转换失败：" + e.getMessage(), null)));
+				} finally {
 					currentBuilder.set(null);
-				}		
+				}
 
 			}
-			
+
 		}
 	}
+
+	public Message postJsonMessage(FramePacket pack, String requestBody, String pbname) throws ClientProtocolException, IOException {
+		String path = bmap.getEURL(pbname);
+		String jsonStr = requestor.post(pack, requestBody, backendurl + path);
+		// String jsonStr =
+		// requestor.post(pack,requestBody,"http://172.16.28.85:8080"+path);
+		// 报文格式整理
+		if(jsonStr.startsWith("{\"errorCode\":"))
+		{
+			jsonStr = jsonStr.replaceAll("error", "return");
+		}
+		else if (!pbname.equals("PBIFE_login")) {
+			jsonStr = jsonStr.substring(jsonStr.indexOf(":") + 1, jsonStr.lastIndexOf("}"));
+		}
+		// 2. json,转换成PBMessage再发到客户端
+		Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
+		
+		JsonPBUtil.json2PB(jsonStr.getBytes("UTF-8"), retbuilder);
+		// try{
+		bmap.postProcess(retbuilder, pbname);
+		posProc.postDO(retbuilder, pbname);
+
+		Message retmsg = retbuilder.build();
+		
+		log.debug("posProc_result=" + retmsg);
+		return retmsg;
+		// }catch(Exception e){
+		// handler.onFinished(PacketHelper.toPBReturn(pack, new
+		// SendFailedBody("消息后置处理："+e.getMessage(), null)));
+		// }
+	}
+
 	@Override
 	public Builder<?> getPBBuilder() {
 		return currentBuilder.get();

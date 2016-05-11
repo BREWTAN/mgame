@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
-// 重置交易密码,客户信息,MobileManageController,POST,JSON,/ife/passwordmanage/resetTradePassword.html@onight.mgame.utils.PBInfo(name = "PBIFE_passwordmanage_resetTradePassword", path = "/ife/passwordmanage/resetTradePassword.html") 
+// 重置交易密码,客户信息,PasswordManageController,POST,JSON,/ife/passwordmanage/resetTradePassword.html@onight.mgame.utils.PBInfo(name = "PBIFE_passwordmanage_resetTradePassword", path = "/ife/passwordmanage/resetTradePassword.html") 
 public class IF_重置交易密码 {
 	// =======REQuest==============
 

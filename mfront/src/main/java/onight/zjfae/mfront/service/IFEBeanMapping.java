@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
 import onight.mgame.utils.PBInfo;
 import onight.tfw.outils.bean.JsonPBUtil;
 import onight.zjfae.mfront.utils.WrapClassLoader;
@@ -15,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.Message;
 
+@Slf4j
 public class IFEBeanMapping {
 
 	public HashMap<String, Class> name2JsonClass = new HashMap<>();
@@ -43,12 +45,17 @@ public class IFEBeanMapping {
 					continue;
 				name2EURL.put(ano.name(), ano.path());
 
-				name2JsonClass.put(ano.name(), clazz);
-				Class pbclazz = Class.forName("onight.zjfae.afront.gens." + WrapClassLoader.getCamelStr(ano.name()) + "$Ret_" + ano.name());
-				name2ResPBClass.put(ano.name(), pbclazz);
+				try {
+					name2JsonClass.put(ano.name(), clazz);
+					Class pbclazz = Class.forName("onight.zjfae.afront.gens." + WrapClassLoader.getCamelStr(ano.name()) + "$Ret_" + ano.name());
+					name2ResPBClass.put(ano.name(), pbclazz);
 
-				Class pbreqclazz = Class.forName("onight.zjfae.afront.gens." + WrapClassLoader.getCamelStr(ano.name()) + "$REQ_" + ano.name());
-				name2ReqPBClass.put(ano.name(), pbreqclazz);
+					Class pbreqclazz = Class.forName("onight.zjfae.afront.gens." + WrapClassLoader.getCamelStr(ano.name()) + "$REQ_" + ano.name());
+					name2ReqPBClass.put(ano.name(), pbreqclazz);
+				} catch (Exception e) {
+					log.warn("加载类失败："+clazz,e);
+					e.printStackTrace();
+				}
 			}
 
 			initPostProc();
@@ -77,7 +84,6 @@ public class IFEBeanMapping {
 
 		return null;
 	}
-
 	public Message json2ResPB(String key, String json) {
 		Class pbclazz = name2ResPBClass.get(key);
 		if (pbclazz == null) {
