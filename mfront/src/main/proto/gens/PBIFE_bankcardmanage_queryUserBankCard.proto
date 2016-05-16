@@ -26,6 +26,7 @@ message PBIFE_bankcardmanage_queryUserBankCard{
 		string lastFlag = 17;	 //,是否上次入金所选渠道,String,不校验,是,
 		string fundPasswordSet = 18;	 //,是否设置资金帐户密码,String,不校验,是,
 		string needUpdate = 19;	 //,是否可以升级,String,不校验,是,
+		string needSms = 20; //,是否需要短信,String,不校验,是,
 	}
 
 

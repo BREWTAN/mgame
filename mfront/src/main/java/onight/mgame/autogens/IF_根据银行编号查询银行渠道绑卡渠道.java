@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
-// 根据银行编号查询银行渠道绑卡渠道,客户信息,BankCardManageController,POST,JSON,/ife/bankcardmanage/queryFundBankInfo.html@onight.mgame.utils.PBInfo(name = "PBIFE_bankcardmanage_queryFundBankInfo", path = "/ife/bankcardmanage/queryFundBankInfo.html") 
+// 根据银行编号查询银行渠道绑卡渠道,客户信息,BankCardManageController,POST,JSON,/ife/bankcardmanage/queryFundBankInfo.html
+@onight.mgame.utils.PBInfo(name = "PBIFE_bankcardmanage_queryFundBankInfo", path = "/ife/bankcardmanage/queryFundBankInfo.html") 
 public class IF_根据银行编号查询银行渠道绑卡渠道 {
 	// =======REQuest==============
 
@@ -20,8 +21,6 @@ public class IF_根据银行编号查询银行渠道绑卡渠道 {
 		String bankCode;//  ,银行编号,String,,否,
 		 @PBFields(name = ",交易类型,String,,否,0-绑卡，1-入金")
 		String transType;//  ,交易类型,String,,否,0-绑卡，1-入金
-		 @PBFields(name = ",绑卡渠道,String,,否,")
-		String payChannel;//  ,绑卡渠道,String,
 		 String tfw__reserved;//保留字段
 
 	}
@@ -69,6 +68,8 @@ public class IF_根据银行编号查询银行渠道绑卡渠道 {
 				String transType;//  ,操作类型,String,不校验,是,0：绑卡 1：入金
 		 @PBFields(name = ",状态变更说明,String,不校验,是,")
 				String remark;//  ,状态变更说明,String,不校验,是,
+		 @PBFields(name = ",是否需要短信,String,不校验,是,")
+				String needSms;//  ,是否需要短信,String,不校验,是,
 }
 
 		 FundBankDict fundBankDict;// 

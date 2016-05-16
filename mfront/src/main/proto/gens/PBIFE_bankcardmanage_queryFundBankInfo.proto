@@ -23,6 +23,8 @@ message PBIFE_bankcardmanage_queryFundBankInfo{
 		string bankType = 14;	 //,终端,String,不校验,是,0：手机 1：网页
 		string transType = 15;	 //,操作类型,String,不校验,是,0：绑卡 1：入金
 		string remark = 16;	 //,状态变更说明,String,不校验,是,
+		
+		string needSms = 17; //,是否需要短信,String,不校验,是,
 	}
 
 

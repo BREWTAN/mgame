@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
-// 查询用户已银行卡,客户信息,BankCardManageController,POST,JSON,/ife/bankcardmanage/queryUserBankCard.html@onight.mgame.utils.PBInfo(name = "PBIFE_bankcardmanage_queryUserBankCard", path = "/ife/bankcardmanage/queryUserBankCard.html") 
+// 查询用户已银行卡,客户信息,BankCardManageController,POST,JSON,/ife/bankcardmanage/queryUserBankCard.html
+@onight.mgame.utils.PBInfo(name = "PBIFE_bankcardmanage_queryUserBankCard", path = "/ife/bankcardmanage/queryUserBankCard.html") 
 public class IF_查询用户已银行卡 {
 	// =======REQuest==============
 
@@ -65,10 +66,12 @@ public class IF_查询用户已银行卡 {
 				String gmtModify;//  ,修改时间,String,不校验,是,
 		 @PBFields(name = ",是否上次入金所选渠道,String,不校验,是,")
 				String lastFlag;//  ,是否上次入金所选渠道,String,不校验,是,
-		 @PBFields(name = ",是否设置资金帐户密码,String,不校验,是,")
-	 		String fundPasswordSet;
-		 @PBFields(name = ",是否可以升级,String,不校验,是,")
-	 		String needUpdate;
+		 @PBFields(name = ",状态,String,不校验,是,")
+				String status;//  ,状态,String,不校验,是,
+		 @PBFields(name = ",出金渠道,String,不校验,是,")
+				String outNo;//  ,出金渠道,String,不校验,是,
+		 @PBFields(name = ",是否需要短信,String,不校验,是,")
+		 		String needSms;//  ,是否需要短信,String,不校验,是,
 }
 
 		 List<TcCustomerChannelList>tcCustomerChannelList;// 

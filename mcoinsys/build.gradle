@@ -2,7 +2,7 @@
 version='1.0.0'
 buildscript {
 	repositories { maven { url "https://plugins.gradle.org/m2/" } }
-	dependencies {  classpath 'com.google.protobuf:protobuf-gradle-plugin:0.7.0' }
+	dependencies {  classpath 'com.google.protobuf:protobuf-gradle-plugin:0.7.7' }
 }
 
 apply plugin: "java"
@@ -17,7 +17,7 @@ protobuf {
 
 dependencies {
 	includeInJar 'org.projectlombok:lombok:1.16.4'
-	compile 'com.google.protobuf:protobuf-java:3.0.0-alpha-3.1'
+	compile 'com.google.protobuf:protobuf-java:3.0.0-beta-2'
 	includeInJar 'org.glassfish.grizzly:grizzly-core:2.3.21'
 	includeInJar 'com.googlecode.protobuf-java-format:protobuf-java-format:1.2'
 	compile 'org.apache.commons:commons-lang3:3.3.2'

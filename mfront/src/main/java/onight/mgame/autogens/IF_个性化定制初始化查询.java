@@ -17,6 +17,7 @@ public class IF_个性化定制初始化查询 {
 	@NoArgsConstructor
 	public static class Request {
 		String orderType;// orderType 预约类型
+		String queryOrderInit;// 字段
 		String tfw__reserved;//保留字段
 
 	}

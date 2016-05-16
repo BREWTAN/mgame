@@ -15,7 +15,7 @@ message PBIFE_fund_loadWithDrawBankInfo{
 
 	string remark = 1; //,提现备注,String,不校验,否,
 
-	bool isNeedSubbranch = 2; //,是否需要支行信息,Boolean,不校验,否,
+	string isNeedSubbranch = 2; //,是否需要支行信息,Boolean,不校验,否,
 
 	double pMaxAmount = 3; //,单次最多提现金额,BigDecimal,不校验,否,
 

@@ -29,7 +29,7 @@ public class IF_出金银行卡信息加载 {
 		 @PBFields(name = ",提现备注,String,不校验,否,")
 		String remark;//  ,提现备注,String,不校验,否,
 		 @PBFields(name = ",是否需要支行信息,Boolean,不校验,否,")
-		Boolean isNeedSubbranch;//  ,是否需要支行信息,Boolean,不校验,否,
+		 String isNeedSubbranch;//  ,是否需要支行信息,Boolean,不校验,否,
 		 @PBFields(name = ",单次最多提现金额,BigDecimal,不校验,否,")
 		BigDecimal pMaxAmount;//  ,单次最多提现金额,BigDecimal,不校验,否,
 		 @PBFields(name = ",当日最多提现金额,BigDecimal,不校验,否,")

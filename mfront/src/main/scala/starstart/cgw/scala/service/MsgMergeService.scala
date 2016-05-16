@@ -1,47 +1,37 @@
 package starstart.cgw.scala.service
 
+import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 import scala.collection.JavaConversions.asScalaBuffer
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.concurrent.Promise
+import org.codehaus.jackson.JsonNode
+import org.codehaus.jackson.map.DeserializationConfig.Feature
+import org.codehaus.jackson.map.ObjectMapper
+import org.codehaus.jackson.map.SerializationConfig
+import org.codehaus.jackson.node.ArrayNode
+import org.codehaus.jackson.node.MissingNode
+import org.codehaus.jackson.node.ObjectNode
+import com.google.protobuf.Message
 import onight.oapi.scala.traits.OLog
 import onight.osgi.annotation.NActorProvider
 import onight.scala.commons.LService
 import onight.scala.commons.PBUtils
 import onight.scala.commons.SessionModules
+import onight.tfw.async.CallBack
 import onight.tfw.async.CompleteHandler
+import onight.tfw.ntrans.api.annotation.ActorRequire
 import onight.tfw.otransio.api.PacketHelper
 import onight.tfw.otransio.api.beans.FramePacket
-import starstart.cgw.scala.service.Sender
-import onight.tfw.async.CallBack
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Promise
-import onight.tfw.outils.serialize.SerializerFactory
-import onight.tfw.outils.serialize.TransBeanSerializer
-import onight.tfw.outils.serialize.TransBeanSerializer.BeanMap
-import onight.tfw.outils.serialize.SerializerUtil
-import onight.tfw.otransio.api.beans.FixHeader
-import onight.tfw.otransio.api.beans.ExtHeader
-import org.codehaus.jackson.map.ObjectMapper
-import org.codehaus.jackson.map.DeserializationConfig.Feature
-import org.codehaus.jackson.map.ObjectMapper
-import org.codehaus.jackson.map.SerializationConfig
-import org.codehaus.jackson.node.ObjectNode
-import org.codehaus.jackson.JsonNode
-import org.codehaus.jackson.node.ArrayNode
-import com.sun.org.apache.xpath.internal.operations.Bool
-import org.codehaus.jackson.node.MissingNode
-import onight.zjfae.afront.Amobilezj.PWMergeProxy
 import onight.zjfae.afront.Amobilezj.PBFramePacket
-import onight.zjfae.afront.Amobilezj.PWRetMerges
 import onight.zjfae.afront.Amobilezj.PEACommand
-import onight.zjfae.mfront.service.IFEBeanMapping
+import onight.zjfae.afront.Amobilezj.PWMergeProxy
+import onight.zjfae.afront.Amobilezj.PWRetMerges
 import onight.zjfae.mfront.action.FJsonPBFormat
-import java.util.concurrent.ThreadPoolExecutor
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.LinkedBlockingQueue
-import onight.tfw.ntrans.api.annotation.ActorRequire
 import onight.zjfae.mfront.action.IFEProxyAction
-import scala.beans.BeanProperty
-import com.google.protobuf.Message
+import onight.tfw.outils.bean.JsonPBUtil
 
 @NActorProvider
 object CGWMsgMergeActor extends SessionModules[PWMergeProxy] {
@@ -148,6 +138,16 @@ object CGWMsgMergeService extends OLog with PBUtils with LService[PWMergeProxy] 
     return null;
 
   }
+  def getPacket(pack: FramePacket,xp:PBFramePacket):String = {
+     val jsonStr = if (pack.getFixHead.getEnctype()=='P') {
+      val builder = CGWMsgMergeActor.iFEProxyAction.getBmap().getReqBuilder(xp.getPbname);
+      builder.mergeFrom(xp.getPbbody);
+      new FJsonPBFormat().printToString(builder.build());
+    } else {
+      xp.getJsbody;
+    }
+     return jsonStr
+  }
 
   def proxyPacket(pack: FramePacket, proxypack: PBFramePacket, p: Promise[PBFramePacket.Builder]): Future[PBFramePacket.Builder] = {
 
@@ -177,8 +177,8 @@ object CGWMsgMergeService extends OLog with PBUtils with LService[PWMergeProxy] 
             val nextp = Promise[PBFramePacket.Builder]();
             if (proxypack.getClonefieldsList.size() > 0) {
               val nextPacketbuilder = xp.toBuilder();
-              val dstnode = jsonmapper.readTree(xp.getJsbody)
-              val srcnode = jsonmapper.readTree(pbv.getJsbody)
+              val dstnode = jsonmapper.readTree(getPacket(pack,xp));//jsonmapper.readTree(xp.getJsbody)
+              val srcnode =  jsonmapper.readTree(new FJsonPBFormat().printToString(message));//jsonmapper.readTree(getPacket(pack,pbv.build()));//jsonmapper.readTree(pbv.getJsbody)
               log.debug("srcnode=" + srcnode)
               log.debug("dstnode=" + dstnode)
               var overrided: Int = 0;
@@ -201,7 +201,15 @@ object CGWMsgMergeService extends OLog with PBUtils with LService[PWMergeProxy] 
                 Future { PBFramePacket.newBuilder() }
               } else {
                 //                log.debug("overrided:OK.for key:,dstnode=:{}" + dstnode)
-                nextPacketbuilder.setJsbody(dstnode.toString());
+//                nextPacketbuilder.setJsbody(dstnode.toString());
+                if (pack.getFixHead.getEnctype()=='P') {
+                  val builder = CGWMsgMergeActor.iFEProxyAction.getBmap().getReqBuilder(nextPacketbuilder.getPbname);
+                  JsonPBUtil.json2PB(dstnode, builder);
+                  nextPacketbuilder.setPbbody(builder.build().toByteString());
+                } else {
+                  nextPacketbuilder.setJsbody(dstnode.toString());
+                }
+                      
                 proxyPacket(pack, nextPacketbuilder.build(), nextp)
               }
             } else {
