@@ -142,9 +142,10 @@ public class HttpRequestor {
 
 	public String post(final FramePacket pack, String xml, String address) throws ClientProtocolException, IOException {
 		lock.readLock().lock();
+		HttpPost httppost = new HttpPost(address);
+
 		try {
 			log.debug("httppost:" + address + ",data=" + xml);
-			HttpPost httppost = new HttpPost(address);
 
 			StringBuffer stringBuffer = new StringBuffer();
 			for (Entry<String, Object> entry : pack.getExtHead().getVkvs().entrySet()) {
@@ -156,17 +157,12 @@ public class HttpRequestor {
 			for (Entry<String, Object> entry : pack.getExtHead().getIgnorekvs().entrySet()) {
 				stringBuffer.append(entry.getKey()).append("=").append(entry.getValue()).append(";");
 			}
-			
+
 			log.debug("post:cookies=" + stringBuffer.toString());
-			// if (pack.getExtProp(SSO_SMID) != null) {//get client smid
-			// stringBuffer.append(SSO_SMID).append("=").append(pack.getExtProp(SSO_SMID)).append(";");
-			// }
-			// if (pack.getExtProp(ZJS_ID) != null) {//get client zjsid
-			// stringBuffer.append(ZJS_ID).append("=").append(pack.getExtProp(ZJS_ID)).append(";");
-			// }
 			if (StringUtils.isNotBlank(stringBuffer)) {// if exists , post it as
-														// Cookie to erie
 				httppost.setHeader(new BasicHeader("Cookie", stringBuffer.toString()));
+			} else {
+				httppost.setHeader(new BasicHeader("Cookie", ""));
 			}
 			if (StringUtils.isNotBlank(xml)) {
 				ObjectMapper mapper = new ObjectMapper();
@@ -184,37 +180,49 @@ public class HttpRequestor {
 			ResponseHandler<String> responseHandler = new BasicResponseHandler() {
 				@Override
 				public String handleResponse(HttpResponse response) throws HttpResponseException, IOException {
-					if (response.getHeaders("Set-Cookie").length > 0) {
-						List<String> Cookies = (List<String>) pack.getExtHead().getVkvs().get(PackHeader.Set_COOKIE);
-						synchronized (pack) {
-							Cookies = (List<String>) pack.getExtHead().getVkvs().get(PackHeader.Set_COOKIE);
-							if (Cookies == null) {
-								Cookies = new ArrayList<String>();
-								pack.getExtHead().append(PackHeader.Set_COOKIE, Cookies);
-							}
-						}
-
-						for (Header head : response.getHeaders("Set-Cookie")) {
-							Cookies.add(head.getValue());
-							String cookie[] = head.getValue().split(";");
-							String kvs[] = cookie[0].trim().split("=");
-							if (kvs.length == 2) {
-								// PackHeader.EXT_COOKIES+kvs[0], kvs[1]);
-								pack.putHeader(kvs[0], kvs[1]);
-								log.debug("SetCookies:" + kvs[0] + "=" + kvs[1]);
-							} else {
-								log.debug("error SetCookies:" + head.getValue());
+					if (response.getStatusLine().getStatusCode() == 200) {
+						if (response.getHeaders("Set-Cookie").length > 0) {
+							List<String> Cookies = (List<String>) pack.getExtHead().getVkvs().get(PackHeader.Set_COOKIE);
+							synchronized (pack) {
+								Cookies = (List<String>) pack.getExtHead().getVkvs().get(PackHeader.Set_COOKIE);
+								if (Cookies == null) {
+									Cookies = new ArrayList<String>();
+									pack.getExtHead().append(PackHeader.Set_COOKIE, Cookies);
+								}
 							}
 
+							for (Header head : response.getHeaders("Set-Cookie")) {
+								Cookies.add(head.getValue());
+								String cookie[] = head.getValue().split(";");
+								String kvs[] = cookie[0].trim().split("=");
+								if (kvs.length == 2) {
+									// PackHeader.EXT_COOKIES+kvs[0], kvs[1]);
+									pack.putHeader(kvs[0], kvs[1]);
+									log.debug("SetCookies:" + kvs[0] + "=" + kvs[1]);
+								} else {
+									log.debug("error SetCookies:" + head.getValue());
+								}
+
+							}
+							// log.debug(response.getHeaders("Set-Cookie")[0].getValue());
 						}
-						// log.debug(response.getHeaders("Set-Cookie")[0].getValue());
+						return super.handleResponse(response);
+					} else {
+						throw new HttpResponseException(response.getStatusLine().getStatusCode(), response.getStatusLine().getReasonPhrase());
 					}
-					return super.handleResponse(response);
 				}
 			};
 			String result = httpclient.execute(httppost, responseHandler);
 			log.debug("httpresult:" + address + ",result=" + result);
 			return result;
+		} catch (HttpResponseException e) {
+			if (e.getStatusCode() == 999) {
+				log.debug("HttpResponseException:9999", e);
+				return "{\"returnCode\":\"0000001\",\"returnMsg\":\"您未登录或者登陆已经超时~\"}";
+			} else {
+				log.warn("httpRequest Error:"+e.getMessage(), e);
+				return "{\"returnCode\":\"I599999\",\"returnMsg\":\"系统太繁忙~\"}";
+			}
 		} finally {
 			lock.readLock().unlock();
 		}

@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import lombok.extern.slf4j.Slf4j;
 import onight.mgame.utils.PBInfo;
+import onight.tfw.otransio.api.beans.FramePacket;
 import onight.tfw.outils.bean.JsonPBUtil;
+import onight.zjfae.mfront.preproc.PreProcResult;
 import onight.zjfae.mfront.utils.WrapClassLoader;
-
-import org.apache.commons.lang3.StringUtils;
 
 import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.Message;
@@ -29,7 +29,7 @@ public class IFEBeanMapping {
 	}
 
 	public interface PreProc {
-		public boolean prepDO(Message message, String pbname);
+		public PreProcResult preDO(FramePacket fp,Message.Builder builder, String pbname);
 	}
 
 	public HashMap<String, PostProc> name2PostProcess = new HashMap<>();
@@ -58,31 +58,11 @@ public class IFEBeanMapping {
 				}
 			}
 
-			initPostProc();
-			initPrepProc();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void initPostProc() {
-		//
-		name2PostProcess.put("PBIFE_passwordmanage_resetTradePassword", new RegPostProc());
-	}
-
-	public void initPrepProc() {
-		//
-		name2PrepProcess.put("PBIFE_passwordmanage_resetTradePassword", new RegPrepProc());
-		name2PrepProcess.put("PBIFE_trade_queryTransferSellProfits", new BuyOrTradeFee());
-
-	}
-
-	public <T> T parseREQ(HttpServletRequest req) {
-		String pbcmd = req.getParameter("pbcmd");
-
-		return null;
 	}
 	public Message json2ResPB(String key, String json) {
 		Class pbclazz = name2ResPBClass.get(key);
@@ -147,31 +127,4 @@ public class IFEBeanMapping {
 		}
 	}
 
-	public boolean preProcess(Message message, String pbname) {
-		PreProc pbclazz = name2PrepProcess.get(pbname);
-		if (pbclazz == null) {
-			return true;
-		}
-		try {
-			return pbclazz.prepDO(message, pbname);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	public static void main(String[] args) {
-		IFEBeanMapping beanmap = new IFEBeanMapping();
-		beanmap.init();
-		String test = "PBIFE_securityquestionmanage_setSecurityQuestionPre";
-		Class pbclazz = beanmap.name2ResPBClass.get(test);
-		try {
-			Method builder = pbclazz.getDeclaredMethod("newBuilder");
-			System.out.println("bb==" + builder.invoke(pbclazz).hashCode());
-			Message msg = beanmap.json2ResPB("PBIFE_bankcardmanage_acquireBankSmsCheckCode4changeBind", "{\"serialNo\":\"aabb\"}");
-			System.out.println("msg==" + msg);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

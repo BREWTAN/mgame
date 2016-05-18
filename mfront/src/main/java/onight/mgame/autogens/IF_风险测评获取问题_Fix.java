@@ -58,10 +58,10 @@ public class IF_风险测评获取问题_Fix {
 				String tId;// ,答题系统模板PK,String,不校验,是,
 				@PBFields(name = ",状态,String,不校验,是,VALID(有效)  INVALID(失效)")
 				String status;// ,状态,String,不校验,是,VALID(有效) INVALID(失效)
-			}
 
-			@PBFields(name = ",答案列表,List,不校验,是,")
-			List<TcAssessmentAList> tcAssessmentAList;// ,答案列表,List,不校验,是,
+				@PBFields(name = ",答案列表,List,不校验,是,")
+				List<TcAssessmentAList> tcAssessmentAList;// ,答案列表,List,不校验,是,
+			}
 
 			@Data
 			@AllArgsConstructor

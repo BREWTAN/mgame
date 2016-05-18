@@ -1,5 +1,7 @@
 package onight.zjfae.mfront.postproc.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import lombok.extern.slf4j.Slf4j;
 import onight.zjfae.mfront.postproc.AbstractPostFieldTracker;
 import onight.zjfae.mfront.postproc.annotation.Formatter;
@@ -16,11 +18,12 @@ public class TrimSizeFormatter extends AbstractPostFieldTracker {
 
 	@Override
 	public ModifyValue modTraceValue(Object v) {
-		String patterns[] = procs.getProcParams().split(",");
+		String patterns[] = StringUtils.stripAll(procs.getProcParams().trim().split(","));
 		if (patterns.length < 2) {
-			log.debug("格式化参数错误：" + v + ",formatter=" + procs.getProcParams());
+			log.debug("格式化参数错误：" + v + ",formatter=" + procs.getProcParams()+",proc.uuid="+procs.getUuid());
 			return null;
 		}
+
 		try {
 			if (v == null) {
 				return new ModifyValue(patterns[1]);

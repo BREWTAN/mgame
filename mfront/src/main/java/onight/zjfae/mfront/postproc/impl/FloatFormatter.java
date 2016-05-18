@@ -18,17 +18,18 @@ public class FloatFormatter extends AbstractPostFieldTracker {
 
 	@Override
 	public ModifyValue modTraceValue(Object v) {
-		String patterns[] = procs.getProcParams().split(",");
+		String patterns[] = StringUtils.stripAll(procs.getProcParams().trim().split(","));
 		if (patterns.length < 2) {
-			log.debug("格式化参数错误：" + v + ",formatter=" + procs.getProcParams());
+			log.debug("格式化参数错误：" + v + ",formatter=" + procs.getProcParams()+",proc.uuid="+procs.getUuid());
 			return null;
 		}
+
 		try {
 			if (v == null || StringUtils.isBlank((String) v)) {
-				return new ModifyValue(patterns[1]);
+				return new ModifyValue(patterns[1].trim());
 			} else {
 				Double d = Double.parseDouble((String) v);
-				return new ModifyValue(String.format(patterns[0], d));
+				return new ModifyValue(String.format(patterns[0].trim(), d));
 			}
 		} catch (Throwable e) {
 			log.debug("格式化错误：" + v + ",formatter=" + procs.getProcParams(), e);

@@ -22,10 +22,11 @@ public class DictionaryFormatter extends AbstractPostFieldTracker {
 
 	@Override
 	public ModifyValue modTraceValue(Object v) {
-		String patterns[] = procs.getProcParams().split(",");
+		String patterns[] = StringUtils.stripAll(procs.getProcParams().trim().split(","));
+		
 //		HashMap<String, HashMap<String, APPDictionary>> dictmap;
 		HashMap<String, APPDictionary> map;
-		if (StringUtils.equalsIgnoreCase("caseignore", patterns[0])) {
+		if (StringUtils.equalsIgnoreCase("caseignore", patterns[0].trim())) {
 			map = KDictionary.caseIgnoreDictsByKeyNO.get(procs.getKeyNo().toLowerCase());
 		} else {
 			map = KDictionary.dictsByKeyNO.get(procs.getKeyNo());

@@ -24,23 +24,23 @@ public class DateTimeFormatter extends AbstractPostFieldTracker {
 	public ModifyValue modTraceValue(Object v) {
 		if (v == null || StringUtils.isBlank((String) v))
 			return null;
-		String patterns[] = procs.getProcParams().split(",");
+		String patterns[] = StringUtils.stripAll(procs.getProcParams().trim().split(","));
 		if (patterns.length < 2) {
-			log.debug("格式化参数错误：" + v + ",formatter=" + procs.getProcParams());
+			log.debug("格式化参数错误：" + v + ",formatter=" + procs.getProcParams()+",proc.uuid="+procs.getUuid());
 			return null;
 		}
 		try {
-			SimpleDateFormat srcsdf = new SimpleDateFormat(patterns[0]);
-			SimpleDateFormat dstsdf = new SimpleDateFormat(patterns[1]);
+			SimpleDateFormat srcsdf = new SimpleDateFormat(patterns[0].trim());
+			SimpleDateFormat dstsdf = new SimpleDateFormat(patterns[1].trim());
 			Date date = srcsdf.parse((String) v);
 			String dst = dstsdf.format(date);
 			return new ModifyValue(dst);
 		} catch (ParseException e) {
 			log.debug("格式化错误：" + v + ",formatter=" + procs.getProcParams(), e);
-			if (patterns.length >= 3 && !StringUtils.isBlank(patterns[2])) {
-				if ("{}".equals(patterns[2])) {
+			if (patterns.length >= 3 && !StringUtils.isBlank(patterns[2].trim())) {
+				if ("{}".equals(patterns[2].trim())) {
 					try {
-						SimpleDateFormat dstsdf = new SimpleDateFormat(patterns[1]);
+						SimpleDateFormat dstsdf = new SimpleDateFormat(patterns[1].trim());
 						return new ModifyValue(dstsdf.format(new Date()));
 					} catch (Exception e1) {
 						return new ModifyValue("");

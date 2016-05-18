@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import onight.mgame.utils.PBInfo;
 import onight.osgi.annotation.NActorProvider;
 import onight.osgi.annotation.iPojoBean;
 import onight.tfw.async.CompleteHandler;
@@ -23,15 +24,19 @@ import onight.zjfae.afront.Amobilezj.PEARetConfigReload;
 import onight.zjfae.mfront.cache.KDictionary;
 import onight.zjfae.mfront.postproc.AbstractPostFieldTracker;
 import onight.zjfae.mfront.postproc.FormatterLoader;
-import onight.zjfae.mfront.postproc.impl.DateTimeFormatter;
-import onight.zjfae.mfront.postproc.impl.FloatFormatter;
+import onight.zjfae.mfront.preproc.AbstractPreProc;
+import onight.zjfae.mfront.preproc.PreProcResult;
+import onight.zjfae.mfront.preproc.PreProccesorLoader;
 import onight.zjfae.mfront.service.IFEBeanMapping.PostProc;
+import onight.zjfae.mfront.service.IFEBeanMapping.PreProc;
 import onight.zjfae.mfront.utils.PBMessageFlatten;
-import onight.zjfae.mfront.utils.PBMessageFlatten.FieldTracker;
+import onight.zjfae.mfront.utils.WrapClassLoader;
 import onight.zjfae.ordbgens.app.entity.APPDictionary;
 import onight.zjfae.ordbgens.app.entity.APPDictionaryExample;
 import onight.zjfae.ordbgens.app.entity.APPIfacePostproc;
 import onight.zjfae.ordbgens.app.entity.APPIfacePostprocExample;
+import onight.zjfae.ordbgens.app.entity.APPIfacePreproc;
+import onight.zjfae.ordbgens.app.entity.APPIfacePreprocExample;
 
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
@@ -39,9 +44,7 @@ import com.google.protobuf.Message;
 @NActorProvider
 @Slf4j
 @iPojoBean
-public class ConfigPostProc extends MobileModuleStarter<PEAConfigReload> implements PostProc {
-
-	// List<APPIfacePostproc> procs = new ArrayList<APPIfacePostproc>();
+public class ConfigProcessor extends MobileModuleStarter<PEAConfigReload> implements PostProc,PreProc {
 
 	@AllArgsConstructor
 	public class PostProcessor {
@@ -49,8 +52,11 @@ public class ConfigPostProc extends MobileModuleStarter<PEAConfigReload> impleme
 		AbstractPostFieldTracker tracker;
 	}
 
-	// HashMap<String, List<APPIfacePostproc>> procsBypbName = new
-	// HashMap<String, List<APPIfacePostproc>>();
+	@AllArgsConstructor
+	public class PreProcessor {
+		AbstractPreProc proc;
+		APPIfacePreproc appProc;
+	}
 
 	@Override
 	public void postDO(Message.Builder builder, String pbname) {
@@ -63,13 +69,26 @@ public class ConfigPostProc extends MobileModuleStarter<PEAConfigReload> impleme
 	}
 
 	@Override
+	public PreProcResult preDO(FramePacket fp,Message.Builder builder, String pbname) {
+		List<PreProcessor> fds = pbPreProcs.get(pbname);
+		if (fds != null) {
+			for (PreProcessor proc : fds) {
+				if (proc.proc.doPreProc(fp,builder)) {
+					return new PreProcResult(true,proc.appProc);
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
 	public void onPBPacket(FramePacket pack, PEAConfigReload pbo, CompleteHandler handler) {
 
 		if (pbo != null) {
 			init();
 			PEARetConfigReload.Builder ret = PEARetConfigReload.newBuilder();
 			ret.setRetCode("0000");
-			ret.setRetMessage("共加载策略个数：" + pbPostProcs.size() + ":" + pbPostProcs);
+			ret.setRetMessage("共加载前处理策略个数：" + pbPreProcs.size()+"，后处理策略个数：" + pbPostProcs.size() + ":prekeys=" + pbPreProcs.keySet()+",postkeys="+pbPostProcs.keySet());
 			handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
 		} else {
 			PEARetConfigReload.Builder ret = PEARetConfigReload.newBuilder();
@@ -98,7 +117,12 @@ public class ConfigPostProc extends MobileModuleStarter<PEAConfigReload> impleme
 	@StoreDAO(domain = APPIfacePostproc.class, target = "appmysql")
 	@Getter
 	@Setter
-	OJpaDAO<APPIfacePostproc> appFaceDao;
+	OJpaDAO<APPIfacePostproc> appFacePostDao;
+
+	@StoreDAO(domain = APPIfacePreproc.class, target = "appmysql")
+	@Getter
+	@Setter
+	OJpaDAO<APPIfacePreproc> appFacePreDao;
 
 	@StoreDAO(domain = APPDictionary.class, target = "appmysql")
 	@Getter
@@ -106,15 +130,52 @@ public class ConfigPostProc extends MobileModuleStarter<PEAConfigReload> impleme
 	OJpaDAO<APPDictionary> appDictionaryDao;
 
 	public void init() {
-		if (appFaceDao != null && appFaceDao.getDaosupport() != null) {
-			synchronized (appFaceDao) {
+		if (appFacePostDao != null && appFacePostDao.getDaosupport() != null) {
+			synchronized (appFacePostDao) {
 				loadDictionary();
 				List<APPIfacePostproc> tmpprocs = new ArrayList<APPIfacePostproc>();
 				loadProcFromDB(tmpprocs);
 				HashMap<String, List<PostProcessor>> mapper = loadClassInfo(tmpprocs);
-				log.debug("load Procs.size=" + mapper.size());
-
+				log.debug("load PostProcs.size=" + mapper.size());
 				pbPostProcs = mapper;
+
+			}
+		}
+		if (appFacePreDao != null && appFacePreDao.getDaosupport() != null) {
+			synchronized (appFacePreDao) {
+				List<APPIfacePreproc> tmpprocs = new ArrayList<APPIfacePreproc>();
+				loadPreProcFromDB(tmpprocs);
+				HashMap<String, List<PreProcessor>> tmppbPreProcs = new HashMap<String, List<PreProcessor>>();
+
+				try {
+					for (Class clazz : WrapClassLoader.getClasses("onight.mgame.autogens")) {
+						try {
+							PBInfo ano = (PBInfo) clazz.getAnnotation(PBInfo.class);
+							if (ano == null)
+								continue;
+							for (APPIfacePreproc proc : tmpprocs) {
+								if (ano.name().matches(proc.getPbAction())) {
+									List<PreProcessor> preprocs = tmppbPreProcs.get(ano.name());
+									if (preprocs == null) {
+										preprocs = new ArrayList<>();
+										tmppbPreProcs.put(ano.name(), preprocs);
+									}
+									AbstractPreProc preproc = preLoader.getPreProcess(proc);
+									if (preproc != null) {
+										preprocs.add(new PreProcessor(preproc,proc));
+									}
+								}
+							}
+
+						} catch (Exception e) {
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				log.debug("load PreProcs.size=" + tmppbPreProcs.size());
+				pbPreProcs = tmppbPreProcs;
 
 			}
 		}
@@ -150,21 +211,42 @@ public class ConfigPostProc extends MobileModuleStarter<PEAConfigReload> impleme
 
 		try {
 			example.createCriteria().andStatusEqualTo(1);
-			List<Object> lst = appFaceDao.selectByExample(example);
+			List<Object> lst = appFacePostDao.selectByExample(example);
 			if (lst != null) {
 				for (Object obj : lst) {
 					APPIfacePostproc proc = (APPIfacePostproc) obj;
 					tmpprocs.add(proc);
 				}
 			}
-			log.debug("从数据库共加载策略个数：" + tmpprocs.size());
+			log.debug("从数据库共加载后处理策略个数：" + tmpprocs.size());
 		} catch (Exception e) {
 			log.debug("从数据库加载后处理策略失败:" + e.getMessage(), e);
 			// e.printStackTrace();
 		}
 	}
 
+	public void loadPreProcFromDB(List<APPIfacePreproc> tmpprocs) {
+		APPIfacePreprocExample example = new APPIfacePreprocExample();
+
+		try {
+			example.createCriteria().andStatusEqualTo(1);
+			List<Object> lst = appFacePreDao.selectByExample(example);
+			if (lst != null) {
+				for (Object obj : lst) {
+					APPIfacePreproc proc = (APPIfacePreproc) obj;
+					tmpprocs.add(proc);
+				}
+			}
+			log.debug("从数据库共加载预处理策略个数：" + tmpprocs.size());
+		} catch (Exception e) {
+			log.debug("从数据库加载预处理策略失败:" + e.getMessage(), e);
+			// e.printStackTrace();
+		}
+	}
+
 	HashMap<String, List<PostProcessor>> pbPostProcs = new HashMap<String, List<PostProcessor>>();
+
+	HashMap<String, List<PreProcessor>> pbPreProcs = new HashMap<String, List<PreProcessor>>();
 
 	public HashMap<String, List<PostProcessor>> loadClassInfo(List<APPIfacePostproc> tmpprocs) {
 		HashMap<String, HashMap<String, List<FieldDescriptor>>> packMapper = new HashMap<String, HashMap<String, List<FieldDescriptor>>>();
@@ -199,12 +281,13 @@ public class ConfigPostProc extends MobileModuleStarter<PEAConfigReload> impleme
 
 	/**
 	 * 获取格式化的函数
-	 * '格式化函数(DateFormat:时间格式化,FloatFormat:浮点格式化,StringFormat:字符串格式化,TrimSize:大小格式,JavaScript:通过js脚本自己控制/暂时不支持,ScriptFile:脚本文件/不推荐/
-	 * 暂 时 不 支 持 ) ' ,
+	 * '格式化函数(DateFormat:时间格式化,FloatFormat:浮点格式化,StringFormat:字符串格式化,TrimSize:大小格式,JavaScript:通过js脚本自己控制/暂时不支持,ScriptFile:脚本文件/不推荐
+	 * / 暂 时 不 支 持 ) ' ,
 	 * 
 	 * @param proc
 	 * @return
 	 */
 
 	FormatterLoader formLoader = new FormatterLoader();
+	PreProccesorLoader preLoader = new PreProccesorLoader();
 }

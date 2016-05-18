@@ -1,0 +1,412 @@
+
+syntax = "proto3";
+
+package onight.zjfae.ordbgens.app.pbo;
+
+message PBAPPAds
+{
+	string uuid = 1;
+	string func_icons = 2;
+	string ani_method = 3;
+	string ani_params = 4;
+	string func_url = 5;
+	string platforms = 6;
+	string app_vers = 7;
+	string show_type = 8;
+	int32 interval_min = 9;
+	int32 ctrl_iparam = 10;
+	string ctrl_strparam = 11;
+	int64 inserttime = 12;
+	int32 status = 13;
+}
+
+message PBAPPBanners
+{
+	string uuid = 1;
+	string func_icons = 2;
+	string ani_method = 3;
+	string ani_params = 4;
+	string func_url = 5;
+	string platforms = 6;
+	string app_vers = 7;
+	int64 inserttime = 8;
+	int32 status = 9;
+}
+
+message PBAPPBoards
+{
+	string uuid = 1;
+	string func_icons = 2;
+	string ani_method = 3;
+	string ani_params = 4;
+	string func_url = 5;
+	string platforms = 6;
+	string app_vers = 7;
+	int64 inserttime = 8;
+	int32 status = 9;
+}
+
+message PBAPPCacheItems
+{
+	string uuid = 1;
+	string cache_key = 2;
+	string catalogs = 3;
+	string contents = 4;
+	string str_v1 = 5;
+	string str_v2 = 6;
+	double float_v1 = 7;
+	double float_v2 = 8;
+	double int_v1 = 9;
+	double int_v2 = 10;
+	int64 dt_v3 = 11;
+	int64 dt_v4 = 12;
+	int64 crt_time = 13;
+	int64 upd_time = 14;
+	int32 ttl = 15;
+	int32 status = 16;
+}
+
+message PBAPPDictionary
+{
+	string uuid = 1;
+	string key_no = 2;
+	string key_name = 3;
+	string key_code = 4;
+	string data_value = 5;
+	int64 crt_time = 6;
+	int64 upd_time = 7;
+	string platforms = 8;
+	string app_vers = 9;
+	int32 ttl = 10;
+	int32 status = 11;
+}
+
+message PBAPPFunctions
+{
+	string uuid = 1;
+	string func_code = 2;
+	string func_name = 3;
+	string func_icon = 4;
+	string ani_method = 5;
+	string ani_params = 6;
+	string func_url = 7;
+	string platforms = 8;
+	string app_vers = 9;
+	int32 user_id_level = 10;
+	int64 inserttime = 11;
+	int32 status = 12;
+}
+
+message PBAPPIfacePostproc
+{
+	string uuid = 1;
+	string key_no = 2;
+	string gcmd_code = 3;
+	string pb_action = 4;
+	string key_rex = 5;
+	string date_type = 6;
+	string format_proc = 7;
+	string proc_params = 8;
+	string scripts = 9;
+	int64 crt_time = 10;
+	int64 upd_time = 11;
+	string platforms = 12;
+	string app_vers = 13;
+	int32 pio = 14;
+	int32 status = 15;
+}
+
+message PBAPPIfacePreproc
+{
+	string uuid = 1;
+	string key_no = 2;
+	string gcmd_code = 3;
+	string pb_action = 4;
+	string key_rex = 5;
+	string pre_proc = 6;
+	string proc_params = 7;
+	int64 crt_time = 8;
+	int64 upd_time = 9;
+	string platforms = 10;
+	string app_vers = 11;
+	int32 pio = 12;
+	int32 status = 13;
+}
+
+message PBAPPPrdKeyword
+{
+	string uuid = 1;
+	string productuuid = 2;
+	string icon_url = 3;
+	string backend_url = 4;
+	string deatails = 5;
+	int32 status = 6;
+	int64 inserttime = 7;
+	int64 updatetime = 8;
+}
+
+message PBAPPShakeTips
+{
+	string uuid = 1;
+	string tips_title = 2;
+	string tips_content = 3;
+	string tips_url = 4;
+	string platforms = 5;
+	string app_vers = 6;
+	int64 inserttime = 7;
+	int32 status = 8;
+}
+
+message PBAPPSysAction
+{
+	int64 action_id = 1;
+	string action_flag = 2;
+	string action_name = 3;
+	string action_desc = 4;
+	int64 action_menu = 5;
+	string field1 = 6;
+}
+
+message PBAPPSysBackend
+{
+	string uuid = 1;
+	string face_code = 2;
+	string face_name = 3;
+	string front_url = 4;
+	string backedn_url = 5;
+	int32 status = 6;
+	string operator_id = 7;
+	string face_versions = 8;
+	string comments = 9;
+	int64 inserttime = 10;
+	int64 updatetime = 11;
+}
+
+message PBAPPSysBlackword
+{
+	string uuid = 1;
+	string words = 2;
+}
+
+message PBAPPSysBranch
+{
+	string branch_id = 1;
+	string branch_desc = 2;
+	string branch_name = 3;
+	string branch_manager = 4;
+	string mobile = 5;
+	int64 begin_time = 6;
+	int64 end_time = 7;
+	string parent_id = 8;
+	int32 leaf_flag = 9;
+	int32 branch_seq = 10;
+	int32 level = 11;
+}
+
+message PBAPPSysBusiness
+{
+	string business_id = 1;
+	string business_name = 2;
+	string business_desc = 3;
+	string business_manager = 4;
+	string business_mobile = 5;
+	int32 business_seq = 6;
+	int64 begin_time = 7;
+	int64 end_time = 8;
+	int32 status = 9;
+	int32 business_data_permission = 10;
+}
+
+message PBAPPSysFaceLogs
+{
+	string uuid = 1;
+	string level = 2;
+	int64 crt_time = 3;
+	int64 end_time = 4;
+	int32 cost_mills = 5;
+	string face_code = 6;
+	string face_name = 7;
+	double amount = 8;
+	int32 count = 9;
+	int32 optype = 10;
+	int32 ctype = 11;
+	string backend_url = 12;
+	string trade_date = 13;
+	string ret_code = 14;
+	string acct_no = 15;
+	string user_id = 16;
+	string channel_id = 17;
+	string merchnat_id = 18;
+	string client_ip = 19;
+	string contents = 20;
+	string client_os = 21;
+	string client_device = 22;
+	string app_vers = 23;
+	string provider = 24;
+	string device_token = 25;
+	string device_id = 26;
+	int64 inserttime = 27;
+}
+
+message PBAPPSysMenu
+{
+	int32 menu_id = 1;
+	string menu_name = 2;
+	string menu_desc = 3;
+	int32 menu_seq = 4;
+	string menu_url = 5;
+	int32 parent_id = 6;
+	int32 leaf_flag = 7;
+	int32 level = 8;
+	string icon = 9;
+}
+
+message PBAPPSysOpLogs
+{
+	string id = 1;
+	string skeys = 2;
+	string contents = 3;
+	string level = 4;
+	int64 crt_time = 5;
+}
+
+message PBAPPSysParam
+{
+	string param_id = 1;
+	string param_type = 2;
+	string param_value = 3;
+	string dsc = 4;
+	string crt_time = 5;
+	string field1 = 6;
+	string field2 = 7;
+	string field3 = 8;
+}
+
+message PBAPPSysPushmsg
+{
+	string uuid = 1;
+	string msg_title = 2;
+	string srcid = 3;
+	string operator_id = 4;
+	string contents = 5;
+	int32 status = 6;
+	int32 total_send_count = 7;
+	int32 recv_count = 8;
+	int32 send_count = 9;
+	int64 inserttime = 10;
+	int64 updatetime = 11;
+}
+
+message PBAPPSysPushmsgLog
+{
+	string uuid = 1;
+	string userid = 2;
+	string msg_id = 3;
+	string msg_title = 4;
+	string target_platform = 5;
+	string tokenid = 6;
+	string deviceid = 7;
+	string srcid = 8;
+	string operator_id = 9;
+	string contents = 10;
+	int32 status = 11;
+	int64 inserttime = 12;
+	int64 send_time = 13;
+}
+
+message PBAPPSysRole
+{
+	string role_id = 1;
+	string role_name = 2;
+	string role_desc = 3;
+	int32 status = 4;
+}
+
+message PBAPPSysRoleAction
+{
+	string id = 1;
+	int64 action_id = 2;
+	string role_id = 3;
+	int64 status = 4;
+}
+
+message PBAPPSysRoleMenu
+{
+	string id = 1;
+	int32 menu_id = 2;
+	string role_id = 3;
+	int32 status = 4;
+}
+
+message PBAPPSysRoleMutex
+{
+	string role_mutex_id = 1;
+	string role_id_a = 2;
+	string role_id_b = 3;
+	int32 status = 4;
+}
+
+message PBAPPSysRspCode
+{
+	string id = 1;
+	string prod_id = 2;
+	string out_rsp_code = 3;
+	string in_rsp_code2 = 4;
+	string rsp_desc = 5;
+}
+
+message PBAPPSysUser
+{
+	string user_id = 1;
+	string branch_id = 2;
+	string login_name = 3;
+	string user_name = 4;
+	string mobile = 5;
+	string user_workaddress = 6;
+	string status = 7;
+	string password = 8;
+	int64 update_time = 9;
+	int64 create_time = 10;
+	string created_by = 11;
+	string modified_by = 12;
+	string email = 13;
+	int32 data_environ = 14;
+	string icon = 15;
+}
+
+message PBAPPSysUserRole
+{
+	string user_role_id = 1;
+	string role_id = 2;
+	string user_id = 3;
+	int32 status = 4;
+}
+
+message PBAPPSysVersionups
+{
+	string uuid = 1;
+	string versionname = 2;
+	int32 targetplatform = 3;
+	string versionid = 4;
+	string os_versionid = 5;
+	string up_type = 6;
+	string merchant_id = 7;
+	string channle_id = 8;
+	string operator_id = 9;
+	string contents = 10;
+	int32 status = 11;
+	string upurl = 12;
+	int64 inserttime = 13;
+}
+
+message PBAPPUrlParams
+{
+	string uuid = 1;
+	string key_no = 2;
+	string backend_url = 3;
+	string deatails = 4;
+	int32 status = 5;
+	int64 inserttime = 6;
+	int64 updatetime = 7;
+}
+
