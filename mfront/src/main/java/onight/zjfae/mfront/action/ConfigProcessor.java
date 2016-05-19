@@ -211,6 +211,7 @@ public class ConfigProcessor extends MobileModuleStarter<PEAConfigReload> implem
 
 		try {
 			example.createCriteria().andStatusEqualTo(1);
+			example.setOrderByClause("PIO DESC");
 			List<Object> lst = appFacePostDao.selectByExample(example);
 			if (lst != null) {
 				for (Object obj : lst) {
@@ -230,6 +231,7 @@ public class ConfigProcessor extends MobileModuleStarter<PEAConfigReload> implem
 
 		try {
 			example.createCriteria().andStatusEqualTo(1);
+			example.setOrderByClause("PIO DESC");
 			List<Object> lst = appFacePreDao.selectByExample(example);
 			if (lst != null) {
 				for (Object obj : lst) {

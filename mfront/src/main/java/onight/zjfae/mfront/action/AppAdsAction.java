@@ -60,7 +60,7 @@ public class AppAdsAction extends MobileModuleStarter<PEAGetAds> {
 
 			try {
 				APPAdsExample example = new APPAdsExample();
-				example.createCriteria().andShowTypeEqualTo(pbo.getShowType());
+				example.createCriteria().andShowTypeEqualTo(pbo.getShowType()).andStatusEqualTo(1);
 				example.setLimit(100);
 
 				List<Object> lst = appAdsDao.selectByExample(example);
