@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -15,8 +16,10 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.net.ssl.SSLContext;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
+
+import lombok.extern.slf4j.Slf4j;
+import onight.tfw.otransio.api.PackHeader;
+import onight.tfw.otransio.api.beans.FramePacket;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -46,9 +49,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import lombok.extern.slf4j.Slf4j;
-import onight.tfw.otransio.api.PackHeader;
-import onight.tfw.otransio.api.beans.FramePacket;
 
 @Slf4j
 public class HttpRequestor {
@@ -84,7 +84,7 @@ public class HttpRequestor {
 			Registry<ConnectionSocketFactory> registry = registryBuilder.build();
 
 			cm = new PoolingHttpClientConnectionManager(registry);
-			httpclient = HttpClientBuilder.create().setConnectionManager(cm).build();
+			httpclient = HttpClientBuilder.create().disableCookieManagement().setConnectionManager(cm).build();
 		} finally {
 			lock.writeLock().unlock();
 		}
@@ -130,7 +130,7 @@ public class HttpRequestor {
 			StringEntity entity = new StringEntity(xml, "UTF-8");
 			HttpPost httppost = new HttpPost(address);
 			httppost.setEntity(entity);
-			ResponseHandler<String> responseHandler = new BasicResponseHandler();
+			ResponseHandler<String> responseHandler = new BasicResponseHandler(); 
 			String result = httpclient.execute(httppost, responseHandler);
 
 			log.debug("httpresult:" + address + ",result=" + result);
@@ -138,6 +138,13 @@ public class HttpRequestor {
 		} finally {
 			lock.readLock().unlock();
 		}
+	}
+	public String printHeader(HttpPost post){
+		StringBuffer sb = new StringBuffer();
+		for(Header h :post.getAllHeaders()){
+			sb.append(h.getName()).append("=").append(h.getValue()).append(";");
+		}
+		return sb.toString();
 	}
 
 	public String post(final FramePacket pack, String xml, String address) throws ClientProtocolException, IOException {
@@ -158,7 +165,7 @@ public class HttpRequestor {
 				stringBuffer.append(entry.getKey()).append("=").append(entry.getValue()).append(";");
 			}
 
-			log.debug("post:cookies=" + stringBuffer.toString());
+			log.debug("post:cookies=" + stringBuffer.toString()+",header="+printHeader(httppost));
 			if (StringUtils.isNotBlank(stringBuffer)) {// if exists , post it as
 				httppost.setHeader(new BasicHeader("Cookie", stringBuffer.toString()));
 			} else {

@@ -13,6 +13,8 @@ enum PEACommand{
 	ADS = 0 ;//获取广告信息
 	TIP = 1 ;//心灵鸡汤
 	MER = 2; //聚合接口
+	URL = 3; //url列表
+	LOG = 4; //记录日志
 	C01 = 10 ;//后处理配置重新加载
 };
 
@@ -68,6 +70,67 @@ message PEARetTips
 {
 	string  user_id  = 1; //用户id，暂时不用
 	repeated PBAPPShakeTips tips = 2;//提示列表
+}
+
+
+//url请求
+message PBAPPUrlParams
+{
+	string uuid = 1;
+	string key_no = 2;
+	string backend_url = 3;
+	string deatails = 4;
+}
+
+message PEAGetUrl
+{
+	string  key_no  = 1; //keyno，(1:常见问题,2:兑付确权信息,3:中心公告,4:活动专区,5:社区主页,6:增值服务)
+}
+
+message PEARetUrl
+{
+	string  key_no  = 1; //keyno，查询的时候使用，如果为空则差全部
+	repeated PBAPPUrlParams urls = 2;//urls列表
+}
+
+
+//App日志
+message PEALogs
+{
+	//string uuid = 1;
+	string level = 2;
+	//int64 crt_time = 3;
+	//int64 end_time = 4;
+	int32 cost_mills = 5;
+	string face_code = 6;
+	string face_name = 7;
+	double amount = 8;
+	int32 count = 9;
+	int32 optype = 10;//操作类型(0:访问,1:下载,2:购买,3:鲜花,4:评分,5:新建产品,6:推荐访问,7:应用错误,8:消费充值,9:消费返还,10:新建用户,11:应用启动,12:应用退出)
+	int32 ctype = 11;
+	string backend_url = 12;
+	string trade_date = 13;
+	string ret_code = 14;
+	string acct_no = 15;
+	string user_id = 16;
+	string channel_id = 17;
+	string merchnat_id = 18;
+	string client_ip = 19;
+	string contents = 20;
+	string client_os = 21;
+	string client_device = 22;
+	string app_vers = 23;
+	string provider = 24;
+	string device_token = 25;
+	string device_id = 26;
+	int64 inserttime = 27;
+}
+
+
+message PEARetAppLogs
+{
+	string  returnCode  = 1; //keyno，查询的时候使用，如果为空则差全部
+	string  returnMsg  = 2; //keyno，查询的时候使用，如果为空则差全部
 }
 
 

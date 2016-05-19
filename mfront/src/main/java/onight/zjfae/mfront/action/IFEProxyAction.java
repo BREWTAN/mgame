@@ -103,7 +103,6 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					currentBuilder.set(builder);
 					Message msg = getPBBody(pack);//
 					// 1.preprocess.== validate..前处理逻辑
-					log.debug("msg==" + msg);
 					try {
 						PreProcResult ppResult = cfgProc.preDO(pack, builder, pbname);
 						if (ppResult != null) {
@@ -133,7 +132,7 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 						return;
 					}
 
-					log.debug("msg=={}", msg);
+					log.debug("post.msg=={}", msg);
 					String str = null;
 					String requestBody = null;
 					String path = bmap.getEURL(pbname);
