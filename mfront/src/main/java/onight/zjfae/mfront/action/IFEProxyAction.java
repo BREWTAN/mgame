@@ -8,12 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 import onight.osgi.annotation.NActorProvider;
 import onight.osgi.annotation.iPojoBean;
 import onight.tfw.async.CompleteHandler;
-import onight.tfw.ntrans.api.ActorService;
 import onight.tfw.ntrans.api.annotation.ActorRequire;
+import onight.tfw.otransio.api.PackHeader;
 import onight.tfw.otransio.api.PacketHelper;
 import onight.tfw.otransio.api.beans.FramePacket;
 import onight.tfw.otransio.api.beans.SendFailedBody;
 import onight.tfw.otransio.api.beans.UnknowCMDBody;
+import onight.tfw.outils.bean.JsonPBFormat;
 import onight.tfw.outils.bean.JsonPBUtil;
 import onight.tfw.outils.serialize.ISerializer;
 import onight.tfw.outils.serialize.SerializerFactory;
@@ -23,10 +24,8 @@ import onight.zjfae.mfront.service.HttpRequestor;
 import onight.zjfae.mfront.service.IFEBeanMapping;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.felix.ipojo.annotations.Instantiate;
-import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.StaticServiceProperty;
 import org.apache.http.client.ClientProtocolException;
+import org.slf4j.MDC;
 
 import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.Message;
@@ -87,11 +86,43 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 
 	}
 
+	public Message preCheckIFace(FramePacket pack, String pbname) {
+		try {
+			PreProcResult ppResult = cfgProc.preDO(pack, pbname);
+			if (ppResult != null) {
+				String str = ppResult.getPreproc().getProcParams();
+				Message retmsg;
+				if (str != null) {
+					int idx = str.indexOf(",");
+					if (idx >= 0) {
+						String errcode = str.substring(0, idx);
+						String errmessage = "接口被屏蔽";
+						if (idx < str.length() - 1) {
+							errmessage = str.substring(idx + 1);
+						}
+						retmsg = resultToErrorPacket(str.substring(0, idx), errmessage, pbname);
+					} else {
+						retmsg = resultToErrorPacket("I19999", "接口被屏蔽", pbname);
+					}
+					log.info("prefilter_Block:" + pbname + ",ip=" + pack.getExtStrProp(PackHeader.PEER_IP) + ",retmsg=" + retmsg);
+					return retmsg;
+				}
+			}
+
+		} catch (Exception e) {
+			log.debug("preprocError", e);
+			log.info("prefilter_Block:" + pbname + ",ip=" + pack.getExtStrProp(PackHeader.PEER_IP) + ",");
+			return resultToErrorPacket("I09999", "系统前处理异常", pbname);
+		}
+		return null;
+	}
+
 	@Override
 	public void onPBPacket(final FramePacket pack, Message nubo, final CompleteHandler handler) {
 		// log.debug("pack:" + pack);
 
 		String pbname = pack.getExtStrProp("pbname");
+
 		if (StringUtils.isBlank(pbname)) {
 			handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("pbname 不能为空", pack)));
 		} else {
@@ -99,38 +130,22 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 			if (builder == null) {
 				handler.onFinished(PacketHelper.toPBReturn(pack, new UnknowCMDBody("未找到的命令:" + pbname, pack)));
 			} else {
+				MDC.put("peerip", String.valueOf(pack.getExtStrProp(PackHeader.PEER_IP)));
+				MDC.put("pbname", String.valueOf(pbname));
+				String smid = pack.getExtStrProp("SMID");
+				if (smid != null) {
+					MDC.put("smid", smid);
+				}
 				try {
 					currentBuilder.set(builder);
-					Message msg = getPBBody(pack);//
-					// 1.preprocess.== validate..前处理逻辑
-					try {
-						PreProcResult ppResult = cfgProc.preDO(pack, builder, pbname);
-						if (ppResult != null) {
-							String str = ppResult.getPreproc().getProcParams();
-							Message retmsg;
-							if (str != null) {
-								int idx = str.indexOf(",");
-								if (idx >= 0) {
-									String errcode = str.substring(0, idx);
-									String errmessage = "接口被屏蔽";
-									if (idx < str.length() - 1) {
-										errmessage = str.substring(idx + 1);
-									}
-									retmsg = resultToErrorPacket(str.substring(0, idx), errmessage, pbname);
-								} else {
-									retmsg = resultToErrorPacket("I19999", "接口被屏蔽", pbname);
-								}
-								handler.onFinished(PacketHelper.toPBReturn(pack, retmsg));
-								return;
-							}
-						}
-
-					} catch (Exception e) {
-						log.debug("preprocError", e);
-						Message retmsg = resultToErrorPacket("I09999", "系统前处理异常", pbname);
-						handler.onFinished(PacketHelper.toPBReturn(pack, retmsg));
+					Message checkmsg = preCheckIFace(pack, pbname);
+					if (checkmsg != null) {
+						handler.onFinished(PacketHelper.toPBReturn(pack, checkmsg));
 						return;
 					}
+
+					Message msg = getPBBody(pack);//
+					// 1.preprocess.== validate..前处理逻辑
 
 					log.debug("post.msg=={}", msg);
 					String str = null;
@@ -150,7 +165,8 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					log.debug("name:" + pbname + ",url=" + path);
 					try {
 						Message retmsg = postJsonMessage(pack, requestBody, pbname);
-						log.debug("posProc_result=" + retmsg);
+
+						// pack.getExtHead().remove(PackHeader.PEER_IP);
 						handler.onFinished(PacketHelper.toPBReturn(pack, retmsg));
 						int size = pack.getFixHead().getBodysize();
 						log.debug("retfh = {},extSize={},bodySize={}", pack.getFixHead().toStrHead(), pack.getFixHead().getExtsize(), size);
@@ -180,12 +196,10 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 	public Message postJsonMessage(FramePacket pack, String requestBody, String pbname) throws ClientProtocolException, IOException {
 		String path = bmap.getEURL(pbname);
 		String jsonStr = requestor.post(pack, requestBody, backendurl + path);
+		jsonStr = jsonStr.trim();
 		// String jsonStr =
 		// requestor.post(pack,requestBody,"http://172.16.28.85:8080"+path);
 		// 报文格式整理
-		if (jsonStr.startsWith("{\"errorCode\":")) {
-			jsonStr = jsonStr.replaceAll("error", "return");
-		} else if (!pbname.equals("PBIFE_login")) {
 			int zjidx = jsonStr.indexOf("\"zjsWebResponse\":");
 			if (zjidx > 0 && zjidx < 10) {
 				int startidx = jsonStr.indexOf(":") + 1;
@@ -195,8 +209,16 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 				} else {
 					return resultToErrorPacket("I49999", "系统服务接口异常", pbname);
 				}
+			}else{
+				if (!jsonStr.startsWith("{\"returnCode\":")) {
+					log.info("后台接口格式错误："+jsonStr);
+				}
+				if (jsonStr.startsWith("{\"message\":")) {
+					jsonStr = jsonStr.replaceAll("message", "returnMsg");
+					jsonStr = jsonStr.replaceAll("result", "returnCode");
+				} 
+
 			}
-		}
 		// 2. json,转换成PBMessage再发到客户端
 		Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
 
@@ -207,7 +229,8 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 
 		Message retmsg = retbuilder.build();
 
-		log.debug("posProc_result=" + retmsg);
+		log.debug("posProc_result={}" ,new JsonPBFormat().printToString(retmsg));
+//		log.debug("posProc_result=" + retmsg);
 		return retmsg;
 		// }catch(Exception e){
 		// handler.onFinished(PacketHelper.toPBReturn(pack, new

@@ -31,7 +31,7 @@ public class CheckCookiePP extends AbstractPreProc {
 	}
 
 	@Override
-	public boolean doPreProc(FramePacket fp, Builder builder) {
+	public boolean doPreProc(FramePacket fp) {
 		for (String[] str : cookieChecks) {
 			String v = fp.getExtStrProp(str[0]);
 			if (v != null) {

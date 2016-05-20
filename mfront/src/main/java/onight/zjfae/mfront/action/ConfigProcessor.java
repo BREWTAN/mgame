@@ -37,6 +37,10 @@ import onight.zjfae.ordbgens.app.entity.APPIfacePostproc;
 import onight.zjfae.ordbgens.app.entity.APPIfacePostprocExample;
 import onight.zjfae.ordbgens.app.entity.APPIfacePreproc;
 import onight.zjfae.ordbgens.app.entity.APPIfacePreprocExample;
+import onight.zjfae.ordbgens.app.entity.APPSysParam;
+import onight.zjfae.ordbgens.app.entity.APPSysParamKey;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
@@ -44,7 +48,7 @@ import com.google.protobuf.Message;
 @NActorProvider
 @Slf4j
 @iPojoBean
-public class ConfigProcessor extends MobileModuleStarter<PEAConfigReload> implements PostProc,PreProc {
+public class ConfigProcessor extends MobileModuleStarter<PEAConfigReload> implements PostProc, PreProc {
 
 	@AllArgsConstructor
 	public class PostProcessor {
@@ -69,12 +73,12 @@ public class ConfigProcessor extends MobileModuleStarter<PEAConfigReload> implem
 	}
 
 	@Override
-	public PreProcResult preDO(FramePacket fp,Message.Builder builder, String pbname) {
+	public PreProcResult preDO(FramePacket fp, String pbname) {
 		List<PreProcessor> fds = pbPreProcs.get(pbname);
 		if (fds != null) {
 			for (PreProcessor proc : fds) {
-				if (proc.proc.doPreProc(fp,builder)) {
-					return new PreProcResult(true,proc.appProc);
+				if (proc.proc.doPreProc(fp)) {
+					return new PreProcResult(true, proc.appProc);
 				}
 			}
 		}
@@ -85,15 +89,25 @@ public class ConfigProcessor extends MobileModuleStarter<PEAConfigReload> implem
 	public void onPBPacket(FramePacket pack, PEAConfigReload pbo, CompleteHandler handler) {
 
 		if (pbo != null) {
-			init();
+			APPSysParam sysparam = appSysParamDao.selectByPrimaryKey(new APPSysParamKey("__admin_reload"));
+			String exloader = pack.getExtStrProp("opid");
 			PEARetConfigReload.Builder ret = PEARetConfigReload.newBuilder();
-			ret.setRetCode("0000");
-			ret.setRetMessage("共加载前处理策略个数：" + pbPreProcs.size()+"，后处理策略个数：" + pbPostProcs.size() + ":prekeys=" + pbPreProcs.keySet()+",postkeys="+pbPostProcs.keySet());
+			ret.setReturnCode("0001");
+			if (sysparam != null && StringUtils.isBlank(exloader)) {
+				ret.setReturnMsg("权限不对，无法更新:exloader为空");
+			} else if (sysparam != null && !StringUtils.equalsIgnoreCase(exloader,sysparam.getParamValue())) {
+				ret.setReturnMsg("权限不对，无法更新:exloader和db不等：exloader="+exloader);
+			} else {
+				init();
+				ret.setReturnCode("0000");
+				ret.setReturnMsg("共加载前处理策略个数：" + pbPreProcs.size() + "，后处理策略个数：" + pbPostProcs.size() + ":prekeys=" + pbPreProcs.keySet() + ",postkeys="
+						+ pbPostProcs.keySet());
+			}
 			handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
 		} else {
 			PEARetConfigReload.Builder ret = PEARetConfigReload.newBuilder();
-			ret.setRetCode("0001");
-			ret.setRetMessage("请求内容不能为空");
+			ret.setReturnCode("0001");
+			ret.setReturnMsg("请求内容不能为空");
 			handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
 		}
 	}
@@ -123,6 +137,11 @@ public class ConfigProcessor extends MobileModuleStarter<PEAConfigReload> implem
 	@Getter
 	@Setter
 	OJpaDAO<APPIfacePreproc> appFacePreDao;
+
+	@StoreDAO(domain = APPSysParam.class, target = "appmysql")
+	@Getter
+	@Setter
+	OJpaDAO<APPSysParam> appSysParamDao;
 
 	@StoreDAO(domain = APPDictionary.class, target = "appmysql")
 	@Getter
@@ -162,7 +181,7 @@ public class ConfigProcessor extends MobileModuleStarter<PEAConfigReload> implem
 									}
 									AbstractPreProc preproc = preLoader.getPreProcess(proc);
 									if (preproc != null) {
-										preprocs.add(new PreProcessor(preproc,proc));
+										preprocs.add(new PreProcessor(preproc, proc));
 									}
 								}
 							}
@@ -283,8 +302,8 @@ public class ConfigProcessor extends MobileModuleStarter<PEAConfigReload> implem
 
 	/**
 	 * 获取格式化的函数
-	 * '格式化函数(DateFormat:时间格式化,FloatFormat:浮点格式化,StringFormat:字符串格式化,TrimSize:大小格式,JavaScript:通过js脚本自己控制/暂时不支持,ScriptFile:脚本文件/不推荐
-	 * / 暂 时 不 支 持 ) ' ,
+	 * '格式化函数(DateFormat:时间格式化,FloatFormat:浮点格式化,StringFormat:字符串格式化,TrimSize:大小格式,JavaScript:通过js脚本自己控制/暂时不支持,ScriptFile:脚本文件/
+	 * 不 推 荐 / 暂 时 不 支 持 ) ' ,
 	 * 
 	 * @param proc
 	 * @return

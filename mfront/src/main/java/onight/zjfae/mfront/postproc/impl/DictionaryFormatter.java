@@ -36,11 +36,17 @@ public class DictionaryFormatter extends AbstractPostFieldTracker {
 			APPDictionary dict = map.get((String) v);
 			if (dict != null) {
 				return new ModifyValue(dict.getDataValue());
+			}else
+			if(patterns.length>=2&&StringUtils.isNoneBlank(patterns[1]))
+			{//走默认值
+				if("{}".equals(patterns[1])){
+					return null;
+				}
+				return new ModifyValue(patterns[1]);
 			}
 		}
-		if (patterns.length >= 2) {
-			return new ModifyValue(patterns[1].trim());
-		}
-		return new ModifyValue("");
+		return null;
+//		
+//		return new ModifyValue("");
 	}
 }

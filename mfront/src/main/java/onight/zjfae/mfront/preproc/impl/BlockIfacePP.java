@@ -22,7 +22,7 @@ public class BlockIfacePP extends AbstractPreProc {
 	}
 
 	@Override
-	public boolean doPreProc(FramePacket fp,Builder builder) {
+	public boolean doPreProc(FramePacket fp) {
 		return open;
 	}
 

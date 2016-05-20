@@ -12,6 +12,6 @@ import onight.zjfae.ordbgens.app.entity.APPIfacePreproc;
 public abstract class AbstractPreProc {
 	protected APPIfacePreproc procs;
 	
-	public abstract boolean doPreProc(FramePacket fp,Message.Builder builder);
+	public abstract boolean doPreProc(FramePacket fp);
 
 }

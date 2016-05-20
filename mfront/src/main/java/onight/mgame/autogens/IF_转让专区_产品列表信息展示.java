@@ -200,7 +200,10 @@ PageInfo pageInfo;//
 }
 
 		 List<ProductTradeInfoList>productTradeInfoList;// 
- 
+			
+		 @PBFields(name = ",当前登录账户交易账号,String,不校验,否,")
+		String currTradeAccount;//，当前登录账户交易账号，String，户不校验,否,
+			
 		 String tfw__reserved;//保留字段 
 
 	}

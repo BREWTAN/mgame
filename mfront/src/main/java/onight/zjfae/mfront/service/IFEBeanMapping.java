@@ -29,7 +29,7 @@ public class IFEBeanMapping {
 	}
 
 	public interface PreProc {
-		public PreProcResult preDO(FramePacket fp,Message.Builder builder, String pbname);
+		public PreProcResult preDO(FramePacket fp, String pbname);
 	}
 
 	public HashMap<String, PostProc> name2PostProcess = new HashMap<>();

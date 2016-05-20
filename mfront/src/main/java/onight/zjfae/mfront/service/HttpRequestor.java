@@ -224,8 +224,8 @@ public class HttpRequestor {
 			return result;
 		} catch (HttpResponseException e) {
 			if (e.getStatusCode() == 999) {
-				log.debug("HttpResponseException:9999", e);
-				return "{\"returnCode\":\"0000001\",\"returnMsg\":\"您未登录或者登陆已经超时~\"}";
+				log.debug("HttpResponseException:9999:");
+				return "{\"returnCode\":\"000001\",\"returnMsg\":\"您未登录或者登陆已经超时~\"}";
 			} else {
 				log.warn("httpRequest Error:"+e.getMessage(), e);
 				return "{\"returnCode\":\"I599999\",\"returnMsg\":\"系统太繁忙~\"}";

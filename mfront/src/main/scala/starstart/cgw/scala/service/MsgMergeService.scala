@@ -32,6 +32,8 @@ import onight.zjfae.afront.Amobilezj.PWRetMerges
 import onight.zjfae.mfront.action.FJsonPBFormat
 import onight.zjfae.mfront.action.IFEProxyAction
 import onight.tfw.outils.bean.JsonPBUtil
+import org.slf4j.MDC
+import onight.tfw.otransio.api.PackHeader
 
 @NActorProvider
 object CGWMsgMergeActor extends SessionModules[PWMergeProxy] {
@@ -138,34 +140,49 @@ object CGWMsgMergeService extends OLog with PBUtils with LService[PWMergeProxy] 
     return null;
 
   }
-  def getPacket(pack: FramePacket,xp:PBFramePacket):String = {
-     val jsonStr = if (pack.getFixHead.getEnctype()=='P') {
+  def getPacket(pack: FramePacket, xp: PBFramePacket): String = {
+    val jsonStr = if (pack.getFixHead.getEnctype() == 'P') {
       val builder = CGWMsgMergeActor.iFEProxyAction.getBmap().getReqBuilder(xp.getPbname);
       builder.mergeFrom(xp.getPbbody);
       new FJsonPBFormat().printToString(builder.build());
     } else {
       xp.getJsbody;
     }
-     return jsonStr
+    return jsonStr
   }
 
   def proxyPacket(pack: FramePacket, proxypack: PBFramePacket, p: Promise[PBFramePacket.Builder]): Future[PBFramePacket.Builder] = {
 
     var jsonStr: String = "";
-    if (pack.getFixHead.getEnctype()=='P') {
+    if (pack.getFixHead.getEnctype() == 'P') {
       val builder = CGWMsgMergeActor.iFEProxyAction.getBmap().getReqBuilder(proxypack.getPbname);
       builder.mergeFrom(proxypack.getPbbody);
+
       jsonStr = new FJsonPBFormat().printToString(builder.build());
+
     } else {
       jsonStr = proxypack.getJsbody;
     }
+
+    MDC.put("peerip", String.valueOf(pack.getExtStrProp(PackHeader.PEER_IP)));
+    val smid = pack.getExtStrProp("SMID");
+    if (smid != null) {
+      MDC.put("smid", smid);
+    }
+
+    MDC.put("pbname", String.valueOf(proxypack.getPbname));
+
+    //        if (checkmsg != null) {
+    //          handler.onFinished(PacketHelper.toPBReturn(pack, checkmsg));
+    //          return;
+    //        }
 
     val cb = new CallBack[Message]() {
       def onSuccess(message: Message) {
         val pbv = PBFramePacket.newBuilder();
         pbv.setGcmd(proxypack.getGcmd);
         pbv.setExts(proxypack.getExts);
-        if (pack.getFixHead.getEnctype()=='P') {
+        if (pack.getFixHead.getEnctype() == 'P') {
           pbv.setPbbody(message.toByteString());
         } else {
           pbv.setJsbody(new FJsonPBFormat().printToString(message));
@@ -177,8 +194,8 @@ object CGWMsgMergeService extends OLog with PBUtils with LService[PWMergeProxy] 
             val nextp = Promise[PBFramePacket.Builder]();
             if (proxypack.getClonefieldsList.size() > 0) {
               val nextPacketbuilder = xp.toBuilder();
-              val dstnode = jsonmapper.readTree(getPacket(pack,xp));//jsonmapper.readTree(xp.getJsbody)
-              val srcnode =  jsonmapper.readTree(new FJsonPBFormat().printToString(message));//jsonmapper.readTree(getPacket(pack,pbv.build()));//jsonmapper.readTree(pbv.getJsbody)
+              val dstnode = jsonmapper.readTree(getPacket(pack, xp)); //jsonmapper.readTree(xp.getJsbody)
+              val srcnode = jsonmapper.readTree(new FJsonPBFormat().printToString(message)); //jsonmapper.readTree(getPacket(pack,pbv.build()));//jsonmapper.readTree(pbv.getJsbody)
               log.debug("srcnode=" + srcnode)
               log.debug("dstnode=" + dstnode)
               var overrided: Int = 0;
@@ -201,15 +218,15 @@ object CGWMsgMergeService extends OLog with PBUtils with LService[PWMergeProxy] 
                 Future { PBFramePacket.newBuilder() }
               } else {
                 //                log.debug("overrided:OK.for key:,dstnode=:{}" + dstnode)
-//                nextPacketbuilder.setJsbody(dstnode.toString());
-                if (pack.getFixHead.getEnctype()=='P') {
+                //                nextPacketbuilder.setJsbody(dstnode.toString());
+                if (pack.getFixHead.getEnctype() == 'P') {
                   val builder = CGWMsgMergeActor.iFEProxyAction.getBmap().getReqBuilder(nextPacketbuilder.getPbname);
                   JsonPBUtil.json2PB(dstnode, builder);
                   nextPacketbuilder.setPbbody(builder.build().toByteString());
                 } else {
                   nextPacketbuilder.setJsbody(dstnode.toString());
                 }
-                      
+
                 proxyPacket(pack, nextPacketbuilder.build(), nextp)
               }
             } else {
@@ -237,8 +254,13 @@ object CGWMsgMergeService extends OLog with PBUtils with LService[PWMergeProxy] 
     threadExec.execute(new Runnable() {
       def run() {
         try {
-          val msg = CGWMsgMergeActor.iFEProxyAction.postJsonMessage(pack, jsonStr, proxypack.getPbname);
-          cb.onSuccess(msg);
+          val checkmsg = CGWMsgMergeActor.iFEProxyAction.preCheckIFace(pack, proxypack.getPbname);
+          if (checkmsg != null) {
+            cb.onSuccess(checkmsg);
+          } else {
+            val msg = CGWMsgMergeActor.iFEProxyAction.postJsonMessage(pack, jsonStr, proxypack.getPbname);
+            cb.onSuccess(msg);
+          }
         } catch {
           case t: Throwable => cb.onFailed(new Exception(t), null);
         }

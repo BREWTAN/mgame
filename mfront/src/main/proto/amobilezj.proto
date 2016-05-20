@@ -142,8 +142,8 @@ message PEAConfigReload
 
 message PEARetConfigReload
 {
-	string ret_code  = 1; //返回码
-	string ret_message  = 2;//提示信息
+	string returnCode  = 1; //返回码
+	string returnMsg  = 2;//提示信息
 }
 
 

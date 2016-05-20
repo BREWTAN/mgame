@@ -29,7 +29,7 @@ public class LockIPPP extends AbstractPreProc {
 	}
 
 	@Override
-	public boolean doPreProc(FramePacket fp, Builder builder) {
+	public boolean doPreProc(FramePacket fp) {
 		String ip = fp.getExtStrProp(PackHeader.PEER_IP);
 		if (StringUtils.isNotBlank(ip)) {
 			for (String ipx : ipRex) {

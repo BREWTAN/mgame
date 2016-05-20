@@ -7,9 +7,9 @@ package onight.zjfae.afront.gens;
 message Ret_PBIFE_login{
 	///ife/login.html
 
-	string message = 1; //,message,
+	string returnCode = 1; //,message,
 
-	string result = 2; //,result,
+	string returnMsg = 2; //,result,
 
 
 }
