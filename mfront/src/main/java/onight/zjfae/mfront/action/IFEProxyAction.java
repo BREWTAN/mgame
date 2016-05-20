@@ -1,6 +1,8 @@
 package onight.zjfae.mfront.action;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,16 +20,19 @@ import onight.tfw.outils.bean.JsonPBFormat;
 import onight.tfw.outils.bean.JsonPBUtil;
 import onight.tfw.outils.serialize.ISerializer;
 import onight.tfw.outils.serialize.SerializerFactory;
+import onight.zjfae.mfront.cache.KDictionary;
 import onight.zjfae.mfront.filter.SSOPacketHelper;
 import onight.zjfae.mfront.preproc.PreProcResult;
 import onight.zjfae.mfront.service.HttpRequestor;
 import onight.zjfae.mfront.service.IFEBeanMapping;
+import onight.zjfae.ordbgens.app.entity.APPDictionary;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.slf4j.MDC;
 
 import com.google.protobuf.AbstractMessage.Builder;
+import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 
 @iPojoBean
@@ -146,8 +151,10 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 
 					Message msg = getPBBody(pack);//
 					// 1.preprocess.== validate..前处理逻辑
-
-					log.debug("post.msg=={}", msg);
+					if (msg != null) {
+						// log.debug("post.msg=={}", msg);
+						log.debug("post.msg={}", new JsonPBFormat().printToString(msg));
+					}
 					String str = null;
 					String requestBody = null;
 					String path = bmap.getEURL(pbname);
@@ -192,6 +199,37 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 
 		}
 	}
+	
+	public void transErrorCode(Message.Builder retbuilder){
+		FieldDescriptor returnMsgfd = null;
+		boolean mustTransCode = false;
+		String returnCode = null;
+		for (Map.Entry<FieldDescriptor, Object> entry : retbuilder.getAllFields().entrySet()) {
+			if (StringUtils.equals(entry.getKey().getName(), "returnCode")) {
+				Object obj = entry.getValue();
+				if (obj != null && obj instanceof String && !StringUtils.equals((String) obj, "0000")) {
+					mustTransCode = true;
+					returnCode = (String) obj;
+				}
+			} else if (StringUtils.equals(entry.getKey().getName(), "returnMsg")) {
+				returnMsgfd = entry.getKey();
+			}
+		}
+		if (mustTransCode && returnMsgfd != null && returnCode != null) {
+			Object retmsg = retbuilder.getField(returnMsgfd);
+			HashMap<String, APPDictionary> dict = KDictionary.dictsByKeyNO.get("transcode");
+			if (dict != null && dict.containsKey(returnCode)) {
+				APPDictionary appdict = dict.get(returnCode);
+				String dv = appdict.getDataValue();
+				log.debug("translate_Error_Code_From_Dict:"+returnCode+":"+retmsg+" ==> "+ dv);
+				retbuilder.setField(returnMsgfd, dv);
+//			} else {
+//				String dv = (retmsg + "");
+//				log.debug("translate_Error_Code_BySplit_0:"+returnCode+":"+retmsg+" ==> "+ dv);
+//				retbuilder.setField(returnMsgfd,dv);
+			}
+		}
+	}
 
 	public Message postJsonMessage(FramePacket pack, String requestBody, String pbname) throws ClientProtocolException, IOException {
 		String path = bmap.getEURL(pbname);
@@ -200,37 +238,39 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 		// String jsonStr =
 		// requestor.post(pack,requestBody,"http://172.16.28.85:8080"+path);
 		// 报文格式整理
-			int zjidx = jsonStr.indexOf("\"zjsWebResponse\":");
-			if (zjidx > 0 && zjidx < 10) {
-				int startidx = jsonStr.indexOf(":") + 1;
-				int endidx = jsonStr.lastIndexOf("}");
-				if (startidx < endidx) {
-					jsonStr = jsonStr.substring(startidx, endidx);
-				} else {
-					return resultToErrorPacket("I49999", "系统服务接口异常", pbname);
-				}
-			}else{
-				if (!jsonStr.startsWith("{\"returnCode\":")) {
-					log.info("后台接口格式错误："+jsonStr);
-				}
-				if (jsonStr.startsWith("{\"message\":")) {
-					jsonStr = jsonStr.replaceAll("message", "returnMsg");
-					jsonStr = jsonStr.replaceAll("result", "returnCode");
-				} 
-
+		int zjidx = jsonStr.indexOf("\"zjsWebResponse\":");
+		if (zjidx > 0 && zjidx < 10) {
+			int startidx = jsonStr.indexOf(":") + 1;
+			int endidx = jsonStr.lastIndexOf("}");
+			if (startidx < endidx) {
+				jsonStr = jsonStr.substring(startidx, endidx);
+			} else {
+				return resultToErrorPacket("I49999", "系统服务接口异常", pbname);
 			}
+		} else {
+			if (!jsonStr.startsWith("{\"returnCode\":")) {
+				log.info("后台接口格式错误：" + jsonStr);
+			}
+			if (jsonStr.startsWith("{\"message\":")) {
+				jsonStr = jsonStr.replaceAll("message", "returnMsg");
+				jsonStr = jsonStr.replaceAll("result", "returnCode");
+			}
+
+		}
 		// 2. json,转换成PBMessage再发到客户端
 		Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
-
 		JsonPBUtil.json2PB(jsonStr.getBytes("UTF-8"), retbuilder);
+
+//		transErrorCode(retbuilder);!!去掉了，有后台来改
+
 		// try{
 		bmap.postProcess(retbuilder, pbname);
 		cfgProc.postDO(retbuilder, pbname);
 
 		Message retmsg = retbuilder.build();
 
-		log.debug("posProc_result={}" ,new JsonPBFormat().printToString(retmsg));
-//		log.debug("posProc_result=" + retmsg);
+		log.debug("posProc_result={}", new JsonPBFormat().printToString(retmsg));
+		// log.debug("posProc_result=" + retmsg);
 		return retmsg;
 		// }catch(Exception e){
 		// handler.onFinished(PacketHelper.toPBReturn(pack, new
