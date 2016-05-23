@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
-// 二级市场购买,产品相关,TradeController,POST,JSON,/ife/trade/transferOrder.html@onight.mgame.utils.PBInfo(name = "PBIFE_trade_transferOrder", path = "/ife/trade/transferOrder.html") 
+// 二级市场购买,产品相关,TradeController,POST,JSON,/ife/trade/transferOrder.html
+@onight.mgame.utils.PBInfo(name = "PBIFE_trade_transferOrder", path = "/ife/trade/transferOrder.html") 
 public class IF_二级市场购买 {
 	// =======REQuest==============
 
@@ -19,7 +20,7 @@ public class IF_二级市场购买 {
 		 @PBFields(name = ",委托编号,String,不校验,否,")
 		String delegationCode;//  ,委托编号,String,不校验,否,
 		 @PBFields(name = ",购买数量,String,不校验,否,")
-		String buyNumStr;//  ,购买数量,String,不校验,否,
+		String buyNum;//  ,购买数量,String,不校验,否,
 		 @PBFields(name = ",重复提交校验码,String,不校验,否,")
 		 String  repeatCommitCheckCode;
 		 @PBFields(name = ",渠道,String,不校验,否,")

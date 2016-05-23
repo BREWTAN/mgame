@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
-// 认购专区-产品列表展示（非登录模式）,产品相关,PrdSubscribeQueryController,POST,JSON,/ife/prdsubscribequery/querySubscribeProductListNoLogon.html@onight.mgame.utils.PBInfo(name = "PBIFE_prdsubscribequery_querySubscribeProductListNoLogon", path = "/ife/prdsubscribequery/querySubscribeProductListNoLogon.html") 
+// 认购专区-产品列表展示（非登录模式）,产品相关,PrdSubscribeQueryController,POST,JSON,/ife/prdsubscribequery/querySubscribeProductListNoLogon.html
+@onight.mgame.utils.PBInfo(name = "PBIFE_prdsubscribequery_querySubscribeProductListNoLogon", path = "/ife/prdsubscribequery/querySubscribeProductListNoLogon.html") 
 public class IF_认购专区_产品列表_非登录模式_ {
 	// =======REQuest==============
 
@@ -32,6 +33,8 @@ public class IF_认购专区_产品列表_非登录模式_ {
 		String marketingChannel;//  ,销售对象,String,不校验,是,
 		 @PBFields(name = ",终端编号,String,不校验,是,11-网站，12-移动终端，13-微信，14-柜台，15-其他，16-接口")
 		String terminalNo;//  ,终端编号,String,不校验,是,11-网站，12-移动终端，13-微信，14-柜台，15-其他，16-接口
+		@PBFields(name = ",销售状态,String,不校验,是,0-敬请期待，1-售卖中，2-已售罄，3-已结束")
+		String sellingStatus;//  ,销售状态,String,不校验,是,0-敬请期待，1-售卖中，2-已售罄，3-已结束
 		 String tfw__reserved;//保留字段
 
 	}

@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
-// 获取用户详细信息,客户信息,UserBaseInfoController,POST,JSON,/ife/userbaseinfo/getUserDetailInfo.html@onight.mgame.utils.PBInfo(name = "PBIFE_userbaseinfo_getUserDetailInfo", path = "/ife/userbaseinfo/getUserDetailInfo.html") 
+// 获取用户详细信息,客户信息,UserBaseInfoController,POST,JSON,/ife/userbaseinfo/getUserDetailInfo.html
+@onight.mgame.utils.PBInfo(name = "PBIFE_userbaseinfo_getUserDetailInfo", path = "/ife/userbaseinfo/getUserDetailInfo.html") 
 public class IF_获取用户详细信息 {
 	// =======REQuest==============
 
@@ -32,6 +33,8 @@ public class IF_获取用户详细信息 {
 		String lastLoginTerminalName;//  ,上次登录终端,String,不校验,是,
 		 @PBFields(name = ",资金账号,String,不校验,是,")
 		String fundAccount;//  ,资金账号,String,不校验,是,
+		@PBFields(name = ",交易账户,String,不校验,是,")
+		String tradeAccount;//  ,交易账户,String,不校验,是,
 		 @PBFields(name = ",安全等级,String,不校验,是,")
 		String safeLevel;//  ,安全等级,String,不校验,是,
 		 @PBFields(name = ",是否绑定银行卡,String,不校验,是,true-是，false-否")

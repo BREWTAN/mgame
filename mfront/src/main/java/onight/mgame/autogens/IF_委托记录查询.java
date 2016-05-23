@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
-// 委托记录查询,产品相关,PrdQueryController,POST,JSON,/ife/prdquery/prdQueryTcDelegationFinanceList.html@onight.mgame.utils.PBInfo(name = "PBIFE_prdquery_prdQueryTcDelegationFinanceList", path = "/ife/prdquery/prdQueryTcDelegationFinanceList.html") 
+// 委托记录查询,产品相关,PrdQueryController,POST,JSON,/ife/prdquery/prdQueryTcDelegationFinanceList.html
+@onight.mgame.utils.PBInfo(name = "PBIFE_prdquery_prdQueryTcDelegationFinanceList", path = "/ife/prdquery/prdQueryTcDelegationFinanceList.html") 
 public class IF_委托记录查询 {
 	// =======REQuest==============
 
@@ -77,12 +78,18 @@ PageInfo pageInfo;//
 				String delegateAmount;//  ,委托金额,String,不校验,是,
 		 @PBFields(name = ",委托类型,String,不校验,是,认购、协议卖出、定价卖出、定价买入")
 				String delegateType;//  ,委托类型,String,不校验,是,认购、协议卖出、定价卖出、定价买入
+		@PBFields(name = ",委托类型,String,不校验,是,认购、协议卖出、定价卖出、定价买入")
+				String delegateTypeName;//  ,委托类型,String,不校验,是,认购、协议卖出、定价卖出、定价买入
 		 @PBFields(name = ",委托状态,String,不校验,是,委托中、委托成功、委托失败、委托关闭")
 				String delegateStatus;//  ,委托状态,String,不校验,是,委托中、委托成功、委托失败、委托关闭
+		@PBFields(name = ",委托状态,String,不校验,是,委托中、委托成功、委托失败、委托关闭")
+				String delegateStatusName;//  ,委托状态,String,不校验,是,委托中、委托成功、委托失败、委托关闭
 		 @PBFields(name = ",委托单位,String,不校验,是,")
 				String delegateNum;//  ,委托单位,String,不校验,是,
 		 @PBFields(name = ",撤单标志,String,不校验,是,")
 				String cancelStatus;//  ,撤单标志,String,不校验,是,
+		@PBFields(name = ",撤单标志,String,不校验,是,")
+				String cancelStatusName;//  ,撤单标志,String,不校验,是,
 		 @PBFields(name = ",买卖类型,String,不校验,是,")
 				String saleType;//  ,买卖类型,String,不校验,是,
 		 @PBFields(name = ",交易账户,String,不校验,是,")
