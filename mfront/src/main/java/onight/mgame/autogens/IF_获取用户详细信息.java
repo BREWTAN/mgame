@@ -27,7 +27,11 @@ public class IF_获取用户详细信息 {
 	@AllArgsConstructor
 	@NoArgsConstructor
 	public static class Response {
-		 @PBFields(name = ",最后一次登录时间,String,不校验,是,")
+		@PBFields(name = ",姓名,String,不校验,是,")
+		String name;//  ,姓名,String,不校验,是,
+		@PBFields(name = ",账户,String,不校验,是,")
+		String account;//  ,账户,String,不校验,是,
+		@PBFields(name = ",最后一次登录时间,String,不校验,是,")
 		String lastLoginTime;//  ,最后一次登录时间,String,不校验,是,
 		 @PBFields(name = ",上次登录终端,String,不校验,是,")
 		String lastLoginTerminalName;//  ,上次登录终端,String,不校验,是,
