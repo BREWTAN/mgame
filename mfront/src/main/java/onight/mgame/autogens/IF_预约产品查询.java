@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
-// 预约产品查询,产品相关,TradeController,POST,JSON,/ife/trade/queryProductOrderInfo.html@onight.mgame.utils.PBInfo(name = "PBIFE_trade_queryProductOrderInfo", path = "/ife/trade/queryProductOrderInfo.html") 
+// 预约产品查询,产品相关,TradeController,POST,JSON,/ife/trade/queryProductOrderInfo.html
+@onight.mgame.utils.PBInfo(name = "PBIFE_trade_queryProductOrderInfo", path = "/ife/trade/queryProductOrderInfo.html") 
 public class IF_预约产品查询 {
 	// =======REQuest==============
 
@@ -71,6 +72,9 @@ PageInfo pageInfo;//
 				String depositRate;//  ,保证金比例,String,不校验,是,
 		 @PBFields(name = ",是否已预约,String,不校验,是,")
 				String isOrderFlag;//  ,是否已预约,String,不校验,是,
+		 @PBFields(name = ",是否能预约,String,不校验,是,")
+				String ifCanOrder;//  ,是否能预约true-是，false-否,String,不校验,是,
+
 }
 
 		 List<TaProductOrderInfoWrapList>taProductOrderInfoWrapList;// 

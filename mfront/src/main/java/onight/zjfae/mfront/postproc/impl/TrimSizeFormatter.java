@@ -20,7 +20,7 @@ public class TrimSizeFormatter extends AbstractPostFieldTracker {
 	public ModifyValue modTraceValue(Object v) {
 		String patterns[] = StringUtils.stripAll(procs.getProcParams().trim().split(","));
 		if (patterns.length < 2) {
-			log.debug("格式化参数错误：" + v + ",formatter=" + procs.getProcParams()+",proc.uuid="+procs.getUuid());
+			log.debug("格式化参数错误：" + v + ",formatter=" + procs.getProcParams() + ",proc.uuid=" + procs.getUuid());
 			return null;
 		}
 
@@ -34,7 +34,10 @@ public class TrimSizeFormatter extends AbstractPostFieldTracker {
 			}
 		} catch (Throwable e) {
 			log.debug("格式化错误：" + v + ",formatter=" + procs.getProcParams(), e);
-			return new ModifyValue(patterns[1].trim());
+			if ("{}".equals(patterns[1].trim())) {
+				return new ModifyValue(patterns[1].trim());
+			}
+			return null;
 		}
 	}
 }

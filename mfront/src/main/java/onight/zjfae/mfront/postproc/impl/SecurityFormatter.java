@@ -32,7 +32,10 @@ public class SecurityFormatter extends AbstractPostFieldTracker {
 			}
 		} catch (Throwable e) {
 			log.debug("格式化错误：" + v + ",formatter=" + procs.getProcParams(), e);
-			return new ModifyValue(patterns[1].trim());
+			if ("{}".equals(patterns[1].trim())) {
+				return new ModifyValue(patterns[1].trim());
+			}
+			return null;
 		}
 	}
 

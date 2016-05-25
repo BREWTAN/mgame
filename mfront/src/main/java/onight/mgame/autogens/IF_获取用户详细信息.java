@@ -65,7 +65,11 @@ public class IF_获取用户详细信息 {
 		String certificateType;//  ,证件类型,String,不校验,是,
 		 @PBFields(name = ",用户类型,String,不校验,是,")
 		String userType;//  ,用户类型,String,不校验,是,
-		 String tfw__reserved;//保留字段 
+		@PBFields(name = ",风险测评等级,String,不校验,是,")
+		String riskLevel;//  ,风险测评等级,String,不校验,是,
+		@PBFields(name = ",风险测评有效期,String,不校验,是,")
+		String riskExpiredDate;//  ,风险测评有效期,String,不校验,是,
+		 String tfw__reserved;//保留字段
 
 	}
 
