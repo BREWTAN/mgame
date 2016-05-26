@@ -8,7 +8,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -27,12 +26,15 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
+import org.apache.http.config.SocketConfig;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.LayeredConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
@@ -46,6 +48,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HttpContext;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -84,7 +87,17 @@ public class HttpRequestor {
 			Registry<ConnectionSocketFactory> registry = registryBuilder.build();
 
 			cm = new PoolingHttpClientConnectionManager(registry);
-			httpclient = HttpClientBuilder.create().disableCookieManagement().setConnectionManager(cm).build();
+			httpclient = HttpClientBuilder.create().disableCookieManagement().setConnectionManager(cm)
+					.setRetryHandler(new HttpRequestRetryHandler() {
+						@Override
+						public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
+							return false;
+						}
+						
+					})
+					.setDefaultRequestConfig(RequestConfig.custom().setSocketTimeout(5*60*1000).setConnectTimeout(60*1000).build())
+					.build();
+			
 		} finally {
 			lock.writeLock().unlock();
 		}
