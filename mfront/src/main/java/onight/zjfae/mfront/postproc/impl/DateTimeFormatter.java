@@ -52,12 +52,14 @@ public class DateTimeFormatter extends AbstractPostFieldTracker {
 			Date date = srcsdf.parse((String) v);
 			if ("sexy".equals(patterns[1].trim())) {
 				long datesec = date.getTime() / 1000;
-				if (patterns.length >= 3) {// ,60.300.600.3600.86400:刚刚.五分钟前.十分钟之前.一小时之前
+				if (patterns.length > 3) {// ,60.300.600.3600.86400:刚刚.五分钟前.十分钟之前.一小时之前
 					String sexy = getSexyTime(datesec, patterns[3]);
 					if (sexy != null) {
 						return new ModifyValue(sexy);
 					}
+					return null;
 				}
+			
 			}
 
 			SimpleDateFormat dstsdf = new SimpleDateFormat(patterns[1].trim());
