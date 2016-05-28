@@ -1,8 +1,18 @@
 package onight.zjfae.mfront.action;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.ClientProtocolException;
+import org.slf4j.MDC;
+
+import com.google.protobuf.AbstractMessage.Builder;
+import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Message;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,14 +36,7 @@ import onight.zjfae.mfront.preproc.PreProcResult;
 import onight.zjfae.mfront.service.HttpRequestor;
 import onight.zjfae.mfront.service.IFEBeanMapping;
 import onight.zjfae.ordbgens.app.entity.APPDictionary;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.ClientProtocolException;
-import org.slf4j.MDC;
-
-import com.google.protobuf.AbstractMessage.Builder;
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.Message;
+import onight.zjfae.ordbgens.app.entity.APPIfeLog;
 
 @iPojoBean
 @NActorProvider
@@ -79,6 +82,10 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 	@Setter
 	@Getter
 	ConfigProcessor cfgProc;
+	@ActorRequire
+	@Setter
+	@Getter
+	LoggerThreadPool loggerThreadPool;
 
 	public Message resultToErrorPacket(String returnCode, String returnMsg, String pbname) {
 		Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
@@ -232,8 +239,12 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 	}
 
 	public Message postJsonMessage(FramePacket pack, String requestBody, String pbname) throws ClientProtocolException, IOException {
+		
 		String path = bmap.getEURL(pbname);
+		long start = System.currentTimeMillis();
 		String jsonStr = requestor.post(pack, requestBody, backendurl + path);
+		long end = System.currentTimeMillis();
+
 		jsonStr = jsonStr.trim();
 		// String jsonStr =
 		// requestor.post(pack,requestBody,"http://172.16.28.85:8080"+path);
@@ -268,7 +279,7 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 		cfgProc.postDO(retbuilder, pbname);
 
 		Message retmsg = retbuilder.build();
-
+		loggerThreadPool.log(pack, requestBody, pbname, jsonStr, end - start);
 		log.debug("posProc_result={}", new JsonPBFormat().printToString(retmsg));
 		// log.debug("posProc_result=" + retmsg);
 		return retmsg;
