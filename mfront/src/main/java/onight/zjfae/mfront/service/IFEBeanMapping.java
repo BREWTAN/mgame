@@ -44,6 +44,12 @@ public class IFEBeanMapping {
 				if (ano == null)
 					continue;
 				name2EURL.put(ano.name(), ano.path());
+				
+				 int i=0;
+				 System.out.println("----------------");
+				  for (String key : name2EURL.keySet()) {
+				   System.out.println("insert into APP_IFE_MATCH (UUID,PB_ACTION,STATUS)  values ('"+i+"','"+key+"','1')");
+				  }
 
 				try {
 					name2JsonClass.put(ano.name(), clazz);
