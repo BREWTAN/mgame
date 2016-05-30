@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
 
-// 转让专区-产品列表信息展示,产品相关,PrdTransferQueryController,POST,JSON,/ife/prdtransferquery/prdQueryTransferOrderList.html@onight.mgame.utils.PBInfo(name = "PBIFE_prdtransferquery_prdQueryTransferOrderList", path = "/ife/prdtransferquery/prdQueryTransferOrderList.html") 
+// 转让专区-产品列表信息展示,产品相关,PrdTransferQueryController,POST,JSON,/ife/prdtransferquery/prdQueryTransferOrderList.html
+@onight.mgame.utils.PBInfo(name = "PBIFE_prdtransferquery_prdQueryTransferOrderList", path = "/ife/prdtransferquery/prdQueryTransferOrderList.html") 
 public class IF_转让专区_产品列表信息展示 {
 	// =======REQuest==============
 
@@ -197,6 +198,8 @@ PageInfo pageInfo;//
 				String saleObjectList;//  ,销售对象查询条件,List,不校验,否,
 		 @PBFields(name = ",可买人数,String,不校验,否,")
 				String canBuyNum;//  ,可买人数,String,不校验,否,
+		@PBFields(name = ",是否我的挂单,String,不校验,否,")
+		String isMyTransfer;//  ,是否我的挂单,String,不校验,否,
 }
 
 		 List<ProductTradeInfoList>productTradeInfoList;// 

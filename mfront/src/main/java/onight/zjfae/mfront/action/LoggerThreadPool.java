@@ -13,6 +13,8 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -53,8 +55,8 @@ public class LoggerThreadPool extends MobileModuleStarter<PEAConfigReload> {
 	@Getter
 	@Setter
 	OJpaDAO<APPIfeMatch> appIfeMatchDao;
-	
-	Map<String,String>  matcheMap = new ConcurrentHashMap<String,String>();
+
+	Map<String, String> matcheMap = new ConcurrentHashMap<String, String>();
 
 	LoggerThreadPool() {
 		synchronized (monitor) {
@@ -70,8 +72,9 @@ public class LoggerThreadPool extends MobileModuleStarter<PEAConfigReload> {
 
 	@Override
 	public void onPBPacket(FramePacket pack, PEAConfigReload arg1, CompleteHandler handler) {
-		reloadMatchMap();//重新加载缓存信息；
+		reloadMatchMap();// 重新加载缓存信息；
 		PEARetConfigReload.Builder ret = PEARetConfigReload.newBuilder();
+		reloadMatchMap();
 		ret.setReturnCode("0000");
 		ret.setReturnMsg("success");
 		handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
@@ -100,32 +103,38 @@ public class LoggerThreadPool extends MobileModuleStarter<PEAConfigReload> {
 		appIfeMatchExample.setOredCriteria(criteriaS);
 		List<Object> appIfeMatchS = appIfeMatchDao.selectByExample(appIfeMatchExample);
 		synchronized (monitor) {
-			matcheMap.clear();
+			Map<String, String> map = new ConcurrentHashMap<String, String>();
 			for (Object appIfeMatch : appIfeMatchS) {
-				if(matcheMap == null){
-					new ConcurrentHashMap<String,String>();
-				}
-				matcheMap.put(((APPIfeMatch) appIfeMatch).getPbAction(), "1");
+				map.put(((APPIfeMatch) appIfeMatch).getPbAction(), "1");
 			}
+			matcheMap = map;
 		}
 		return matcheMap;
 	}
-	
+
 	public void log(FramePacket pack, String requestBody, String pbname, String resStr, Long cost) {
-		reloadMatchMap();
+
 		try {
-			if (matcheMap.get(pbname) !=null) {
+			if (matcheMap.get(pbname) != null) {
 				APPIfeLog appIfeLog = new APPIfeLog();
 				appIfeLog.setAppVersion(pack.getExtStrProp("appVersion"));
 				appIfeLog.setClientOsver(pack.getExtStrProp("clientOsver"));
 				appIfeLog.setUserCookies(pack.getExtStrProp("SMID") + "," + pack.getExtStrProp("userid"));
 				appIfeLog.setPbAction(pbname);
 				appIfeLog.setPlatform(pack.getExtStrProp("p"));
-				appIfeLog.setReqStr(requestBody);
-				appIfeLog.setReqTime(new Date());
+				
+				appIfeLog.setReqStr(StringUtils.substring(requestBody, 0, 4096));
+				try {
+					if (StringUtils.isNumeric(pack.getExtStrProp("ReqTime"))) {
+						appIfeLog.setReqTime(new Date(Long.parseLong(pack.getExtStrProp("ReqTime"))));
+					}
+				} catch (Exception e) {
+					log.debug("reqLogTime Error:" + pack.getExtStrProp("ReqTime"), e);
+					// e.printStackTrace();
+				}
 				appIfeLog.setProxyTime(new Date());
 				appIfeLog.setResTime(new Date());
-				appIfeLog.setResStr(resStr);
+				appIfeLog.setResStr(StringUtils.substring(resStr, 0, 4096));
 				appIfeLog.setUserIp(pack.getExtStrProp(PackHeader.PEER_IP));
 				appIfeLog.setCostMs(cost.intValue());
 				appIfeLog.setUuid(UUID.randomUUID().toString().replace("-", ""));

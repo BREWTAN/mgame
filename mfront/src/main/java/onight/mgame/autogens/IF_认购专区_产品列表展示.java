@@ -466,7 +466,9 @@ PageInfo pageInfo;//
 				String process;//  ,剩余百分比进度条,String,不校验,是,
 		 @PBFields(name = ",预约额度,String,不校验,是,")
 				String orderBuyAmount;//  ,预约额度,String,不校验,是,
-}
+		@PBFields(name = ",销售状态,String,不校验,是,0-敬请期待，1-售卖中，2-已售罄，3-已结束")
+			String sellingStatus;//  ,销售状态,String,不校验,是,0-敬请期待，1-售卖中，2-已售罄，3-已结束
+		}
 
 		 List<ProductFinanceDetailList>productFinanceDetailList;// 
  
