@@ -66,7 +66,7 @@ public class DateTimeFormatter extends AbstractPostFieldTracker {
 
 			String dst = dstsdf.format(date);
 			return new ModifyValue(dst);
-		} catch (ParseException e) {
+		} catch (Throwable e) {
 			log.debug("格式化错误：" + v + ",formatter=" + procs.getProcParams(), e);
 			if (patterns.length >= 3 && !StringUtils.isBlank(patterns[2].trim())) {
 				if ("{}".equals(patterns[2].trim())) {
