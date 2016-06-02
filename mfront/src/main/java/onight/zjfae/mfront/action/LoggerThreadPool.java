@@ -63,8 +63,8 @@ public class LoggerThreadPool extends MobileModuleStarter<PEAConfigReload> {
 			BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(1000);
 			threadPoolExecutor = new ThreadPoolExecutor(10, 50, 300, TimeUnit.SECONDS, queue);
 		}
+		reloadMatchMap();
 	}
-
 	@Override
 	public String[] getCmds() {
 		return new String[] { "ltp" };
@@ -72,7 +72,6 @@ public class LoggerThreadPool extends MobileModuleStarter<PEAConfigReload> {
 
 	@Override
 	public void onPBPacket(FramePacket pack, PEAConfigReload arg1, CompleteHandler handler) {
-		reloadMatchMap();// 重新加载缓存信息；
 		PEARetConfigReload.Builder ret = PEARetConfigReload.newBuilder();
 		reloadMatchMap();
 		ret.setReturnCode("0000");
