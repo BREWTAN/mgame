@@ -19,7 +19,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import onight.osgi.annotation.NActorProvider;
-import onight.osgi.annotation.iPojoBean;
 import onight.tfw.async.CompleteHandler;
 import onight.tfw.ojpa.api.OJpaDAO;
 import onight.tfw.ojpa.api.annotations.StoreDAO;
@@ -39,10 +38,11 @@ import onight.zjfae.ordbgens.app.entity.APPIfeMatchExample.Criteria;
  */
 @NActorProvider
 @Slf4j
-@iPojoBean
 public class LoggerThreadPool extends MobileModuleStarter<PEAConfigReload> {
 
 	private final Object monitor = new Object();
+
+	private  Boolean load = false;
 
 	private ThreadPoolExecutor threadPoolExecutor = null;
 
@@ -63,7 +63,6 @@ public class LoggerThreadPool extends MobileModuleStarter<PEAConfigReload> {
 			BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(1000);
 			threadPoolExecutor = new ThreadPoolExecutor(10, 50, 300, TimeUnit.SECONDS, queue);
 		}
-		reloadMatchMap();
 	}
 	@Override
 	public String[] getCmds() {
@@ -112,7 +111,13 @@ public class LoggerThreadPool extends MobileModuleStarter<PEAConfigReload> {
 	}
 
 	public void log(FramePacket pack, String requestBody, String pbname, String resStr, Long cost) {
-
+		
+		if (!load) {
+			synchronized (monitor) {
+				reloadMatchMap();
+			    load = true;
+			}
+		}
 		try {
 			if (matcheMap.get(pbname) != null) {
 				APPIfeLog appIfeLog = new APPIfeLog();

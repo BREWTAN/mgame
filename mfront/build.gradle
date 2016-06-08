@@ -1,8 +1,9 @@
 
 version='1.0.4'
 buildscript {
-	repositories { maven { url "https://plugins.gradle.org/m2/"
-		} }
+	repositories {
+	         maven { url "https://plugins.gradle.org/m2/"} 
+	         }
 	dependencies {
 		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.7.0'
 		classpath 'com.google.protobuf:protobuf-java:3.0.0-alpha-3.1'
@@ -25,10 +26,10 @@ dependencies {
 	includeInJar 'org.projectlombok:lombok:1.16.4'
 	includeInJar 'org.apache.httpcomponents:httpclient:4.5.2'
 	includeInJar 'org.apache.httpcomponents:httpmime:4.5.2'
-
-	compile 'com.google.protobuf:protobuf-java:3.0.0-alpha-3.1'
 	includeInJar 'org.glassfish.grizzly:grizzly-core:2.3.21'
 	includeInJar 'com.googlecode.protobuf-java-format:protobuf-java-format:1.4'
+
+	compile 'com.google.protobuf:protobuf-java:3.0.0-alpha-3.1'
 	compile 'org.apache.commons:commons-lang3:3.3.2'
 	testCompile 'junit:junit:4.8.2'
 }
@@ -49,5 +50,3 @@ jar {
 }
 
 dependencies { testCompile 'junit:junit:4.12' }
-
-
