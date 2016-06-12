@@ -35,8 +35,9 @@ public class IF_风险测评提交 {
 		String riskExpiredDate;//  ,风险有效期,String,不校验,否,
 		@PBFields(name = ",分数,String,不校验,否,")
 		String point;//  ,分数,String,不校验,否,
-		 String tfw__reserved;//保留字段 
-
+		 String tfw__reserved;//保留字段
+        @PBFields(name = ",风险等级名称,String,不校验,否,")
+        String riskLevelName;//  ,风险等级名称,String,不校验,否,
 	}
 
 }

@@ -125,7 +125,7 @@ public class ProtoSwiftGens {
 
 	public static void main(String[] args) {
 		try {
-			File dstDir = new File("/Users/brew/Documents/KJ/MING/git/mgame/mfront/src/main/proto/gens");
+			File dstDir = new File("/Users/wangdongguang/Rmitec/project/zjfae/app/mgame/mfront/src/main/proto/gens");
 			dstDir.mkdirs();
 			for (Class clazz : getClasses("onight.mgame.autogens")) {
 				// Class clazz = IF_不良资产产品查询_项目揭示_.class;
@@ -133,7 +133,7 @@ public class ProtoSwiftGens {
 				if (ano == null)
 					continue;
 //				System.out.println(clazz);
-				if(!clazz.getSimpleName().equals("IF_转让专区_产品列表信息展示"))continue;
+				if(!clazz.getSimpleName().equals("IF_校验是否交易日"))continue;
 
 				System.out.println("ano==" + ano.name() + ",path=" + ano.path());
 				StringBuffer sb = new StringBuffer();
