@@ -1,10 +1,8 @@
 package onight.zjfae.mfront.action;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
@@ -36,15 +34,9 @@ import onight.zjfae.mfront.preproc.PreProcResult;
 import onight.zjfae.mfront.service.HttpRequestor;
 import onight.zjfae.mfront.service.IFEBeanMapping;
 import onight.zjfae.ordbgens.app.entity.APPDictionary;
-import onight.zjfae.ordbgens.app.entity.APPIfeLog;
 
 @iPojoBean
 @NActorProvider
-// @Provides(specifications = { IActor.class, PSenderService.class })
-// @Instantiate(name = "iFEProxyAction")
-// @Provides(specifications = ActorService.class, properties = {
-// @StaticServiceProperty(name = "name", value = "iFEProxyAction", type =
-// "java.lang.String") })
 @Slf4j
 public class IFEProxyAction extends MobileModuleStarter<Message> {
 
@@ -88,7 +80,7 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 	LoggerThreadPool loggerThreadPool;
 
 	public Message resultToErrorPacket(String returnCode, String returnMsg, String pbname) {
-		Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
+		Builder<?> retbuilder = (Builder<?>) bmap.getResBuilder(pbname);
 		if (retbuilder != null) {
 			JsonPBUtil.json2PB("{\"returnCode\":\"" + returnCode + "\",\"returnMsg\":\"" + returnMsg + "\"}", retbuilder);
 			return retbuilder.build();
@@ -107,7 +99,6 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 				if (str != null) {
 					int idx = str.indexOf(",");
 					if (idx >= 0) {
-						String errcode = str.substring(0, idx);
 						String errmessage = "接口被屏蔽";
 						if (idx < str.length() - 1) {
 							errmessage = str.substring(idx + 1);
@@ -138,7 +129,7 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 		if (StringUtils.isBlank(pbname)) {
 			handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("pbname 不能为空", pack)));
 		} else {
-			Builder builder = bmap.getReqBuilder(pbname);
+			Builder<?> builder = bmap.getReqBuilder(pbname);
 			if (builder == null) {
 				handler.onFinished(PacketHelper.toPBReturn(pack, new UnknowCMDBody("未找到的命令:" + pbname, pack)));
 			} else {
@@ -269,7 +260,7 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 
 		}
 		// 2. json,转换成PBMessage再发到客户端
-		Builder retbuilder = (Builder) bmap.getResBuilder(pbname);
+		Builder<?> retbuilder = (Builder<?>) bmap.getResBuilder(pbname);
 		JsonPBUtil.json2PB(jsonStr.getBytes("UTF-8"), retbuilder);
 
 //		transErrorCode(retbuilder);!!去掉了，有后台来改
