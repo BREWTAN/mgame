@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletRequest;
+import com.google.protobuf.AbstractMessage.Builder;
+import com.google.protobuf.Message;
 
 import lombok.extern.slf4j.Slf4j;
 import onight.mgame.utils.PBInfo;
@@ -12,9 +13,6 @@ import onight.tfw.otransio.api.beans.FramePacket;
 import onight.tfw.outils.bean.JsonPBUtil;
 import onight.zjfae.mfront.preproc.PreProcResult;
 import onight.zjfae.mfront.utils.WrapClassLoader;
-
-import com.google.protobuf.AbstractMessage.Builder;
-import com.google.protobuf.Message;
 
 @Slf4j
 public class IFEBeanMapping {
@@ -33,6 +31,9 @@ public class IFEBeanMapping {
 	}
 
 	public HashMap<String, PostProc> name2PostProcess = new HashMap<>();
+	/**
+	 * prepProcess 
+	 */
 	public HashMap<String, PreProc> name2PrepProcess = new HashMap<>();
 
 	

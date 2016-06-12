@@ -7,7 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import onight.zjfae.mfront.postproc.annotation.Formatter;
 import onight.zjfae.mfront.utils.WrapClassLoader;
 import onight.zjfae.ordbgens.app.entity.APPIfacePostproc;
-
+/**
+ * @author tfw
+ * @date   2016年6月12日
+ * @desc   加载需要格式化处理类信息
+ */
 @Slf4j
 public class FormatterLoader {
 

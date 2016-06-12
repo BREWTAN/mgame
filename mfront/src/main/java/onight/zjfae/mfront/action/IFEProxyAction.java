@@ -119,7 +119,18 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 		}
 		return null;
 	}
-
+    /**
+     * 1:合法性校验 pbname不能为空，pbbuild不能为空
+     * 2:输出日志中添加访问主机IP、pbname以及smid信息
+     * 3:前置处理器进行预处理  
+     * 4:将app客户端传送过来的json或者pb消息转化为 统一的pb message
+     * 5:将pb消息转发为核心能够识别的请求参数
+     * 6:根据pb名称获取，代理到核心url地址
+     * 7:发送报文信息到核心
+     * 8:处理核心返回值，并将返回值转化为pb message
+     * 9:后置处理器对返回消息进行再次加工
+     * 10:将加工后的消息(iso/bp,and/json)返回给客户端
+     */
 	@Override
 	public void onPBPacket(final FramePacket pack, Message nubo, final CompleteHandler handler) {
 		// log.debug("pack:" + pack);
@@ -149,8 +160,8 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 
 					Message msg = getPBBody(pack);//
 					// 1.preprocess.== validate..前处理逻辑
+					
 					if (msg != null) {
-						// log.debug("post.msg=={}", msg);
 						log.debug("post.msg={}", new JsonPBFormat().printToString(msg));
 					}
 					String str = null;
