@@ -21,7 +21,7 @@ public class Change2YuanFormatter extends AbstractPostFieldTracker {
 	public ModifyValue modTraceValue(Object v) {
 
 		String patterns[] = StringUtils.stripAll(procs.getProcParams().trim().split(","));
-		if (patterns.length < 3) {
+		if (patterns.length < 2) {
 			log.debug("格式化参数错误：" + v + ",formatter=" + procs.getProcParams() + ",proc.uuid=" + procs.getUuid());
 			return null;
 		}
@@ -31,11 +31,9 @@ public class Change2YuanFormatter extends AbstractPostFieldTracker {
 		}
 
 		Double d = Double.parseDouble((String) v);
-		if (patterns.length >= 4) {
+		if (patterns.length >= 3) {
 			double mul = Double.parseDouble((String) patterns[2]);
 			d = d * mul;
-			double mul_10000 = Double.parseDouble((String) patterns[3]);
-			d = d * mul_10000;
 		}
 		return new ModifyValue(String.format(patterns[0].trim(), d));
 	}
