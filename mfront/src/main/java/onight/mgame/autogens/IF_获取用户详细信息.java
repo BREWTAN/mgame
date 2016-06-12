@@ -69,6 +69,8 @@ public class IF_获取用户详细信息 {
 		String riskLevel;//  ,风险测评等级,String,不校验,是,
 		@PBFields(name = ",风险测评有效期,String,不校验,是,")
 		String riskExpiredDate;//  ,风险测评有效期,String,不校验,是,
+        @PBFields(name = ",是否年过65,String,不校验,是,")
+        String isOlderThan65;//  ,是否年过65,String,不校验,是,
 		 String tfw__reserved;//保留字段
 
 	}
