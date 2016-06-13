@@ -3,18 +3,13 @@ package onight.zjfae.mfront.preproc.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
-import onight.tfw.otransio.api.PackHeader;
+import org.apache.commons.lang3.StringUtils;
+
 import onight.tfw.otransio.api.beans.FramePacket;
 import onight.zjfae.mfront.preproc.AbstractPreProc;
 import onight.zjfae.mfront.preproc.annotation.APreProcessor;
 import onight.zjfae.ordbgens.app.entity.APPIfacePreproc;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.google.protobuf.Message.Builder;
-
-@Slf4j
 @APreProcessor("checkcookie")
 public class CheckCookiePP extends AbstractPreProc {
 	List<String[]> cookieChecks = new ArrayList<String[]>();

@@ -4,11 +4,15 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 import lombok.extern.slf4j.Slf4j;
-import onight.zjfae.mfront.postproc.annotation.Formatter;
 import onight.zjfae.mfront.preproc.annotation.APreProcessor;
 import onight.zjfae.mfront.utils.WrapClassLoader;
 import onight.zjfae.ordbgens.app.entity.APPIfacePreproc;
 
+/**
+ * @author tfw
+ * @date   2016年6月13日
+ * @desc   load PreProccessor and put it into map by name;
+ */
 @Slf4j
 public class PreProccesorLoader {
 
@@ -40,6 +44,5 @@ public class PreProccesorLoader {
 
 		}
 		return null;
-
 	}
 }

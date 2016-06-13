@@ -3,7 +3,6 @@ package onight.mgame.autogens;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import onight.mgame.utils.PBFields;
 
 @onight.mgame.utils.PBInfo(name = "PBIFE_systemcheck_checkIsDayCut", path = "/ife/systemcheck/checkIsDayCut.html")
 public class IF_校验是日切期间 {
@@ -17,7 +16,6 @@ public class IF_校验是日切期间 {
     }
 
     // ======RESponse==========
-
     @Data
     @AllArgsConstructor
     @NoArgsConstructor

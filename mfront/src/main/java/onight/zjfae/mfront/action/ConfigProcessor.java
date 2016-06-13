@@ -148,7 +148,9 @@ public class ConfigProcessor extends MobileModuleStarter<PEAConfigReload> implem
 	@Setter
 	OJpaDAO<APPDictionary> appDictionaryDao;
 
+	//从数据库中加载前置处理器和后置处理器
 	public void init() {
+		//get
 		if (appFacePostDao != null && appFacePostDao.getDaosupport() != null) {
 			synchronized (appFacePostDao) {
 				loadDictionary();
@@ -264,7 +266,7 @@ public class ConfigProcessor extends MobileModuleStarter<PEAConfigReload> implem
 			// e.printStackTrace();
 		}
 	}
-
+    //load postProcs from database 
 	HashMap<String, List<PostProcessor>> pbPostProcs = new HashMap<String, List<PostProcessor>>();
 
 	HashMap<String, List<PreProcessor>> pbPreProcs = new HashMap<String, List<PreProcessor>>();
