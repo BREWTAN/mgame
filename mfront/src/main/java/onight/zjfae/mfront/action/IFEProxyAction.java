@@ -62,14 +62,10 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 		return new String[] { "IFE" };
 	}
 
-	// http://localhost:8081/mzj/pbife.do?fh=VREGMZJ000000J00&bd={"pageIndex":"13800138000","image_code":"12334554"}&pbname=PBIFE_badasset_queryProjectReveal
-	// //
-	// http://localhost:8081/mzj/pbife.do?fh=VREGMZJ000000P00&pbname=PBIFE_badasset_queryProjectReveal
-
+	//http://localhost:8081/mzj/pbife.do?fh=VREGMZJ000000J00&bd={"pageIndex":"13800138000","image_code":"12334554"}&pbname=PBIFE_badasset_queryProjectReveal
+	//http://localhost:8081/mzj/pbife.do?fh=VREGMZJ000000P00&pbname=PBIFE_badasset_queryProjectReveal
 	protected ISerializer jsons = SerializerFactory.getSerializer(SerializerFactory.SERIALIZER_JSON);
-
 	ThreadLocal<Builder<?>> currentBuilder = new ThreadLocal<Builder<?>>();
-
 	@ActorRequire
 	@Setter
 	@Getter
@@ -87,7 +83,6 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 		} else {
 			return null;
 		}
-
 	}
 
 	public Message preCheckIFace(FramePacket pack, String pbname) {
@@ -111,7 +106,6 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 					return retmsg;
 				}
 			}
-
 		} catch (Exception e) {
 			log.debug("preprocError", e);
 			log.info("prefilter_Block:" + pbname + ",ip=" + pack.getExtStrProp(PackHeader.PEER_IP) + ",");
@@ -134,9 +128,7 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 	@Override
 	public void onPBPacket(final FramePacket pack, Message nubo, final CompleteHandler handler) {
 		// log.debug("pack:" + pack);
-
 		String pbname = pack.getExtStrProp("pbname");
-
 		if (StringUtils.isBlank(pbname)) {
 			handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("pbname 不能为空", pack)));
 		} else {
@@ -190,7 +182,6 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 						log.warn("系统处理异常：" + pbname, e);
 						Message retmsg = resultToErrorPacket("I29999", "系统后处理异常", pbname);
 						handler.onFinished(PacketHelper.toPBReturn(pack, retmsg));
-
 					}
 
 				} catch (Exception e) {
@@ -203,9 +194,7 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 				} finally {
 					currentBuilder.set(null);
 				}
-
 			}
-
 		}
 	}
 	
@@ -232,10 +221,6 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 				String dv = appdict.getDataValue();
 				log.debug("translate_Error_Code_From_Dict:"+returnCode+":"+retmsg+" ==> "+ dv);
 				retbuilder.setField(returnMsgfd, dv);
-//			} else {
-//				String dv = (retmsg + "");
-//				log.debug("translate_Error_Code_BySplit_0:"+returnCode+":"+retmsg+" ==> "+ dv);
-//				retbuilder.setField(returnMsgfd,dv);
 			}
 		}
 	}
@@ -246,11 +231,7 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 		long start = System.currentTimeMillis();
 		String jsonStr = requestor.post(pack, requestBody, backendurl + path);
 		long end = System.currentTimeMillis();
-
 		jsonStr = jsonStr.trim();
-		// String jsonStr =
-		// requestor.post(pack,requestBody,"http://172.16.28.85:8080"+path);
-		// 报文格式整理
 		int zjidx = jsonStr.indexOf("\"zjsWebResponse\":");
 		if (zjidx > 0 && zjidx < 10) {
 			int startidx = jsonStr.indexOf(":") + 1;
@@ -268,7 +249,6 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 				jsonStr = jsonStr.replaceAll("message", "returnMsg");
 				jsonStr = jsonStr.replaceAll("result", "returnCode");
 			}
-
 		}
 		// 2. json,转换成PBMessage再发到客户端
 		Builder<?> retbuilder = (Builder<?>) bmap.getResBuilder(pbname);
@@ -276,19 +256,13 @@ public class IFEProxyAction extends MobileModuleStarter<Message> {
 
 //		transErrorCode(retbuilder);!!去掉了，有后台来改
 
-		// try{
 		bmap.postProcess(retbuilder, pbname);
 		cfgProc.postDO(retbuilder, pbname);
 
 		Message retmsg = retbuilder.build();
 		loggerThreadPool.log(pack, requestBody, pbname, jsonStr, end - start);
 		log.debug("posProc_result={}", new JsonPBFormat().printToString(retmsg));
-		// log.debug("posProc_result=" + retmsg);
 		return retmsg;
-		// }catch(Exception e){
-		// handler.onFinished(PacketHelper.toPBReturn(pack, new
-		// SendFailedBody("消息后置处理："+e.getMessage(), null)));
-		// }
 	}
 
 	@Override
