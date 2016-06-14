@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Message;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,11 +44,6 @@ import onight.zjfae.ordbgens.app.entity.APPIfacePreproc;
 import onight.zjfae.ordbgens.app.entity.APPIfacePreprocExample;
 import onight.zjfae.ordbgens.app.entity.APPSysParam;
 import onight.zjfae.ordbgens.app.entity.APPSysParamKey;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.Message;
 
 @NActorProvider
 @Slf4j

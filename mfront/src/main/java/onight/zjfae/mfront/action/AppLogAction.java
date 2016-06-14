@@ -1,8 +1,5 @@
 package onight.zjfae.mfront.action;
 
-import java.util.List;
-
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,22 +14,11 @@ import onight.tfw.otransio.api.beans.FramePacket;
 import onight.tfw.otransio.api.beans.SendFailedBody;
 import onight.tfw.outils.bean.BeanPBUtil;
 import onight.tfw.outils.serialize.UUIDGenerator;
-import onight.zjfae.afront.Amobilezj.PBAPPAds;
 import onight.zjfae.afront.Amobilezj.PEACommand;
-import onight.zjfae.afront.Amobilezj.PEAGetAds;
 import onight.zjfae.afront.Amobilezj.PEALogs;
 import onight.zjfae.afront.Amobilezj.PEAModule;
-import onight.zjfae.afront.Amobilezj.PEARetAds;
 import onight.zjfae.afront.Amobilezj.PEARetAppLogs;
-import onight.zjfae.afront.Amobilezj.PEARetUrl;
-import onight.zjfae.ordbgens.app.entity.APPAds;
-import onight.zjfae.ordbgens.app.entity.APPAdsExample;
 import onight.zjfae.ordbgens.app.entity.APPSysFaceLogs;
-import onight.zjfae.ordbgens.app.entity.APPUrlParams;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.google.protobuf.AbstractMessage.Builder;
 
 @iPojoBean
 @NActorProvider
