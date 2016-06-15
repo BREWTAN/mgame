@@ -124,9 +124,9 @@ public class LoggerThreadPool extends MobileModuleStarter<PEAConfigReload> {
 				appIfeLog.setAppVersion(pack.getExtStrProp("appVersion"));
 				appIfeLog.setClientOsver(pack.getExtStrProp("clientOsver"));
 				appIfeLog.setUserCookies(pack.getExtStrProp("SMID") + "," + pack.getExtStrProp("userid"));
+				appIfeLog.setRetMsg(pack.getExtStrProp("userid"));
 				appIfeLog.setPbAction(pbname);
 				appIfeLog.setPlatform(pack.getExtStrProp("p"));
-				
 				appIfeLog.setReqStr(StringUtils.substring(requestBody, 0, 4096));
 				try {
 					if (StringUtils.isNumeric(pack.getExtStrProp("ReqTime"))) {
