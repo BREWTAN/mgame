@@ -133,7 +133,7 @@ public class ProtoSwiftGens {
 				if (ano == null)
 					continue;
 //				System.out.println(clazz);
-				if(!clazz.getSimpleName().equals("IF_持仓信息查询"))continue;
+				if(!clazz.getSimpleName().equals("IF_预约认购产品详情查询"))continue;
 
 				System.out.println("ano==" + ano.name() + ",path=" + ano.path());
 				StringBuffer sb = new StringBuffer();
