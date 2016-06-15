@@ -27,7 +27,7 @@ public class Change2YuanFormatter extends AbstractPostFieldTracker {
 		}
 
 		if (v == null || StringUtils.isBlank((String) v)) {
-			return new ModifyValue(null);
+			return new ModifyValue("");
 		}
 
 		Double d = Double.parseDouble((String) v);
