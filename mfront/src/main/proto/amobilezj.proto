@@ -15,7 +15,9 @@ enum PEACommand{
 	MER = 2; //聚合接口
 	URL = 3; //url列表
 	LOG = 4; //记录日志
+	UPG = 5; //app应用升级
 	C01 = 10 ;//后处理配置重新加载
+    LTP = 11 ;//加载日志输出匹配规则
 };
 
 message PBAPPAds
@@ -93,6 +95,21 @@ message PEARetUrl
 	repeated PBAPPUrlParams urls = 2;//urls列表
 }
 
+message PEAGetUpg
+{
+	int32 platform = 1; //1 android, 2 ios
+	string versionid =2;//版本号
+}
+
+message PEARetUpg
+{
+	string contents = 1; //升级内容
+	string upType = 2;//是否强制升级
+	string upurl = 3;//升级地址
+	string versionid =4;
+	string returnCode  = 20; //返回码
+	string returnMsg  = 21;//提示信息
+}
 
 //App日志
 message PEALogs

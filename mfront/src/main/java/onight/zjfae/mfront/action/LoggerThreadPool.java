@@ -25,6 +25,7 @@ import onight.tfw.ojpa.api.annotations.StoreDAO;
 import onight.tfw.otransio.api.PackHeader;
 import onight.tfw.otransio.api.PacketHelper;
 import onight.tfw.otransio.api.beans.FramePacket;
+import onight.zjfae.afront.Amobilezj.PEACommand;
 import onight.zjfae.afront.Amobilezj.PEAConfigReload;
 import onight.zjfae.afront.Amobilezj.PEARetConfigReload;
 import onight.zjfae.ordbgens.app.entity.APPIfeLog;
@@ -66,7 +67,7 @@ public class LoggerThreadPool extends MobileModuleStarter<PEAConfigReload> {
 	}
 	@Override
 	public String[] getCmds() {
-		return new String[] { "ltp" };
+		return new String[] { PEACommand.LTP.name() };
 	}
 
 	@Override

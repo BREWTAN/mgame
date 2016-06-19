@@ -16,18 +16,13 @@ import onight.tfw.otransio.api.PacketHelper;
 import onight.tfw.otransio.api.beans.FramePacket;
 import onight.tfw.otransio.api.beans.SendFailedBody;
 import onight.tfw.outils.bean.BeanPBUtil;
-import onight.zjfae.afront.Amobilezj.PBAPPAds;
 import onight.zjfae.afront.Amobilezj.PBAPPUrlParams;
 import onight.zjfae.afront.Amobilezj.PEACommand;
-import onight.zjfae.afront.Amobilezj.PEAGetAds;
 import onight.zjfae.afront.Amobilezj.PEAGetUrl;
 import onight.zjfae.afront.Amobilezj.PEAModule;
 import onight.zjfae.afront.Amobilezj.PEARetUrl;
-import onight.zjfae.ordbgens.app.entity.APPAds;
 import onight.zjfae.ordbgens.app.entity.APPUrlParams;
 import onight.zjfae.ordbgens.app.entity.APPUrlParamsExample;
-
-import com.google.protobuf.AbstractMessage.Builder;
 
 @iPojoBean
 @NActorProvider
@@ -82,9 +77,6 @@ public class AppURLsAction extends MobileModuleStarter<PEAGetUrl> {
 				log.debug("查询URL地址失败:",e);
 				handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("查询URL失败:"+e.getMessage(), pack)));
 			}
-			
 		}
-
 	}
-
 }
