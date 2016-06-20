@@ -83,7 +83,7 @@ public class AppSysVersionupsAction extends MobileModuleStarter<PEAGetUpg> {
 					handler.onFinished(PacketHelper.toPBReturn(pack, ret.build()));
 				}
 			} catch (Exception e) {
-				log.debug("查询URL地址失败:",e);
+				log.debug("查询升级信息失败",e);
 				handler.onFinished(PacketHelper.toPBReturn(pack, new SendFailedBody("查询升级信息失败", pack)));
 			}
 		}

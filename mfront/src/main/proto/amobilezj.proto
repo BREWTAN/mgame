@@ -97,17 +97,17 @@ message PEARetUrl
 
 message PEAGetUpg
 {
-	int32 platform = 1; //1 android, 2 ios
-	string versionid =2;//版本号
+	int32 platform = 1; //平台类型  1:android, 2:ios
+	string versionid =2;//当前应用版本号 
 }
 
 message PEARetUpg
 {
 	string contents = 1; //升级内容
-	string upType = 2;//是否强制升级
+	string upType = 2;//是否强制升级     0:非强制升级,1:强制升级
 	string upurl = 3;//升级地址
-	string versionid =4;
-	string returnCode  = 20; //返回码
+	string versionid =4;//需要升级到的版本号
+	string returnCode  = 20; //返回码    0000:不需要升级,0001:平台类型未找到,9999需要升级
 	string returnMsg  = 21;//提示信息
 }
 
