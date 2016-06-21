@@ -2,12 +2,8 @@ package onight.mgame.autogens;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
-import java.math.BigDecimal;
-
-import onight.mgame.utils.PBFields;
 import lombok.NoArgsConstructor;
+import onight.mgame.utils.PBFields;
 
 // 获取单个产品详细信息和扩展信息,产品相关,PrdQueryController,POST,JSON,/ife/prdquery/prdQueryProductDetails.html
 @onight.mgame.utils.PBInfo(name = "PBIFE_prdquery_prdQueryProductDetails", path = "/ife/prdquery/prdQueryProductDetails.html")
@@ -30,7 +26,7 @@ public class IF_获取单个产品详细信息和扩展信息 {
         @Data
         @AllArgsConstructor
         @NoArgsConstructor
-        public static class TaProudctFinanceDetail {
+        public static class TaProductFinanceDetail {
 
             @PBFields(name = ",预约类型,String,不校验,是,0-特约;1-普通预约;2-定值预约")
             String orderType;//  ,预约类型,String,不校验,是,0-特约;1-普通预约;2-定值预约
@@ -438,7 +434,7 @@ public class IF_获取单个产品详细信息和扩展信息 {
             String incomeTypeName;//  ,收益类型,String,不校验,是,
         }
 
-        TaProudctFinanceDetail taProudctFinanceDetail;//
+        TaProductFinanceDetail taProductFinanceDetail;//
         String tfw__reserved;//保留字段
     }
 }
